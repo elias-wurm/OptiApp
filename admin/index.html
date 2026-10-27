@@ -108,6 +108,13 @@ tbody tr:hover td,tbody tr[aria-selected="true"] td{background:var(--surface-2)}
 .paper{background:#fff;color:#172235;border-radius:6px;padding:48px 52px;font:400 14.5px/1.5 var(--text);box-shadow:0 10px 40px rgba(0,0,0,.25)}
 .paper tr:hover td,.paper tbody tr:hover td{background:none!important}.paper tr{cursor:default}
 .ff3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 18px;margin-top:14px}.ff3 label{display:block;font-size:13.5px;font-weight:700;color:var(--muted);margin-bottom:4px}.ff3 .wide2{grid-column:span 2}
+.home{display:flex;flex:none;border-radius:8px}.weblink{font-size:14px;font-weight:700;color:var(--muted);text-decoration:none;margin-right:6px}.weblink:hover{color:var(--ink)}
+.ff3 .wide3{grid-column:1/-1}textarea.txt{resize:vertical}
+.seg-wrap{flex-wrap:wrap;border-radius:16px}.seg .cnt{font-weight:400;opacity:.75;margin-left:2px}
+.leads td{vertical-align:top}.leads .txt{padding:6px 8px;font-size:14px}.leads td .acts{flex-wrap:nowrap}
+.stsel{min-width:150px;font-weight:700}.stsel.b-ok{color:var(--ok)}.stsel.b-warn{color:var(--warn)}.stsel.b-pilot{color:var(--lens)}
+.txt.late{border-color:var(--warn)}.lnote{display:block;margin-top:4px;font-size:13px;color:var(--muted);max-width:340px;white-space:pre-line}
+.name a{color:inherit}
 .khead{display:flex;gap:12px;align-items:flex-start}.newopt{border:2px solid var(--lens)}
 @media (max-width:820px){.ff3{grid-template-columns:1fr 1fr}.ff3 .wide2{grid-column:1/-1}}@media (max-width:520px){.ff3{grid-template-columns:1fr}}
 .ff{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px;margin-top:14px}.ff label{display:block;font-size:13.5px;font-weight:700;color:var(--muted);margin-bottom:4px}.ff .wide{grid-column:1/-1}
@@ -125,7 +132,7 @@ tbody tr:hover td,tbody tr[aria-selected="true"] td{background:var(--surface-2)}
 .p-foot{margin-top:36px;font-size:12.5px;color:#566273;border-top:1px solid #D5DEDC;padding-top:14px}
 .storno{display:inline-block;margin-top:10px;border:2px solid #B3261E;color:#B3261E;font-weight:700;padding:2px 10px;border-radius:6px;letter-spacing:.06em}
 @media print{body>*:not(.modal){display:none!important}.modal{position:static;background:none;padding:0;display:block}.mbar{display:none}.mwrap{max-width:none}.paper{box-shadow:none;border-radius:0;padding:0}.paper .ph{background:none}@page{margin:18mm}}
-@media (max-width:560px){.paper{padding:26px 20px}.top-in{flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:8px;row-gap:6px}.nav{order:3;width:100%;margin-left:-8px}.nav button{padding:8px 12px}}
+@media (max-width:560px){.weblink{display:none}.paper{padding:26px 20px}.top-in{flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:8px;row-gap:6px}.nav{order:3;width:100%;margin-left:-8px;overflow-x:auto;scrollbar-width:none}.nav button{flex:none}.nav button{padding:8px 12px}}
 .logo{flex:none}
 .close{position:absolute;right:14px;top:14px;border:0;background:var(--surface-2);width:34px;height:34px;border-radius:50%;font-size:18px}
 .empty{color:var(--muted);padding:20px 0}
@@ -135,16 +142,16 @@ tbody tr:hover td,tbody tr[aria-selected="true"] td{background:var(--surface-2)}
 </head>
 <body>
 <header class="top"><div class="top-in">
-  <svg class="logo" viewBox="46 77 1086 253" height="30" role="img" aria-label="OptiApp"><title>OptiApp</title>
+  <a class="home" href="#" onclick="go('optiker');return false" aria-label="Zur Startseite der Verwaltung"><svg class="logo" viewBox="46 77 1086 253" height="30" role="img" aria-label="OptiApp"><title>OptiApp</title>
   <circle cx="158.73" cy="190.15" r="108.73" fill="#F0643C"/>
   <path d="M64.57 244.52 Q65.22 274.96 52.17 298.88 Q104.37 301.06 139.85 297.23 Z" fill="#F0643C"/>
   <circle cx="117.41" cy="194.50" r="32.62" fill="none" stroke="#FFFFFF" stroke-width="13.05" stroke-linecap="round"/>
   <circle cx="200.05" cy="194.50" r="32.62" fill="none" stroke="#FFFFFF" stroke-width="13.05" stroke-linecap="round"/>
   <path d="M150.03 189.61 Q158.73 170.04 167.43 189.61" fill="none" stroke="#FFFFFF" stroke-width="13.05" stroke-linecap="round"/>
   <path d="M316.18216000000007 203.1006Q316.18216000000007 182.7006 325.68216000000007 166.5006Q335.18216000000007 150.30059999999997 351.4821600000001 141.20059999999998Q367.7821600000001 132.1006 387.18216000000007 132.1006Q406.7821600000001 132.1006 423.0821600000001 141.20059999999998Q439.3821600000001 150.30059999999997 448.7821600000001 166.5006Q458.18216000000007 182.7006 458.18216000000007 203.1006Q458.18216000000007 223.5006 448.7821600000001 239.80059999999997Q439.3821600000001 256.1006 423.0821600000001 265.2006Q406.7821600000001 274.3006 387.18216000000007 274.3006Q367.7821600000001 274.3006 351.4821600000001 265.2006Q335.18216000000007 256.1006 325.68216000000007 239.80059999999997Q316.18216000000007 223.5006 316.18216000000007 203.1006ZM434.7821600000001 203.1006Q434.7821600000001 187.7006 428.68216000000007 176.1006Q422.5821600000001 164.5006 411.7821600000001 158.30059999999997Q400.9821600000001 152.1006 387.18216000000007 152.1006Q373.3821600000001 152.1006 362.5821600000001 158.30059999999997Q351.7821600000001 164.5006 345.68216000000007 176.1006Q339.5821600000001 187.7006 339.5821600000001 203.1006Q339.5821600000001 218.5006 345.68216000000007 230.2006Q351.7821600000001 241.9006 362.5821600000001 248.2006Q373.3821600000001 254.5006 387.18216000000007 254.5006Q400.9821600000001 254.5006 411.7821600000001 248.2006Q422.5821600000001 241.9006 428.68216000000007 230.2006Q434.7821600000001 218.5006 434.7821600000001 203.1006ZM540.9821600000001 160.9006Q555.3821600000001 160.9006 567.2821600000001 168.0006Q579.1821600000001 175.1006 585.98216 187.9006Q592.7821600000001 200.7006 592.7821600000001 217.3006Q592.7821600000001 233.9006 585.98216 247.0006Q579.1821600000001 260.1006 567.2821600000001 267.4006Q555.3821600000001 274.7006 540.9821600000001 274.7006Q528.3821600000001 274.7006 518.5821600000002 269.6006Q508.7821600000001 264.5006 502.5821600000001 256.9006V325.30060000000003H479.7821600000001V162.7006H502.5821600000001V178.9006Q508.3821600000001 171.30059999999997 518.3821600000001 166.1006Q528.3821600000001 160.9006 540.9821600000001 160.9006ZM535.9821600000001 180.7006Q527.3821600000001 180.7006 519.6821600000001 185.1006Q511.9821600000001 189.5006 507.2821600000001 197.9006Q502.5821600000001 206.30059999999997 502.5821600000001 217.7006Q502.5821600000001 229.1006 507.2821600000001 237.6006Q511.9821600000001 246.1006 519.6821600000001 250.5006Q527.3821600000001 254.9006 535.9821600000001 254.9006Q544.7821600000001 254.9006 552.48216 250.4006Q560.1821600000001 245.9006 564.8821600000001 237.3006Q569.5821600000002 228.7006 569.5821600000002 217.3006Q569.5821600000002 205.9006 564.8821600000001 197.6006Q560.1821600000001 189.30059999999997 552.48216 185.0006Q544.7821600000001 180.7006 535.9821600000001 180.7006ZM641.1821600000002 181.30059999999997V242.3006Q641.1821600000002 248.5006 644.0821600000002 251.2006Q646.9821600000001 253.9006 653.9821600000001 253.9006H667.9821600000001V272.9006H649.9821600000001Q634.5821600000002 272.9006 626.3821600000001 265.7006Q618.1821600000002 258.5006 618.1821600000002 242.3006V181.30059999999997H605.1821600000002V162.7006H618.1821600000002V135.3006H641.1821600000002V162.7006H667.9821600000001V181.30059999999997ZM685.1821600000001 133.5006Q685.1821600000001 127.3006 689.3821600000001 123.1006Q693.58216 118.9006 699.7821600000001 118.9006Q705.7821600000001 118.9006 709.98216 123.1006Q714.1821600000001 127.3006 714.1821600000001 133.5006Q714.1821600000001 139.70059999999998 709.98216 143.9006Q705.7821600000001 148.1006 699.7821600000001 148.1006Q693.58216 148.1006 689.3821600000001 143.9006Q685.1821600000001 139.70059999999998 685.1821600000001 133.5006ZM710.98216 162.7006V272.9006H688.1821600000001V162.7006ZM823.98216 244.5006H765.7821600000001L755.7821600000001 272.9006H731.98216L781.7821600000001 133.70059999999998H808.1821600000001L857.98216 272.9006H833.98216ZM817.58216 225.9006 794.98216 161.30059999999997 772.1821600000001 225.9006ZM939.9821600000001 160.9006Q954.3821600000001 160.9006 966.2821600000001 168.0006Q978.1821600000001 175.1006 984.98216 187.9006Q991.7821600000001 200.7006 991.7821600000001 217.3006Q991.7821600000001 233.9006 984.98216 247.0006Q978.1821600000001 260.1006 966.2821600000001 267.4006Q954.3821600000001 274.7006 939.9821600000001 274.7006Q927.3821600000001 274.7006 917.5821600000002 269.6006Q907.7821600000001 264.5006 901.58216 256.9006V325.30060000000003H878.7821600000001V162.7006H901.58216V178.9006Q907.3821600000001 171.30059999999997 917.3821600000001 166.1006Q927.3821600000001 160.9006 939.9821600000001 160.9006ZM934.9821600000001 180.7006Q926.3821600000001 180.7006 918.6821600000001 185.1006Q910.9821600000001 189.5006 906.2821600000001 197.9006Q901.58216 206.30059999999997 901.58216 217.7006Q901.58216 229.1006 906.2821600000001 237.6006Q910.9821600000001 246.1006 918.6821600000001 250.5006Q926.3821600000001 254.9006 934.9821600000001 254.9006Q943.7821600000001 254.9006 951.48216 250.4006Q959.1821600000001 245.9006 963.8821600000001 237.3006Q968.5821600000002 228.7006 968.5821600000002 217.3006Q968.5821600000002 205.9006 963.8821600000001 197.6006Q959.1821600000001 189.30059999999997 951.48216 185.0006Q943.7821600000001 180.7006 934.9821600000001 180.7006ZM1074.7821600000002 160.9006Q1089.18216 160.9006 1101.0821600000002 168.0006Q1112.9821600000002 175.1006 1119.7821600000002 187.9006Q1126.5821600000002 200.7006 1126.5821600000002 217.3006Q1126.5821600000002 233.9006 1119.7821600000002 247.0006Q1112.9821600000002 260.1006 1101.0821600000002 267.4006Q1089.18216 274.7006 1074.7821600000002 274.7006Q1062.18216 274.7006 1052.38216 269.6006Q1042.5821600000002 264.5006 1036.38216 256.9006V325.30060000000003H1013.5821600000002V162.7006H1036.38216V178.9006Q1042.18216 171.30059999999997 1052.18216 166.1006Q1062.18216 160.9006 1074.7821600000002 160.9006ZM1069.7821600000002 180.7006Q1061.18216 180.7006 1053.48216 185.1006Q1045.7821600000002 189.5006 1041.0821600000002 197.9006Q1036.38216 206.30059999999997 1036.38216 217.7006Q1036.38216 229.1006 1041.0821600000002 237.6006Q1045.7821600000002 246.1006 1053.48216 250.5006Q1061.18216 254.9006 1069.7821600000002 254.9006Q1078.5821600000002 254.9006 1086.2821600000002 250.4006Q1093.9821600000002 245.9006 1098.6821600000003 237.3006Q1103.38216 228.7006 1103.38216 217.3006Q1103.38216 205.9006 1098.6821600000003 197.6006Q1093.9821600000002 189.30059999999997 1086.2821600000002 185.0006Q1078.5821600000002 180.7006 1069.7821600000002 180.7006Z" fill="currentColor"/>
-</svg><span class="tag">Verwaltung</span>
-  <nav class="nav" aria-label="Bereiche"><button data-v="optiker" onclick="go('optiker')">Optiker</button><button data-v="rechnungen" onclick="go('rechnungen')">Rechnungen</button><button data-v="firma" onclick="go('firma')">Firmendaten</button><button data-v="kunden" onclick="go('kunden')">Kundendaten</button></nav>
-  <span class="grow"></span><button class="btn" onclick="logout()">Abmelden</button>
+</svg></a><span class="tag">Verwaltung</span>
+  <nav class="nav" aria-label="Bereiche"><button data-v="optiker" onclick="go('optiker')">Optiker</button><button data-v="rechnungen" onclick="go('rechnungen')">Rechnungen</button><button data-v="firma" onclick="go('firma')">Firmendaten</button><button data-v="kunden" onclick="go('kunden')">Kundendaten</button><button data-v="leads" onclick="go('leads')">Interessenten</button></nav>
+  <span class="grow"></span><a class="weblink" href="../website/" target="_blank" rel="noopener">Website ↗</a><button class="btn" onclick="logout()">Abmelden</button>
 </div></header>
 <main class="main" id="app"></main>
 <div class="modal" id="modal" hidden onclick="if(event.target===this)closeInv()"><div class="mwrap"><div class="mbar"><button class="btn" onclick="window.print()">Drucken / als PDF speichern</button><button class="btn" onclick="closeInv()">Schließen</button></div><div id="invDoc"></div></div></div>
@@ -198,7 +205,12 @@ const sinceTxt=o=>{const d=new Date(NOW.getFullYear(),NOW.getMonth()+o.since,1);
 function customOpt(c){const d=new Date(c.created),since=(d.getFullYear()-NOW.getFullYear())*12+d.getMonth()-NOW.getMonth();
   const st=(c.stores||[]).length?c.stores:[c.name];return {id:c.id,name:c.name,stores:st.map(n=>[n,1/st.length]),status:c.status||'setup',since,iom:c.iom||'–',ver:'–',custom:true,
     reg:Array(12).fill(0),active:0,msgs:0,orders:0,damage:0,appts:0,rating:null}}
-function load(){OPT=[falkner(),...DEMO,...((typeof B!=='undefined'&&B.custom)||[]).map(customOpt)]}
+// Geänderte Stammdaten bestehender Optiker (Name, Status, Filialen, Kundenverwaltungsprogramm)
+function applyOv(o){const v=(typeof B!=='undefined'&&B.over&&B.over[o.id]);if(!v)return o;const r=Object.assign({},o);
+  if(v.name)r.name=v.name; if(v.status)r.status=v.status; if(v.iom!==undefined)r.iom=v.iom||'–';
+  if(v.stores&&v.stores.length){const same=v.stores.length===o.stores.length&&v.stores.every((n,i)=>n===o.stores[i][0]);r.stores=same?o.stores:v.stores.map(n=>{const f=o.stores.find(x=>x[0]===n);return [n,f?f[1]:1/v.stores.length]})}
+  return r}
+function load(){OPT=[falkner(),...DEMO,...((typeof B!=='undefined'&&B.custom)||[]).map(customOpt)].map(applyOv)}
 function filtered(){return OPT.filter(o=>status==='alle'||(status==='aktiv'?(o.status==='aktiv'||o.status==='pilot'):o.status===status))}
 
 function render(){
@@ -311,7 +323,7 @@ function colChart(id,labels,vals,long){
 /* Abrechnung monatlich: Grundgebühr je Filiale + Gebühr je registriertem Endkunden (Bestand am Monatsende). Beträge netto, zzgl. 20 % USt.
    Prototyp: Tarife und Rechnungen liegen im Browser (localStorage). */
 const BKEY='optiapp-billing-v1', VAT=.2;
-let B={tariffs:{},invoices:[],seq:{},company:{},addr:{},custom:[]}, view='optiker', per=10, flash=null;
+let B={tariffs:{},invoices:[],seq:{},company:{},addr:{},custom:[],over:{},leads:[]}, view='optiker', per=10, flash=null;
 try{const x=JSON.parse(localStorage.getItem(BKEY));if(x&&x.tariffs)B=Object.assign(B,x)}catch(e){}
 const CO_FIELDS=[['name','Firmenname','OptiApp GmbH'],['suffix','Zusatz (z. B. in Gründung)','in Gründung'],['street','Straße und Hausnummer',''],['city','PLZ und Ort',''],['country','Land','Österreich'],['email','E-Mail','office@optiapp.at'],['web','Website','optiapp.at'],['uid','UID-Nummer',''],['fn','Firmenbuchnummer',''],['court','Firmenbuchgericht',''],['bank','Bank',''],['iban','IBAN',''],['bic','BIC',''],['due','Zahlungsziel in Tagen','14']];
 const CO_REQ=['street','city','uid','iban','bic','fn'];
@@ -431,9 +443,11 @@ const K_FIELDS=[['contact','Ansprechpartner',''],['email','E-Mail','name@optiker
 let newOpt=false, delArm=null;
 function kField(o,[k,l,ph]){const a=adr(o.id),need=o.status!=='setup'&&(k==='street'||k==='city');
   return `<div><label for="k-${o.id}-${k}">${l}</label><input class="txt ${need&&!a[k]?'miss':''}" data-need="${need?1:0}" id="k-${o.id}-${k}" value="${esc(a[k])}" placeholder="${esc(ph)}" ${k==='email'?'type="email"':k==='phone'?'type="tel"':''} onchange="setAdr('${o.id}','${k}',this)"></div>`}
-function setCust(id,k,el){const c=B.custom.find(x=>x.id===id);if(!c)return;let v=el.value.trim();
-  if(k==='name'&&!v){el.value=c.name;return} if(k==='stores')v=v.split(',').map(x=>x.trim()).filter(Boolean);
-  c[k]=v;saveB();load();flashSaved();if(k==='status'||k==='name')setTimeout(()=>renderKunden(true),0)}
+function setCust(id,k,el){const o=OPT.find(x=>x.id===id);if(!o)return;let v=el.value.trim();
+  if(k==='name'&&(!v||OPT.some(x=>x.id!==id&&x.name.toLowerCase()===v.toLowerCase()))){el.value=o.name;flash=['warn',v?'Diesen Namen gibt es schon.':'Der Name darf nicht leer sein.'];renderKunden();return}
+  if(k==='stores'){v=v.split(',').map(x=>x.trim()).filter(Boolean);if(!v.length){el.value=o.stores.map(x=>x[0]).join(', ');return}}
+  const c=B.custom.find(x=>x.id===id); if(c)c[k]=v; else B.over[id]=Object.assign({},B.over[id],{[k]:v});
+  saveB();load();flashSaved();setTimeout(()=>renderKunden(true),0)}
 function delCust(id){if(B.invoices.some(v=>v.opt===id&&!v.storno)){flash=['warn','Dieser Optiker hat Rechnungen und kann nicht gelöscht werden.'];renderKunden();return}
   if(delArm!==id){delArm=id;renderKunden(true);return}
   const c=B.custom.find(x=>x.id===id);B.custom=B.custom.filter(x=>x.id!==id);delete B.addr[id];delete B.tariffs[id];saveB();load();delArm=null;flash=['ok',(c?c.name:'Optiker')+' wurde gelöscht.'];renderKunden()}
@@ -447,7 +461,7 @@ function saveNewOpt(){const g=id=>document.getElementById(id).value.trim(), name
   const card=document.getElementById('kc-'+id);if(card)card.scrollIntoView({block:'center'})}
 function renderKunden(keep){
   const fid=keep&&document.activeElement&&document.activeElement.id;
-  const STAT=[['setup','In Einrichtung'],['test','Testphase'],['aktiv','Aktiv']];
+  const STAT=[['setup','In Einrichtung'],['test','Testphase'],['pilot','Pilot'],['aktiv','Aktiv']];
   document.getElementById('app').innerHTML=`
   <div class="head"><div class="grow"><h1>Kundendaten</h1><p>Kontakt- und Rechnungsdaten unserer Optiker. Gelb markierte Felder werden für Rechnungen gebraucht und sind noch leer. Änderungen werden sofort gespeichert.</p></div>
     <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><div class="hint" style="font-weight:700"><span id="missInfo"></span><span class="saved" id="savedMsg">✓ Gespeichert</span></div>
@@ -465,19 +479,75 @@ function renderKunden(keep){
   ${OPT.map(o=>{const c=o.custom?B.custom.find(x=>x.id===o.id):null;return `<div class="card" id="kc-${o.id}" style="margin-top:14px">
     <div class="khead"><div class="grow"><h2>${esc(o.name)}${o.live||o.custom?'':'<span class="demo">Demo</span>'}${o.custom?'<span class="demo" style="border-style:solid">Neu angelegt</span>':''}</h2><div class="sub">${badge(o.status)} &nbsp;${o.stores.map(x=>esc(x[0])).join(', ')} · ${sinceTxt(o)}${o.iom&&o.iom!=='–'?' · '+esc(o.iom):''}</div></div>
       ${c?`<button class="btn sm" id="del-${o.id}" onclick="delCust('${o.id}')">${delArm===o.id?'Wirklich löschen?':'Löschen'}</button>`:''}</div>
-    ${c?`<div class="ff3" style="margin-bottom:12px">
-      <div class="wide2"><label for="kc-${o.id}-name">Name des Optikers</label><input class="txt" id="kc-${o.id}-name" value="${esc(c.name)}" onchange="setCust('${o.id}','name',this)"></div>
-      <div><label for="kc-${o.id}-status">Status</label><select class="txt" id="kc-${o.id}-status" onchange="setCust('${o.id}','status',this)">${STAT.map(([v,l])=>`<option value="${v}" ${c.status===v?'selected':''}>${l}</option>`).join('')}</select></div>
-      <div class="wide2"><label for="kc-${o.id}-stores">Filialen (mit Komma getrennt)</label><input class="txt" id="kc-${o.id}-stores" value="${esc((c.stores||[]).join(', '))}" onchange="setCust('${o.id}','stores',this)"></div>
-      <div><label for="kc-${o.id}-iom">Kundenverwaltungsprogramm</label><input class="txt" id="kc-${o.id}-iom" value="${esc(c.iom||'')}" onchange="setCust('${o.id}','iom',this)"></div></div>`:''}
+    <div class="ff3" style="margin-bottom:12px">
+      <div class="wide2"><label for="kc-${o.id}-name">Name des Optikers</label><input class="txt" id="kc-${o.id}-name" value="${esc(o.name)}" onchange="setCust('${o.id}','name',this)"></div>
+      <div><label for="kc-${o.id}-status">Status</label><select class="txt" id="kc-${o.id}-status" onchange="setCust('${o.id}','status',this)">${STAT.map(([v,l])=>`<option value="${v}" ${o.status===v?'selected':''}>${l}</option>`).join('')}</select></div>
+      <div class="wide2"><label for="kc-${o.id}-stores">Filialen (mit Komma getrennt)</label><input class="txt" id="kc-${o.id}-stores" value="${esc(o.stores.map(x=>x[0]).join(', '))}" onchange="setCust('${o.id}','stores',this)"></div>
+      <div><label for="kc-${o.id}-iom">Kundenverwaltungsprogramm</label><input class="txt" id="kc-${o.id}-iom" value="${esc(o.iom&&o.iom!=='–'?o.iom:'')}" onchange="setCust('${o.id}','iom',this)"></div></div>
     <div class="ff3">${K_FIELDS.map(f=>kField(o,f)).join('')}</div></div>`}).join('')}
-  <p class="note">Selbst angelegte Optiker und alle Kundendaten liegen im Prototyp nur in diesem Browser. Optik Falkner zeigt Live-Daten, die übrigen Optiker mit „Demo“ sind erfundene Beispiele.</p>`;
+  <p class="note">Name, Status, Filialen und Kundenverwaltungsprogramm lassen sich bei allen Optikern ändern. Bereits erstellte Rechnungen behalten den alten Namen. Selbst angelegte Optiker und alle Kundendaten liegen im Prototyp nur in diesem Browser. Optik Falkner zeigt Live-Daten, die übrigen Optiker mit „Demo“ sind erfundene Beispiele.</p>`;
   missInfo(); if(fid){const el=document.getElementById(fid);if(el)el.focus()}
 }
-function go(v){view=v;newOpt=false;delArm=null;flash=null;stornoArm=null;try{history.replaceState(null,'',v==='optiker'?location.pathname:'#'+v)}catch(e){}renderAll();window.scrollTo(0,0)}
+/* ---------- Interessenten (potenzielle Kunden) ---------- */
+const LEAD_ST=[['geplant','Anfrage geplant','b-mute'],['angefragt','Angefragt','b-warn'],['termin','Termin vereinbart','b-pilot'],['angebot','Angebot gesendet','b-warn'],['gewonnen','Gewonnen','b-ok'],['abgesagt','Kein Interesse','b-mute']];
+const leadSt=k=>LEAD_ST.find(x=>x[0]===k)||LEAD_ST[0];
+const L_FIELDS=[['name','Name des Optikers *','z. B. Optik Muster','wide2'],['status','Status','',''],['city','Ort','z. B. Amstetten',''],['stores','Anzahl Filialen','1',''],['iom','Kundenverwaltungsprogramm','',''],
+  ['contact','Ansprechpartner','',''],['phone','Telefon','+43 …',''],['email','E-Mail','name@optiker.at',''],['next','Nächster Schritt am','',''],['todo','Nächster Schritt','z. B. anrufen, Demo zeigen','wide2'],['note','Notizen','','wide3']];
+let leadEdit=null, leadFilter='offen', leadDel=null;
+const todayISO=()=>new Date().toISOString().slice(0,10);
+function leadForm(l){const v=k=>esc(l?(l[k]??''):k==='status'?'geplant':k==='stores'?'1':'');
+  return `<div class="ff3">${L_FIELDS.map(([k,lab,ph,cls])=>`<div class="${cls}"><label for="ld-${k}">${lab}</label>${
+    k==='status'?`<select class="txt" id="ld-status">${LEAD_ST.map(([s,t])=>`<option value="${s}" ${(l?l.status:'geplant')===s?'selected':''}>${t}</option>`).join('')}</select>`
+    :k==='note'?`<textarea class="txt" id="ld-note" rows="3" placeholder="z. B. Gespräch auf der Messe, hat Interesse an der Kasko-Funktion">${v('note')}</textarea>`
+    :`<input class="txt" id="ld-${k}" value="${v(k)}" placeholder="${esc(ph)}" ${k==='next'?'type="date"':k==='stores'?'type="number" min="1" inputmode="numeric"':k==='email'?'type="email"':k==='phone'?'type="tel"':''}>`}</div>`).join('')}</div>
+    <p class="hint" id="ld-err" role="alert" style="color:var(--warn);font-weight:700;margin:10px 0 0"></p>
+    <div class="acts" style="justify-content:flex-start;margin-top:12px"><button class="btn pri" onclick="saveLead()">${l?'Speichern':'Interessent anlegen'}</button><button class="btn" onclick="leadEdit=null;renderLeads()">Abbrechen</button></div>`}
+function saveLead(){const g=k=>{const e=document.getElementById('ld-'+k);return e?e.value.trim():''};
+  if(!g('name')){document.getElementById('ld-err').textContent='Bitte den Namen angeben.';document.getElementById('ld-name').focus();return}
+  const data=Object.fromEntries(L_FIELDS.map(([k])=>[k,g(k)]));
+  if(leadEdit==='new'){B.leads.push(Object.assign({id:'l'+Date.now().toString(36),created:todayISO()},data));flash=['ok',data.name+' wurde als Interessent angelegt.']}
+  else{const l=B.leads.find(x=>x.id===leadEdit);if(l){Object.assign(l,data);flash=['ok',data.name+' gespeichert.']}}
+  saveB();leadEdit=null;renderLeads()}
+function setLead(id,k,el){const l=B.leads.find(x=>x.id===id);if(!l)return;l[k]=el.value;flash=null;saveB();flashSaved();setTimeout(()=>renderLeads(true),0)}
+function delLead(id){if(leadDel!==id){leadDel=id;renderLeads(true);return}const l=B.leads.find(x=>x.id===id);B.leads=B.leads.filter(x=>x.id!==id);saveB();leadDel=null;flash=['ok',(l?l.name:'Interessent')+' gelöscht.'];renderLeads()}
+function convertLead(id){const l=B.leads.find(x=>x.id===id);if(!l||l.converted)return;
+  if(OPT.some(o=>o.name.toLowerCase()===l.name.toLowerCase())){flash=['warn',l.name+' gibt es schon als Kunde.'];renderLeads();return}
+  const oid='o'+Date.now().toString(36),n=Math.max(1,parseInt(l.stores)||1),stores=n===1?[l.city||l.name]:Array.from({length:n},(_,i)=>(l.city||'Filiale')+' '+(i+1));
+  B.custom.push({id:oid,name:l.name,stores,iom:l.iom,status:'setup',created:new Date().toISOString()});
+  B.addr[oid]={contact:l.contact,email:l.email,phone:l.phone,street:'',city:l.city?l.city:'',uid:''};
+  l.converted=oid;l.status='gewonnen';saveB();load();flash=['ok',l.name+' ist jetzt Kunde („In Einrichtung“). Adresse und Filialen unter „Kundendaten“ ergänzen.'];renderLeads()}
+function renderLeads(keep){
+  const fid=keep&&document.activeElement&&document.activeElement.id, all=B.leads, today=todayISO();
+  const isOpen=l=>l.status!=='gewonnen'&&l.status!=='abgesagt';
+  const cnt=f=>f==='alle'?all.length:f==='offen'?all.filter(isOpen).length:all.filter(l=>l.status===f).length;
+  const list=all.filter(l=>leadFilter==='alle'||(leadFilter==='offen'?isOpen(l):l.status===leadFilter))
+    .sort((a,b)=>(a.next||'9999').localeCompare(b.next||'9999')||a.name.localeCompare(b.name));
+  const FILT=[['offen','Offen'],['alle','Alle'],...LEAD_ST.map(([k,t])=>[k,t])];
+  document.getElementById('app').innerHTML=`
+  <div class="head"><div class="grow"><h1>Interessenten</h1><p>Optiker, die wir anfragen wollen oder mit denen wir im Gespräch sind. Status und nächster Schritt lassen sich direkt in der Liste ändern.</p></div>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="saved" id="savedMsg">✓ Gespeichert</span>
+    <button class="btn pri" onclick="leadEdit='new';flash=null;renderLeads();document.getElementById('ld-name').focus()" ${leadEdit==='new'?'disabled':''}>+ Interessent anlegen</button></div></div>
+  ${flash?`<div class="flash ${flash[0]==='warn'?'warn':''}" role="status">${esc(flash[1])}</div>`:''}
+  ${leadEdit==='new'?`<div class="card newopt" style="margin-top:18px"><h2>Neuer Interessent</h2>${leadForm(null)}</div>`:''}
+  <div class="filters" role="group" aria-label="Filter"><div class="seg seg-wrap">${FILT.map(([k,t])=>`<button aria-pressed="${leadFilter===k}" onclick="leadFilter='${k}';leadEdit=null;renderLeads()">${t} <span class="cnt">${cnt(k)}</span></button>`).join('')}</div></div>
+  <div class="card" style="margin-top:14px">
+    ${list.length?`<div class="tblwrap"><table class="inv leads"><thead><tr><th>Optiker</th><th>Ansprechpartner</th><th>Status</th><th>Nächster Schritt</th><th class="num"></th></tr></thead><tbody>
+    ${list.map(l=>{const st=leadSt(l.status),late=l.next&&l.next<today&&isOpen(l);return leadEdit===l.id?`<tr><td colspan="5"><h2 style="font-size:17px">${esc(l.name)} bearbeiten</h2>${leadForm(l)}</td></tr>`:`<tr>
+      <td class="name"><b>${esc(l.name)}</b><span>${[l.city,l.stores&&+l.stores>1?l.stores+' Filialen':'',l.iom].filter(Boolean).map(esc).join(' · ')||'–'}</span>${l.note?`<span class="lnote">${esc(l.note)}</span>`:''}</td>
+      <td class="name"><b style="font-weight:400">${esc(l.contact||'–')}</b><span>${[l.phone?`<a href="tel:${esc(l.phone)}">${esc(l.phone)}</a>`:'',l.email?`<a href="mailto:${esc(l.email)}">${esc(l.email)}</a>`:''].filter(Boolean).join(' · ')}</span></td>
+      <td><select class="txt stsel ${st[2]}" id="lst-${l.id}" aria-label="Status ${esc(l.name)}" onchange="setLead('${l.id}','status',this)">${LEAD_ST.map(([k,t])=>`<option value="${k}" ${l.status===k?'selected':''}>${t}</option>`).join('')}</select></td>
+      <td><input class="txt ${late?'late':''}" type="date" id="lnx-${l.id}" aria-label="Datum nächster Schritt ${esc(l.name)}" value="${esc(l.next||'')}" onchange="setLead('${l.id}','next',this)">${l.todo?`<div class="hint" style="margin-top:3px">${esc(l.todo)}</div>`:''}${late?'<div class="hint" style="color:var(--warn);font-weight:700">überfällig</div>':''}</td>
+      <td class="num"><div class="acts">${l.status==='gewonnen'?(l.converted?'<span class="badge b-ok">Kunde</span>':`<button class="btn sm pri" id="lcv-${l.id}" onclick="convertLead('${l.id}')">Als Kunde übernehmen</button>`):''}
+        <button class="btn sm" id="led-${l.id}" onclick="leadEdit='${l.id}';flash=null;renderLeads()">Bearbeiten</button><button class="btn sm" id="ldl-${l.id}" onclick="delLead('${l.id}')">${leadDel===l.id?'Wirklich löschen?':'Löschen'}</button></div></td></tr>`}).join('')}
+    </tbody></table></div>`:`<p class="empty">${all.length?'Keine Interessenten mit diesem Status.':'Noch keine Interessenten. Leg den ersten mit „+ Interessent anlegen“ an.'}</p>`}
+  </div>
+  <p class="note">Sortiert nach dem Datum des nächsten Schritts. „Als Kunde übernehmen“ legt den Optiker unter „Kundendaten“ an. Im Prototyp liegen die Daten nur in diesem Browser.</p>`;
+  if(fid){const el=document.getElementById(fid);if(el)el.focus()}
+}
+function go(v){view=v;newOpt=false;delArm=null;leadEdit=null;leadDel=null;flash=null;stornoArm=null;try{history.replaceState(null,'',v==='optiker'?location.pathname:'#'+v)}catch(e){}renderAll();window.scrollTo(0,0)}
 function renderAll(){document.querySelectorAll('.nav button').forEach(b=>{if(b.dataset.v===view)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
-  if(view==='rechnungen')renderInv();else if(view==='firma')renderFirma();else if(view==='kunden')renderKunden();else render()}
-if(location.hash==='#rechnungen')view='rechnungen';if(location.hash==='#firma')view='firma';if(location.hash==='#kunden')view='kunden';
+  if(view==='rechnungen')renderInv();else if(view==='firma')renderFirma();else if(view==='kunden')renderKunden();else if(view==='leads')renderLeads();else render()}
+if(location.hash==='#rechnungen')view='rechnungen';if(location.hash==='#firma')view='firma';if(location.hash==='#kunden')view='kunden';if(location.hash==='#leads')view='leads';
 const LOGO_SVG=(()=>{const l=document.querySelector('header .logo').cloneNode(true);l.setAttribute('height','34');l.style.color='#172235';return l.outerHTML})();
 load();renderAll();
 window.addEventListener('storage',e=>{if(e.key==='falkner-v10'||e.key==='falkner-dash-v1'){load();renderAll()}});
