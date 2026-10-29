@@ -655,7 +655,7 @@ html[data-gt="light"] .scrim{background:rgba(20,25,34,.35)!important}
         <button class="list-item" style="width:100%;text-align:left" onclick="demoPush()"><div class="grow">Demo: Bewertungs-Benachrichtigung zeigen</div></button>
         <button class="list-item" style="width:100%;text-align:left;color:var(--danger)" onclick="resetDemo()"><div class="grow">Demo-Daten zurücksetzen</div></button>
       </div>
-      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.8 · Kundendaten sind Beispieldaten</p>
+      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.9 · Kundendaten sind Beispieldaten</p>
     </section>
   </main>
 
@@ -904,7 +904,7 @@ function renderGlasses(){
         <div><span>Vollkasko</span><b style="color:${kaskoActive(g)?'var(--ok)':'var(--muted)'}">${g.kasko?(kaskoActive(g)?'bis '+fmtDate(kaskoInfo(g).until):'abgelaufen'):'keine'}</b></div></div>
       <div class="btn-row"><button class="btn ghost" onclick="openSheet('damage','${g.id}')">Schaden melden</button><button class="btn ghost" onclick="sharePass('${g.id}')">Als PDF teilen</button></div>
       ${kaskoActive(g)?`<button class="btn outline" onclick="openSheet('kasko','${g.id}')">Vollkasko nutzen</button>`:''}
-      <button class="btn ghost" style="margin-top:10px" onclick="openSheet('docs','${g.id}')">📄 Dokumente${g.purchase?' ('+docList(g).length+')':''}</button>
+      <button class="btn ghost" style="margin-top:10px" onclick="openSheet('docs','${g.id}')">📄 Dokumente${docList(g).length?' ('+docList(g).length+')':''}</button>
     </div>`).join('');
 }
 
@@ -1388,14 +1388,19 @@ function sheetNews(id){
 }
 
 /* --- Dokumente (Beispieldokumente) --- */
-function docList(g){if(!g.purchase)return [];const l=[['warranty','🛡️','Garantie-Zertifikat']]; /* Rechnung wird in der App nicht mehr angezeigt */if(g.kasko)l.push(['kasko','☂️','Vollkasko-Police']);return l}
+/* Rechnung wird in der App nicht angezeigt. Vom Optiker hochgeladene Dokumente (g.docs) haben Vorrang vor den Beispieldokumenten. */
+function docList(g){const u=g.docs||{},l=[];if(g.purchase||u.warranty)l.push(['warranty','🛡️','Garantie-Zertifikat']);if(g.kasko||u.kasko)l.push(['kasko','☂️','Vollkasko-Police']);return l}
+function docBlobUrl(d){const b=atob(d.data.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return URL.createObjectURL(new Blob([a],{type:d.mime||'application/pdf'}))}
 function sheetDocs(gid){
   const g=findGlasses(gid), o=ownerOf(gid), l=docList(g);
   setSheet('Dokumente',`<p class="sub">${esc(o.first)} – Brille vom ${fmtDate(g.date)}</p>
-    ${l.length?l.map(d=>`<button class="list-item" style="width:100%;text-align:left" onclick="showDoc('${gid}','${d[0]}')"><span class="aic" style="background:var(--surface-2);font-size:18px">${d[1]}</span><div class="grow"><b>${d[2]}</b><div class="muted-s">PDF · ${fmtDate(g.date)}</div></div><span class="chev">›</span></button>`).join('')
+    ${l.length?l.map(d=>`<button class="list-item" style="width:100%;text-align:left" onclick="showDoc('${gid}','${d[0]}')"><span class="aic" style="background:var(--surface-2);font-size:18px">${d[1]}</span><div class="grow"><b>${d[2]}</b><div class="muted-s">${(g.docs||{})[d[0]]?((g.docs[d[0]].type==='pdf'?'PDF':'Foto')+' · von der Filiale am '+fmtDate(g.docs[d[0]].date)):'PDF · '+fmtDate(g.date)}</div></div><span class="chev">›</span></button>`).join('')
       :'<p class="muted-s mt">Für diese Brille sind noch keine Dokumente hinterlegt.</p>'}`);
 }
 function showDoc(gid,kind){
+  { const gg=findGlasses(gid), up=gg&&gg.docs&&gg.docs[kind]; if(up){ const url=docBlobUrl(up), title=kind==='kasko'?'Vollkasko-Police':'Garantie-Zertifikat';
+    setSheet(title,`<p class="sub">Von Ihrer Filiale hochgeladen am ${fmtDate(up.date)}</p>${up.type==='pdf'?`<iframe src="${url}" title="${title}" style="width:100%;height:60vh;border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>`:`<img src="${url}" alt="${title}" style="width:100%;border-radius:12px;display:block">`}
+      <div class="btn-row"><button class="btn ghost" onclick="sheetDocs('${gid}')">Zurück</button><a class="btn ghost" style="text-decoration:none;text-align:center" href="${url}" download="${esc(up.name||title)}">Herunterladen</a></div>`); return } }
   const g=findGlasses(gid), o=ownerOf(gid), st=curStore(), P=g.purchase, sum=P.items.reduce((s,x)=>s+x[1],0);
   const head=`<div class="row"><img src="${(S.brand&&S.brand.logo)||FALCON_DEFAULT||document.querySelector('.falcon img').src}" style="width:44px;height:44px"><div class="grow"><b>${esc(st.full)}</b><div style="font-size:12px;color:#6e6e74">${esc(st.street)}, ${esc(st.zip)} · ${esc(st.tel)}</div></div></div>`;
   let body='';

@@ -164,6 +164,9 @@ table.t tr.click{cursor:pointer} table.t tr.click:hover td{background:var(--surf
 .audn{margin-top:12px;font-size:14px}.audn b{font-size:18px;color:var(--accent)}.audn.zero b{color:var(--danger)}
 .sup-wrap{padding:0;overflow:hidden;height:calc(100vh - 210px);min-height:440px;display:flex}.sup-wrap .thread{flex:1}
 .sup-av{background:#F0643C!important;color:#fff;font-size:18px}.sup-from{display:block;font-size:12px;color:#C2410C;margin-bottom:2px}
+.docg{margin-top:14px;padding-top:10px;border-top:1px solid var(--line)}.docg:first-of-type{border-top:0}
+.docrow{display:flex;align-items:center;gap:10px;padding:8px 0;flex-wrap:wrap}.docrow .grow{min-width:180px}.docic{width:34px;height:34px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;font-size:17px;flex:none}
+.docup{cursor:pointer}
 </style>
 </head>
 <body>
@@ -173,7 +176,7 @@ table.t tr.click{cursor:pointer} table.t tr.click:hover td{background:var(--surf
     <div id="navList"></div>
     <div class="side-foot"><div class="sideuser"><span class="av" id="sideAv" style="width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700">T</span><div class="grow"><b id="sideName">–</b><div id="sideRole" class="small"></div></div></div>
       <button class="btn ghost sm" style="margin-top:10px;width:100%" onclick="logout()">Abmelden</button>
-      <div style="margin-top:10px">Dashboard-Prototyp v1.1<br>Alle Kundendaten sind Beispieldaten.<br><a class="weblink" href="../website/" target="_blank" rel="noopener">OptiApp-Website ↗</a></div></div>
+      <div style="margin-top:10px">Dashboard-Prototyp v1.2<br>Alle Kundendaten sind Beispieldaten.<br><a class="weblink" href="../website/" target="_blank" rel="noopener">OptiApp-Website ↗</a></div></div>
   </aside>
   <main>
     <div class="top">
@@ -290,7 +293,7 @@ let S;
 function loadS(){let x=null;try{x=JSON.parse(localStorage.getItem(KEY))}catch(e){}
   if(!x){x=JSON.parse(JSON.stringify(DEFAULT));x.store='perg';try{localStorage.setItem(KEY,JSON.stringify(x))}catch(e){}}
   x.chat=x.chat||[];x.tickets=x.tickets||[];x.appts=x.appts||[];x.reviews=x.reviews||[];x.extraNews=x.extraNews||[];x.family=x.family||[];x.storeCfg=x.storeCfg||{};x.tickets.forEach(t=>t.status=normStatus(t.status));return x}
-function saveS(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function saveS(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){S=loadS()}}
 S=loadS();
 const STORES_BASE=JSON.parse(JSON.stringify(STORES));
 S.tickets.forEach(t=>t.status=normStatus(t.status));
@@ -330,7 +333,7 @@ const DDEFAULT={customers:[
 let D;
 try{D=JSON.parse(localStorage.getItem(DKEY))}catch(e){}
 if(!D)D=JSON.parse(JSON.stringify(DDEFAULT));
-function saveD(){try{localStorage.setItem(DKEY,JSON.stringify(D))}catch(e){}}
+function saveD(){try{localStorage.setItem(DKEY,JSON.stringify(D))}catch(e){try{D=JSON.parse(localStorage.getItem(DKEY))||D}catch(x){}}}
 const DEMO_BIRTH={'c2':['1961-03-08','2009-05-20'],'c3':['1994-11-23','2021-02-11'],'c4':['2003-07-30','2024-08-02'],'c5':['1976-01-17','2015-10-06']};
 D.customers.forEach((c,i)=>{if(!c.kdnr)c.kdnr=String(310400+i*37);if(DEMO_BIRTH[c.id]){if(!c.birth)c.birth=DEMO_BIRTH[c.id][0];if(!c.since)c.since=DEMO_BIRTH[c.id][1]}if(!c.since)c.since=(c.invited||new Date().toISOString().slice(0,10));c.tickets.forEach(x=>x.status=normStatus(x.status))});
 const TPL_DEFAULT=[
@@ -660,6 +663,33 @@ function apptReview(cid,aid){
 
 /* --- Kunden --- */
 let q='';
+
+/* --- Dokumente je Brille hochladen (Garantie, Vollkasko) – erscheinen in der Kunden-App --- */
+const DOC_KINDS=[['warranty','🛡️','Garantie-Dokument'],['kasko','☂️','Vollkasko-Dokument']];
+const DOC_MAX_PDF=1.5*1024*1024;
+function docUpload(cid,gid,kind,inp){const f=inp.files[0];inp.value='';if(!f)return;
+  const done=d=>{let ok=true;mutate(cid,x=>{const g=x.glasses.find(y=>y.id===gid);if(g)g.docs=Object.assign({},g.docs,{[kind]:d})});
+    const chk=cust(cid),g2=chk&&chk.glasses.find(y=>y.id===gid);ok=!!(g2&&g2.docs&&g2.docs[kind]&&g2.docs[kind].date===d.date&&g2.docs[kind].name===d.name);
+    render();toast(ok?'Dokument hochgeladen'+(String(cid).startsWith('live')?' · in der App sichtbar':''):'Speicher des Prototyps ist voll – Datei bitte verkleinern')};
+  const today=new Date().toISOString().slice(0,10);
+  if(f.type==='application/pdf'){if(f.size>DOC_MAX_PDF){toast('PDF ist zu groß (max. 1,5 MB im Prototyp)');return}
+    const r=new FileReader();r.onload=e=>done({name:f.name,type:'pdf',mime:'application/pdf',data:e.target.result,date:today});r.readAsDataURL(f);return}
+  if(/^image\//.test(f.type)){const url=URL.createObjectURL(f),im=new Image();im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+      const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
+      done({name:f.name.replace(/\.[^.]+$/,'')+'.jpg',type:'img',mime:'image/jpeg',data:c.toDataURL('image/jpeg',.82),date:today})};im.onerror=()=>toast('Das Bild konnte nicht gelesen werden.');im.src=url;return}
+  toast('Bitte ein PDF oder ein Foto auswählen')}
+function docOpen(cid,gid,kind){const c=cust(cid),g=c&&c.glasses.find(y=>y.id===gid),d=g&&g.docs&&g.docs[kind];if(!d)return;
+  const b=atob(d.data.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);window.open(URL.createObjectURL(new Blob([a],{type:d.mime})),'_blank')}
+let docDelArm=null;
+function docRemove(cid,gid,kind){const key=cid+gid+kind;if(docDelArm!==key){docDelArm=key;render();return}docDelArm=null;
+  mutate(cid,x=>{const g=x.glasses.find(y=>y.id===gid);if(g&&g.docs){delete g.docs[kind]}});render();toast('Dokument entfernt')}
+function docsCard(c){const gl=[...(c.glasses||[])].sort((a,b)=>b.date.localeCompare(a.date));
+  return `<div class="card"><h2>Dokumente</h2><div class="muted small">Garantie- und Vollkasko-Dokumente je Brille hochladen (PDF bis 1,5 MB oder Foto). Der Kunde sieht sie in der App unter „Dokumente“.</div>
+  ${gl.length?gl.map(g=>`<div class="docg"><b class="small">Brille vom ${fmtDate(g.date)}</b>${DOC_KINDS.map(([k,ic,t])=>{const d=g.docs&&g.docs[k],key=c.id+g.id+k;return `<div class="docrow"><span class="docic">${ic}</span><div class="grow"><b>${t}</b><div class="muted small">${d?esc(d.name)+' · '+(d.type==='pdf'?'PDF':'Foto')+' · hochgeladen am '+fmtDate(d.date):'Noch nicht hochgeladen'+(k==='kasko'&&!g.kasko?' · keine Vollkasko hinterlegt':'')}</div></div>
+      ${d?`<button class="btn ghost sm" onclick="docOpen('${c.id}','${g.id}','${k}')">Ansehen</button>`:''}
+      <label class="btn ${d?'ghost':'accent'} sm docup">${d?'Ersetzen':'Hochladen'}<input type="file" accept="application/pdf,image/*" hidden onchange="docUpload('${c.id}','${g.id}','${k}',this)"></label>
+      ${d?`<button class="btn ghost sm" style="color:var(--danger)" onclick="docRemove('${c.id}','${g.id}','${k}')">${docDelArm===key?'Wirklich entfernen?':'Entfernen'}</button>`:''}</div>`}).join('')}</div>`).join('')
+  :'<p class="empty">Noch keine Brille im Brillenpass – Dokumente lassen sich hochladen, sobald eine Brille hinterlegt ist.</p>'}</div>`}
 function vCustomers(){
   const cs=customers().filter(inFilter).filter(c=>!q||c.name.toLowerCase().includes(q.toLowerCase()));
   if(!selCust||!cs.find(c=>c.id===selCust)) selCust=(cs[0]||customers().filter(inFilter)[0]||customers()[0]).id;
@@ -694,6 +724,7 @@ function vCustomers(){
           ${(Y.vouchers||[]).map(v=>`<div class="row" style="margin-top:8px;padding:8px 10px;border:1.5px dashed var(--accent);border-radius:9px"><b class="grow" style="color:var(--accent)">🎁 ${esc(v.code)}</b><button class="btn accent sm" onclick="redeemV('${c.id}','${v.code}')">Einlösen</button></div>`).join('')}
         </div>
       </div>
+      ${docsCard(c)}
       <div class="card"><h2>Aufträge</h2>${ordersTable(c.tickets.map(t=>({...t,cust:c})))}</div>
     </div></div>`);
 }
