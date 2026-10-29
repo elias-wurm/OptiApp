@@ -60,8 +60,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <a class="btn btn-ghost" href="../" target="_blank" rel="noopener">Kunden-App ausprobieren</a>
   </div>
   <div class="stage" aria-hidden="true">
-    <img class="shot-desk" src="img/dashboard.jpg" alt="" width="1440" height="900">
-    <div class="phone"><img src="img/app-start.jpg" alt="" width="390" height="844"></div>
+    <img class="shot-desk" src="img/dashboard.jpg" data-dunkel="img/dashboard.jpg" data-hell="img/dashboard-hell.jpg" alt="" width="1440" height="900">
+    <div class="phone"><img src="img/app-start.jpg" data-dunkel="img/app-start.jpg" data-hell="img/app-start-hell.jpg" alt="" width="390" height="844"></div>
   </div>
 </section>
 
@@ -78,7 +78,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     </ul>
   </div>
   <figure class="split-fig">
-    <div class="phone"><img src="img/app-brillenpass.jpg" alt="Brillenpass in der Kunden-App mit Messwerten für rechts und links" width="390" height="844"></div>
+    <div class="phone"><img src="img/app-brillenpass.jpg" data-dunkel="img/app-brillenpass.jpg" data-hell="img/app-brillenpass-hell.jpg" alt="Brillenpass in der Kunden-App mit Messwerten für rechts und links" width="390" height="844"></div>
   </figure>
 </section>
 
@@ -86,7 +86,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   <div class="wrap">
     <h2 id="h-team">Für Ihr Team: ein Dashboard für alle Filialen</h2>
     <p class="narrow">Nachrichten, Aufträge, Termine und Bewertungen laufen an einer Stelle zusammen. Kundendaten und Messwerte kommen direkt aus Ihrem Kunden&shy;verwaltungs&shy;programm – doppelt eintippen fällt weg.</p>
-    <img class="shot-wide" src="img/dashboard-nachrichten.jpg" alt="Nachrichten im Dashboard: Chat mit einem Kunden, Statusmeldungen und Textbausteine" width="1440" height="900">
+    <img class="shot-wide" src="img/dashboard-nachrichten.jpg" data-dunkel="img/dashboard-nachrichten.jpg" data-hell="img/dashboard-nachrichten-hell.jpg" alt="Nachrichten im Dashboard: Chat mit einem Kunden, Statusmeldungen und Textbausteine" width="1440" height="900">
   </div>
 </section>
 
@@ -164,6 +164,11 @@ f.addEventListener('submit',e=>{e.preventDefault();
   f.innerHTML='<div class="done" tabindex="-1"><h3>Danke für Ihre Anfrage</h3><p>Wir melden uns innerhalb von zwei Werktagen bei '+mail.replace(/[<>&"]/g,'')+'.</p><p class="note">Prototyp: Es wurde nichts versendet.</p></div>';
   f.querySelector('.done').focus();
 });
+</script>
+<script>/* Runde 5: Bilder passend zu Hell/Dunkel */
+(function(){function sw(){var l=document.documentElement.getAttribute('data-gt')==='light';
+document.querySelectorAll('img[data-hell]').forEach(function(i){var t=l?i.dataset.hell:i.dataset.dunkel;if(i.getAttribute('src')!==t)i.setAttribute('src',t)})}
+sw();new MutationObserver(sw).observe(document.documentElement,{attributes:true,attributeFilter:['data-gt']})})();
 </script>
 </body>
 </html>

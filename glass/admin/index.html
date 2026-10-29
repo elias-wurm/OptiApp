@@ -209,7 +209,7 @@ tbody tr:hover td,tbody tr[aria-selected="true"] td{background:rgba(255,255,255,
 .top .gt-seg button{width:28px;height:24px}
 .top .nav button,.top .weblink{white-space:nowrap}
 .top .nav button{padding:8px 11px}
-@media (max-width:1500px){.top .weblink{display:none}}
+@media (max-width:1399px){.top .weblink{display:none}}
 html[data-gt="light"]:root:root:root{--paper:#ECEFF3; --ink:#141922; --muted:rgba(20,25,34,.62); --line:rgba(20,25,34,.11); --surface:rgba(255,255,255,.62); --surface-2:rgba(255,255,255,.5);
 --ok:#1E9566; --ok-soft:rgba(30,149,102,.13); --warn:#B7700F; --warn-soft:rgba(220,150,40,.16); --danger:#D23F3F; color-scheme:light; --grid:rgba(20,25,34,.07); --ok-bg:rgba(30,149,102,.13); --warn-bg:rgba(220,150,40,.16); --mute-bg:rgba(20,25,34,.06); --amber:#B7700F}
 html[data-gt="light"] .top{background:rgba(255,255,255,.55)!important;border-color:rgba(255,255,255,.95)!important;box-shadow:0 16px 40px rgba(20,25,34,.10)}
@@ -247,6 +247,13 @@ html[data-gt="light"] select:not([multiple]):focus-visible,html[data-gt="light"]
 html[data-gt="light"] .gs-pop{background:rgba(255,255,255,.8);border-color:rgba(255,255,255,.95);color:#141922;box-shadow:inset 0 1px 0 #fff,0 20px 50px rgba(20,25,34,.18)}
 html[data-gt="light"] .gs-opt:hover,html[data-gt="light"] .gs-opt.hl{background:rgba(20,25,34,.06)}
 html[data-gt="light"] .gs-opt.on::before{border-color:var(--gs-acc,#141922)}
+
+/* --- Runde 5: Kopfleiste breiter, leere Pflichtfelder mit Gelbstich --- */
+.top{max-width:1320px!important}
+.top .nav{margin-left:10px}
+.txt.miss{background:rgba(255,192,105,.13)!important;border-color:rgba(255,192,105,.55)!important}
+html[data-gt="light"] .txt.miss{background:rgba(245,175,40,.14)!important;border-color:rgba(205,140,20,.5)!important}
+.txt.late{border-color:var(--warn)!important}
 </style>
 </head>
 <body>
@@ -258,7 +265,7 @@ html[data-gt="light"] .gs-opt.on::before{border-color:var(--gs-acc,#141922)}
   <circle cx="200.05" cy="194.50" r="32.62" fill="none" stroke="#FFFFFF" stroke-width="13.05" stroke-linecap="round"/>
   <path d="M150.03 189.61 Q158.73 170.04 167.43 189.61" fill="none" stroke="#FFFFFF" stroke-width="13.05" stroke-linecap="round"/>
   <path d="M316.18216000000007 203.1006Q316.18216000000007 182.7006 325.68216000000007 166.5006Q335.18216000000007 150.30059999999997 351.4821600000001 141.20059999999998Q367.7821600000001 132.1006 387.18216000000007 132.1006Q406.7821600000001 132.1006 423.0821600000001 141.20059999999998Q439.3821600000001 150.30059999999997 448.7821600000001 166.5006Q458.18216000000007 182.7006 458.18216000000007 203.1006Q458.18216000000007 223.5006 448.7821600000001 239.80059999999997Q439.3821600000001 256.1006 423.0821600000001 265.2006Q406.7821600000001 274.3006 387.18216000000007 274.3006Q367.7821600000001 274.3006 351.4821600000001 265.2006Q335.18216000000007 256.1006 325.68216000000007 239.80059999999997Q316.18216000000007 223.5006 316.18216000000007 203.1006ZM434.7821600000001 203.1006Q434.7821600000001 187.7006 428.68216000000007 176.1006Q422.5821600000001 164.5006 411.7821600000001 158.30059999999997Q400.9821600000001 152.1006 387.18216000000007 152.1006Q373.3821600000001 152.1006 362.5821600000001 158.30059999999997Q351.7821600000001 164.5006 345.68216000000007 176.1006Q339.5821600000001 187.7006 339.5821600000001 203.1006Q339.5821600000001 218.5006 345.68216000000007 230.2006Q351.7821600000001 241.9006 362.5821600000001 248.2006Q373.3821600000001 254.5006 387.18216000000007 254.5006Q400.9821600000001 254.5006 411.7821600000001 248.2006Q422.5821600000001 241.9006 428.68216000000007 230.2006Q434.7821600000001 218.5006 434.7821600000001 203.1006ZM540.9821600000001 160.9006Q555.3821600000001 160.9006 567.2821600000001 168.0006Q579.1821600000001 175.1006 585.98216 187.9006Q592.7821600000001 200.7006 592.7821600000001 217.3006Q592.7821600000001 233.9006 585.98216 247.0006Q579.1821600000001 260.1006 567.2821600000001 267.4006Q555.3821600000001 274.7006 540.9821600000001 274.7006Q528.3821600000001 274.7006 518.5821600000002 269.6006Q508.7821600000001 264.5006 502.5821600000001 256.9006V325.30060000000003H479.7821600000001V162.7006H502.5821600000001V178.9006Q508.3821600000001 171.30059999999997 518.3821600000001 166.1006Q528.3821600000001 160.9006 540.9821600000001 160.9006ZM535.9821600000001 180.7006Q527.3821600000001 180.7006 519.6821600000001 185.1006Q511.9821600000001 189.5006 507.2821600000001 197.9006Q502.5821600000001 206.30059999999997 502.5821600000001 217.7006Q502.5821600000001 229.1006 507.2821600000001 237.6006Q511.9821600000001 246.1006 519.6821600000001 250.5006Q527.3821600000001 254.9006 535.9821600000001 254.9006Q544.7821600000001 254.9006 552.48216 250.4006Q560.1821600000001 245.9006 564.8821600000001 237.3006Q569.5821600000002 228.7006 569.5821600000002 217.3006Q569.5821600000002 205.9006 564.8821600000001 197.6006Q560.1821600000001 189.30059999999997 552.48216 185.0006Q544.7821600000001 180.7006 535.9821600000001 180.7006ZM641.1821600000002 181.30059999999997V242.3006Q641.1821600000002 248.5006 644.0821600000002 251.2006Q646.9821600000001 253.9006 653.9821600000001 253.9006H667.9821600000001V272.9006H649.9821600000001Q634.5821600000002 272.9006 626.3821600000001 265.7006Q618.1821600000002 258.5006 618.1821600000002 242.3006V181.30059999999997H605.1821600000002V162.7006H618.1821600000002V135.3006H641.1821600000002V162.7006H667.9821600000001V181.30059999999997ZM685.1821600000001 133.5006Q685.1821600000001 127.3006 689.3821600000001 123.1006Q693.58216 118.9006 699.7821600000001 118.9006Q705.7821600000001 118.9006 709.98216 123.1006Q714.1821600000001 127.3006 714.1821600000001 133.5006Q714.1821600000001 139.70059999999998 709.98216 143.9006Q705.7821600000001 148.1006 699.7821600000001 148.1006Q693.58216 148.1006 689.3821600000001 143.9006Q685.1821600000001 139.70059999999998 685.1821600000001 133.5006ZM710.98216 162.7006V272.9006H688.1821600000001V162.7006ZM823.98216 244.5006H765.7821600000001L755.7821600000001 272.9006H731.98216L781.7821600000001 133.70059999999998H808.1821600000001L857.98216 272.9006H833.98216ZM817.58216 225.9006 794.98216 161.30059999999997 772.1821600000001 225.9006ZM939.9821600000001 160.9006Q954.3821600000001 160.9006 966.2821600000001 168.0006Q978.1821600000001 175.1006 984.98216 187.9006Q991.7821600000001 200.7006 991.7821600000001 217.3006Q991.7821600000001 233.9006 984.98216 247.0006Q978.1821600000001 260.1006 966.2821600000001 267.4006Q954.3821600000001 274.7006 939.9821600000001 274.7006Q927.3821600000001 274.7006 917.5821600000002 269.6006Q907.7821600000001 264.5006 901.58216 256.9006V325.30060000000003H878.7821600000001V162.7006H901.58216V178.9006Q907.3821600000001 171.30059999999997 917.3821600000001 166.1006Q927.3821600000001 160.9006 939.9821600000001 160.9006ZM934.9821600000001 180.7006Q926.3821600000001 180.7006 918.6821600000001 185.1006Q910.9821600000001 189.5006 906.2821600000001 197.9006Q901.58216 206.30059999999997 901.58216 217.7006Q901.58216 229.1006 906.2821600000001 237.6006Q910.9821600000001 246.1006 918.6821600000001 250.5006Q926.3821600000001 254.9006 934.9821600000001 254.9006Q943.7821600000001 254.9006 951.48216 250.4006Q959.1821600000001 245.9006 963.8821600000001 237.3006Q968.5821600000002 228.7006 968.5821600000002 217.3006Q968.5821600000002 205.9006 963.8821600000001 197.6006Q959.1821600000001 189.30059999999997 951.48216 185.0006Q943.7821600000001 180.7006 934.9821600000001 180.7006ZM1074.7821600000002 160.9006Q1089.18216 160.9006 1101.0821600000002 168.0006Q1112.9821600000002 175.1006 1119.7821600000002 187.9006Q1126.5821600000002 200.7006 1126.5821600000002 217.3006Q1126.5821600000002 233.9006 1119.7821600000002 247.0006Q1112.9821600000002 260.1006 1101.0821600000002 267.4006Q1089.18216 274.7006 1074.7821600000002 274.7006Q1062.18216 274.7006 1052.38216 269.6006Q1042.5821600000002 264.5006 1036.38216 256.9006V325.30060000000003H1013.5821600000002V162.7006H1036.38216V178.9006Q1042.18216 171.30059999999997 1052.18216 166.1006Q1062.18216 160.9006 1074.7821600000002 160.9006ZM1069.7821600000002 180.7006Q1061.18216 180.7006 1053.48216 185.1006Q1045.7821600000002 189.5006 1041.0821600000002 197.9006Q1036.38216 206.30059999999997 1036.38216 217.7006Q1036.38216 229.1006 1041.0821600000002 237.6006Q1045.7821600000002 246.1006 1053.48216 250.5006Q1061.18216 254.9006 1069.7821600000002 254.9006Q1078.5821600000002 254.9006 1086.2821600000002 250.4006Q1093.9821600000002 245.9006 1098.6821600000003 237.3006Q1103.38216 228.7006 1103.38216 217.3006Q1103.38216 205.9006 1098.6821600000003 197.6006Q1093.9821600000002 189.30059999999997 1086.2821600000002 185.0006Q1078.5821600000002 180.7006 1069.7821600000002 180.7006Z" fill="currentColor"/>
-</svg></a><span class="tag">Verwaltung</span>
+</svg></a>
   <nav class="nav" aria-label="Bereiche"><button data-v="optiker" onclick="go('optiker')">Optiker</button><button data-v="rechnungen" onclick="go('rechnungen')">Rechnungen</button><button data-v="firma" onclick="go('firma')">Firmendaten</button><button data-v="kunden" onclick="go('kunden')">Kundendaten</button><button data-v="leads" onclick="go('leads')">Interessenten</button><button data-v="support" onclick="go('support')">Nachrichten</button></nav>
   <span class="grow"></span><span class="gt-mount" title="Darstellung"></span><a class="weblink" href="../website/" target="_blank" rel="noopener">Website ↗</a><button class="btn" onclick="logout()">Abmelden</button>
 </div></header>
@@ -779,6 +786,120 @@ select:not([multiple]):focus-visible,select.gs-open{border-color:rgba(255,255,25
     if(usable(e.target)&&(e.key===' '||e.key==='Enter'||(e.altKey&&(e.key==='ArrowDown'||e.key==='ArrowUp')))){e.preventDefault();build(e.target)}
   },true);
   addEventListener('scroll',e=>{if(open&&!(e.target.closest&&e.target.closest('.gs-pop')))close()},true);
+  addEventListener('resize',close);addEventListener('blur',close);
+})();
+</script>
+<!-- ===== Runde 5: Glas-Datumsauswahl ===== -->
+<style>
+@media (pointer:fine){
+input[type="date"]{padding-right:38px!important;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ECEFF5' stroke-opacity='.75' stroke-width='2' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E")!important;
+  background-repeat:no-repeat!important;background-position:right 12px center!important;background-size:16px!important}
+html[data-gt="light"] input[type="date"]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23141922' stroke-opacity='.7' stroke-width='2' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E")!important}
+input[type="date"]::-webkit-calendar-picker-indicator{display:none}
+input[type="date"].gd-open{border-color:rgba(255,255,255,.38)!important;box-shadow:0 0 0 3px rgba(255,255,255,.10)!important}
+html[data-gt="light"] input[type="date"].gd-open{border-color:rgba(20,25,34,.3)!important;box-shadow:0 0 0 3px rgba(20,25,34,.08)!important}
+}
+.gd-pop{position:fixed;z-index:10000;width:292px;padding:12px;border-radius:20px;box-sizing:border-box;color:#F5F6F8;font-size:14px;line-height:1.2;
+  background:rgba(30,34,44,.78);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 22px 55px rgba(0,0,0,.45);transform-origin:top left;animation:gdIn .18s cubic-bezier(.2,.9,.3,1.2)}
+.gd-pop.up{transform-origin:bottom left}
+@keyframes gdIn{from{opacity:0;transform:scale(.95)}}
+.gd-pop button{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;border-radius:999px;transition:background .12s}
+.gd-pop button:focus-visible{outline:2px solid currentColor;outline-offset:1px}
+.gd-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px}
+.gd-title{padding:6px 10px!important;font-weight:700;font-size:15px;display:inline-flex!important;align-items:center;gap:6px}
+.gd-title svg{width:12px;height:12px;opacity:.7}
+.gd-nav{display:flex;gap:4px}
+.gd-nav button{width:32px;height:32px;display:grid!important;place-items:center}
+.gd-nav svg{width:16px;height:16px}
+.gd-pop button:hover:not([disabled]){background:rgba(255,255,255,.12)}
+.gd-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.gd-pop .gd-wd{text-align:center;font-size:11px;font-weight:700;opacity:.55;padding:4px 0 6px}
+.gd-pop .gd-day{height:34px;font-variant-numeric:tabular-nums}
+.gd-pop .gd-day.out{opacity:.38}
+.gd-pop .gd-day.today{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55)}
+.gd-pop .gd-day.on,.gd-pop .gd-cell.on{background:var(--gs-acc,#EF4A50)!important;color:#fff;font-weight:700}
+.gd-pop .gd-day[disabled]{opacity:.2;cursor:default}
+.gd-pop .gd-cells{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.gd-pop .gd-cell{height:44px;border-radius:14px!important;font-weight:600}
+.gd-pop .gd-cell.cur{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55)}
+.gd-foot{display:flex;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.12)}
+.gd-pop .gd-foot button{padding:6px 12px;font-weight:600;color:var(--gs-acc,#EF4A50)}
+html[data-gt="light"] .gd-pop{background:rgba(255,255,255,.88);border-color:rgba(255,255,255,.95);color:#141922;box-shadow:inset 0 1px 0 #fff,0 22px 55px rgba(20,25,34,.2)}
+html[data-gt="light"] .gd-pop button:hover:not([disabled]){background:rgba(20,25,34,.07)}
+html[data-gt="light"] .gd-day.today,html[data-gt="light"] .gd-cell.cur{box-shadow:inset 0 0 0 1.5px rgba(20,25,34,.45)}
+html[data-gt="light"] .gd-foot{border-top-color:rgba(20,25,34,.1)}
+@media (prefers-reduced-motion:reduce){.gd-pop{animation:none}}
+</style>
+<script>
+(function(){
+  if(matchMedia('(pointer:coarse)').matches)return; /* Touch-Geräte: Auswahl des Systems */
+  const MN=['Jänner','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const MS=['Jän','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  const WD=['Mo','Di','Mi','Do','Fr','Sa','So'];
+  const CH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+  const L='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
+  const R='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+  let open=null;
+  const pad=n=>String(n).padStart(2,'0'),iso=(y,m,d)=>y+'-'+pad(m+1)+'-'+pad(d);
+  const parse=v=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(v||'');return m?{y:+m[1],m:+m[2]-1,d:+m[3]}:null};
+  const todayIso=()=>{const t=new Date();return iso(t.getFullYear(),t.getMonth(),t.getDate())};
+  function close(){if(!open)return;open.pop.remove();open.inp.classList.remove('gd-open');open=null}
+  function place(){const r=open.inp.getBoundingClientRect(),p=open.pop,h=p.offsetHeight,w=p.offsetWidth;
+    const below=innerHeight-r.bottom-10,up=below<h&&r.top-10>below;
+    p.style.top=Math.max(8,up?r.top-h-6:r.bottom+6)+'px';p.style.left=Math.max(8,Math.min(r.left,innerWidth-w-8))+'px';p.classList.toggle('up',up)}
+  const ok=v=>{const i=open.inp;return(!i.min||v>=i.min)&&(!i.max||v<=i.max)};
+  function head(title,act){return `<div class="gd-head"><button type="button" class="gd-title" data-a="${act}">${title} ${CH}</button><span class="gd-nav"><button type="button" data-a="prev" aria-label="Zurück">${L}</button><button type="button" data-a="next" aria-label="Weiter">${R}</button></span></div>`}
+  function render(){
+    const o=open,sel=o.inp.value,ti=todayIso(),sp=parse(sel),t=new Date();let h='';
+    if(o.mode==='days'){
+      h+=head(MN[o.m]+' '+o.y,'months')+'<div class="gd-grid">'+WD.map(w=>`<span class="gd-wd">${w}</span>`).join('');
+      const off=(new Date(o.y,o.m,1).getDay()+6)%7;
+      for(let k=0;k<42;k++){const d=new Date(o.y,o.m,1-off+k),v=iso(d.getFullYear(),d.getMonth(),d.getDate());
+        h+=`<button type="button" class="gd-day${d.getMonth()!==o.m?' out':''}${v===ti?' today':''}${v===sel?' on':''}" data-v="${v}" aria-label="${d.getDate()}. ${MN[d.getMonth()]} ${d.getFullYear()}" ${ok(v)?'':'disabled'}>${d.getDate()}</button>`}
+      h+='</div>';
+    }else if(o.mode==='months'){
+      h+=head(String(o.y),'years')+'<div class="gd-cells">'+MS.map((m,i)=>`<button type="button" class="gd-cell${sp&&sp.y===o.y&&sp.m===i?' on':''}${t.getFullYear()===o.y&&t.getMonth()===i?' cur':''}" data-mo="${i}">${m}</button>`).join('')+'</div>';
+    }else{
+      const s=Math.floor(o.y/12)*12;
+      h+=head(s+' – '+(s+11),'days')+'<div class="gd-cells">'+Array.from({length:12},(_,i)=>s+i).map(y=>`<button type="button" class="gd-cell${sp&&sp.y===y?' on':''}${t.getFullYear()===y?' cur':''}" data-yr="${y}">${y}</button>`).join('')+'</div>';
+    }
+    h+=`<div class="gd-foot"><button type="button" data-a="clear">Löschen</button><button type="button" data-a="today">Heute</button></div>`;
+    o.pop.innerHTML=h;
+  }
+  function set(v){const i=open.inp;close();
+    if(i.value!==v){i.value=v;i.dispatchEvent(new Event('input',{bubbles:true}));i.dispatchEvent(new Event('change',{bubbles:true}))}
+    if(i.isConnected)i.focus({preventScroll:true})}
+  function build(inp){
+    close();const pop=document.createElement('div');pop.className='gd-pop';pop.setAttribute('role','dialog');pop.setAttribute('aria-label','Datum wählen');
+    const p=parse(inp.value)||parse(inp.min&&inp.min>todayIso()?inp.min:'')||parse(todayIso());
+    open={inp,pop,y:p.y,m:p.m,mode:'days'};document.body.appendChild(pop);render();place();inp.classList.add('gd-open');
+    pop.addEventListener('mousedown',e=>e.preventDefault());
+    pop.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled||!open)return;const o=open,a=b.dataset.a;
+      if(b.dataset.v)return set(b.dataset.v);
+      if(a==='clear')return set('');
+      if(a==='today')return set(todayIso());
+      if(b.dataset.mo!=null){o.m=+b.dataset.mo;o.mode='days'}
+      else if(b.dataset.yr!=null){o.y=+b.dataset.yr;o.mode='months'}
+      else if(a==='months'||a==='years'||a==='days'){o.mode=a}
+      else if(a==='prev'||a==='next'){const s=a==='prev'?-1:1;
+        if(o.mode==='days'){o.m+=s;if(o.m<0){o.m=11;o.y--}if(o.m>11){o.m=0;o.y++}}else o.y+=s*(o.mode==='years'?12:1)}
+      render();place()});
+  }
+  document.addEventListener('mousedown',e=>{
+    const inp=e.target.closest&&e.target.closest('input[type="date"]');
+    if(inp&&!inp.disabled&&!inp.readOnly){if(!(open&&open.inp===inp))build(inp);return}
+    if(open&&!e.target.closest('.gd-pop'))close();
+  },true);
+  document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('input[type="date"]'))e.preventDefault()},true);
+  document.addEventListener('input',e=>{if(open&&e.target===open.inp){const p=parse(open.inp.value);if(p){open.y=p.y;open.m=p.m;open.mode='days'}render()}},true);
+  document.addEventListener('keydown',e=>{
+    if(open&&e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();const i=open.inp;close();i.focus()}
+    else if(open&&e.key==='Tab')close();
+    else if(!open&&e.target.matches&&e.target.matches('input[type="date"]')&&(e.key==='Enter'||(e.altKey&&e.key==='ArrowDown'))){e.preventDefault();build(e.target)}
+  },true);
+  addEventListener('scroll',e=>{if(open&&!(e.target.closest&&e.target.closest('.gd-pop')))close()},true);
   addEventListener('resize',close);addEventListener('blur',close);
 })();
 </script>
