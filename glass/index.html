@@ -2,6 +2,13 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<script>/* Runde 4: Hell/Dunkel aus den App-Einstellungen, Standard Systemeinstellung */
+(function(){var mq=matchMedia('(prefers-color-scheme: dark)');
+window.gtApply=function(t){if(t===undefined){try{t=((JSON.parse(localStorage.getItem('glass-falkner-v10'))||{}).ui||{}).theme}catch(e){}}
+ window.__gtT=t||'system';var r=(__gtT==='light'||__gtT==='dark')?__gtT:(mq.matches?'dark':'light');
+ document.documentElement.setAttribute('data-gt',r);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',r==='dark'?'#12151B':'#ECEFF3')};
+mq.addEventListener('change',function(){gtApply(window.__gtT)});gtApply();})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#26262b">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -485,6 +492,57 @@ nav.bottom:has(button:active) .lg-lens{transform:scale(1.06,1.12);background:rgb
 .chatbar textarea{background:rgba(28,32,42,.55)!important;border:1px solid rgba(255,255,255,.16)!important;-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%)}
 .chat-att{background:rgba(28,32,42,.75)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 @media (prefers-reduced-motion:reduce){nav.bottom .lg-lens{transition:none}}
+
+/* --- Runde 4: Hell/Dunkel, ruhiger Hintergrund, Anmeldung blickdicht --- */
+.app{background:rgba(16,20,28,.18)!important}
+/* Anmeldung (Onboarding) blickdicht */
+.onb,.onb[style]{background:#12151B!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-gt="light"] .onb{background:#ECEFF3!important}
+/* Hell */
+html[data-gt="light"]:root:root:root{--bg:#ECEFF3; --ink:#141922; --muted:rgba(20,25,34,.62); --line:rgba(20,25,34,.11); --surface:rgba(255,255,255,.62); --surface-2:rgba(255,255,255,.5);
+--ok:#1E9566; --ok-soft:rgba(30,149,102,.13); --warn:#B7700F; --warn-soft:rgba(220,150,40,.16); --danger:#D23F3F; color-scheme:light; --brand:#141922; --brand-2:#2A303B; --brand-soft:rgba(20,25,34,.07);
+  --shadow:0 10px 30px rgba(20,25,34,.08),inset 0 1px 0 rgba(255,255,255,.9)}
+html[data-gt="light"] .app{background:rgba(255,255,255,.28)!important}
+@media (min-width:600px){html[data-gt="light"] .app{border-color:rgba(20,25,34,.12)!important;box-shadow:0 40px 100px rgba(20,25,34,.16),inset 0 1px 0 #fff!important}}
+html[data-gt="light"] h2{color:rgba(20,25,34,.5)}
+html[data-gt="light"] .tile:hover,html[data-gt="light"] .qa:hover{background:rgba(255,255,255,.85)}
+html[data-gt="light"] .hero{background:rgba(255,255,255,.62)!important;border-color:rgba(255,255,255,.95)}
+html[data-gt="light"] .hero{color:#141922}
+html[data-gt="light"] .hero::after{border-color:rgba(20,25,34,.05)}
+html[data-gt="light"] .hero .btn-light{background:rgba(20,25,34,.06);border-color:rgba(20,25,34,.12);color:#141922}
+html[data-gt="light"] .btn{box-shadow:0 6px 18px rgba(20,25,34,.10)}
+html[data-gt="light"] .btn:not(.ghost):not(.accent):not(.outline){background:#141922;color:#fff}
+html[data-gt="light"] .btn.ghost{background:rgba(255,255,255,.65)}
+html[data-gt="light"] .seg button.on,html[data-gt="light"] .day.on,html[data-gt="light"] .chip.on{background:#141922;color:#fff;border-color:#141922}
+html[data-gt="light"] .input,html[data-gt="light"] select.input,html[data-gt="light"] textarea.input,html[data-gt="light"] .num-in{background:rgba(255,255,255,.75)}
+html[data-gt="light"] .input::placeholder,html[data-gt="light"] textarea::placeholder{color:rgba(20,25,34,.42)}
+html[data-gt="light"] option{background:#fff;color:#141922}
+html[data-gt="light"] .toggle{background:rgba(20,25,34,.16)}
+html[data-gt="light"] .tile .ic,html[data-gt="light"] .qa .ic{background:rgba(20,25,34,.06)!important}
+html[data-gt="light"] .sheet{background:rgba(255,255,255,.86)!important;border-color:rgba(255,255,255,.95)}
+html[data-gt="light"] .scrim{background:rgba(20,25,34,.18)!important}
+html[data-gt="light"] .toast{background:rgba(20,25,34,.92);color:#fff}
+html[data-gt="light"] .push{background:rgba(255,255,255,.85)!important}
+html[data-gt="light"] .mapframe{filter:none}
+html[data-gt="light"] .paper{box-shadow:0 10px 30px rgba(20,25,34,.12)}
+html[data-gt="light"] .wm-sub{color:#C4161C!important}
+html[data-gt="light"] .falcon img{filter:none}
+/* Tableiste hell */
+html[data-gt="light"] nav.bottom{background:rgba(255,255,255,.42)!important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.55),inset 0 0 18px rgba(255,255,255,.35),0 10px 30px rgba(20,25,34,.16),0 2px 6px rgba(20,25,34,.08)!important}
+html[data-gt="light"] nav.bottom::before{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(255,255,255,.3) 35%,rgba(20,25,34,.05) 65%,rgba(255,255,255,.8))}
+html[data-gt="light"] nav.bottom button{color:rgba(20,25,34,.72)!important;text-shadow:none}
+html[data-gt="light"] nav.bottom button svg{filter:none}
+html[data-gt="light"] nav.bottom button.on{color:var(--accent)!important}
+html[data-gt="light"] nav.bottom .lg-lens{background:rgba(20,25,34,.07);box-shadow:inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(20,25,34,.05),0 3px 10px rgba(20,25,34,.10)}
+html[data-gt="light"] .lg-edge{background:linear-gradient(to top,rgba(236,239,243,.92) 0%,rgba(236,239,243,.72) 40%,rgba(236,239,243,0) 100%)}
+html[data-gt="light"] .chatbar textarea{background:rgba(255,255,255,.75)!important;border-color:rgba(20,25,34,.12)!important}
+html[data-gt="light"] .chat-att{background:rgba(255,255,255,.88)!important}
+/* Hintergrund: ruhig, Farben nur noch ganz schwach */
+html{background:radial-gradient(70% 60% at 90% -5%,rgba(240,110,70,.07),transparent 70%),radial-gradient(60% 60% at 0% 35%,rgba(90,120,190,.06),transparent 70%),#12151B!important;background-attachment:fixed!important}
+html[data-gt="light"]{background:radial-gradient(70% 60% at 90% -5%,rgba(240,110,70,.06),transparent 70%),radial-gradient(60% 60% at 0% 35%,rgba(90,120,190,.06),transparent 70%),#ECEFF3!important;background-attachment:fixed!important}
+body::before{display:none!important}
+html[data-gt="light"] ::-webkit-scrollbar-thumb{background:rgba(20,25,34,.2)}
 </style>
 </head>
 <body>
@@ -730,6 +788,7 @@ let FALCON_DEFAULT=null;
 function applyUI(){
   const r=document.documentElement, u=S.ui||{};
   if(u.theme==='light'||u.theme==='dark') r.setAttribute('data-theme',u.theme); else r.removeAttribute('data-theme');
+  if(window.gtApply)gtApply(u.theme||'system');
   r.classList.toggle('hc',!!u.hc); r.style.setProperty('--fs',u.fs||1);
   const b=S.brand||{};
   if(b.accent){r.style.setProperty('--accent',b.accent);r.style.setProperty('--accent-soft',hexA(b.accent,.14))} else {r.style.removeProperty('--accent');r.style.removeProperty('--accent-soft')}
