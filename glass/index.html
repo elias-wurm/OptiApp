@@ -655,7 +655,7 @@ html[data-gt="light"] .scrim{background:rgba(20,25,34,.35)!important}
         <button class="list-item" style="width:100%;text-align:left" onclick="demoPush()"><div class="grow">Demo: Bewertungs-Benachrichtigung zeigen</div></button>
         <button class="list-item" style="width:100%;text-align:left;color:var(--danger)" onclick="resetDemo()"><div class="grow">Demo-Daten zurücksetzen</div></button>
       </div>
-      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.7 · Kundendaten sind Beispieldaten</p>
+      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.8 · Kundendaten sind Beispieldaten</p>
     </section>
   </main>
 
@@ -904,7 +904,7 @@ function renderGlasses(){
         <div><span>Vollkasko</span><b style="color:${kaskoActive(g)?'var(--ok)':'var(--muted)'}">${g.kasko?(kaskoActive(g)?'bis '+fmtDate(kaskoInfo(g).until):'abgelaufen'):'keine'}</b></div></div>
       <div class="btn-row"><button class="btn ghost" onclick="openSheet('damage','${g.id}')">Schaden melden</button><button class="btn ghost" onclick="sharePass('${g.id}')">Als PDF teilen</button></div>
       ${kaskoActive(g)?`<button class="btn outline" onclick="openSheet('kasko','${g.id}')">Vollkasko nutzen</button>`:''}
-      <button class="btn ghost" style="margin-top:10px" onclick="openSheet('docs','${g.id}')">📄 Dokumente${g.purchase?' ('+(g.kasko?3:2)+')':''}</button>
+      <button class="btn ghost" style="margin-top:10px" onclick="openSheet('docs','${g.id}')">📄 Dokumente${g.purchase?' ('+docList(g).length+')':''}</button>
     </div>`).join('');
 }
 
@@ -1388,7 +1388,7 @@ function sheetNews(id){
 }
 
 /* --- Dokumente (Beispieldokumente) --- */
-function docList(g){if(!g.purchase)return [];const l=[['invoice','🧾','Rechnung '+g.purchase.nr],['warranty','🛡️','Garantie-Zertifikat']];if(g.kasko)l.push(['kasko','☂️','Vollkasko-Police']);return l}
+function docList(g){if(!g.purchase)return [];const l=[['warranty','🛡️','Garantie-Zertifikat']]; /* Rechnung wird in der App nicht mehr angezeigt */if(g.kasko)l.push(['kasko','☂️','Vollkasko-Police']);return l}
 function sheetDocs(gid){
   const g=findGlasses(gid), o=ownerOf(gid), l=docList(g);
   setSheet('Dokumente',`<p class="sub">${esc(o.first)} – Brille vom ${fmtDate(g.date)}</p>
