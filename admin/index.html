@@ -150,6 +150,7 @@ tbody tr:hover td,tbody tr[aria-selected="true"] td{background:var(--surface-2)}
 .empty{color:var(--muted);padding:20px 0}
 @media (max-width:1000px){.grid2,.dcols{grid-template-columns:1fr}.tiles,.dgrid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.top-in,.main{padding:0 16px}.main{padding-top:20px}.tag{display:none}.head h1{font-size:28px}.tile .n{font-size:28px}}
+.storno.paidst{border-color:#1E7B4F;color:#1E7B4F}
 </style>
 </head>
 <body>
@@ -340,7 +341,10 @@ try{const x=JSON.parse(localStorage.getItem(BKEY));if(x&&x.tariffs)B=Object.assi
 const CO_FIELDS=[['name','Firmenname','OptiApp GmbH'],['suffix','Zusatz (z. B. in Gründung)','in Gründung'],['street','Straße und Hausnummer',''],['city','PLZ und Ort',''],['country','Land','Österreich'],['email','E-Mail','office@optiapp.at'],['web','Website','optiapp.at'],['uid','UID-Nummer',''],['fn','Firmenbuchnummer',''],['court','Firmenbuchgericht',''],['bank','Bank',''],['iban','IBAN',''],['bic','BIC',''],['due','Zahlungsziel in Tagen','14']];
 const CO_REQ=['street','city','uid','iban','bic','fn'];
 const co=k=>{const v=B.company[k];if(v!==undefined)return v;const f=CO_FIELDS.find(x=>x[0]===k);return f?f[2]:''};
-const adr=id=>Object.assign({contact:'',email:'',phone:'',street:'',city:'',uid:''},B.addr[id]||{});
+const adr=id=>Object.assign({contact:'',email:'',phone:'',street:'',city:'',uid:'',pay:'invoice'},B.addr[id]||{});
+const PAY={invoice:'Nach Erhalt der Rechnung',sepa:'SEPA-Lastschrift'};
+const payBadge=k=>k==='sepa'?'<span class="badge b-pilot">SEPA</span>':'<span class="badge b-mute">Überweisung</span>';
+function setPay(id,el){const a=Object.assign({},adr(id));a.pay=el.value==='sepa'?'sepa':'invoice';B.addr[id]=a;saveB();flashSaved()}
 const ph=(v,label)=>v?esc(v):`<span class="ph">${esc(label)}</span>`;
 function saveB(){try{localStorage.setItem(BKEY,JSON.stringify(B))}catch(e){}}
 const eur=n=>n.toLocaleString('de-AT',{style:'currency',currency:'EUR'});
@@ -389,12 +393,12 @@ function invHTML(v){
   const F=v.from||Object.fromEntries(CO_FIELDS.map(f=>[f[0],co(f[0])])), T=v.to||adr(v.opt), g=k=>F[k]||'';
   return `<div class="paper"><div class="p-top"><div>${LOGO_SVG}</div><div class="p-from"><b style="color:#172235">${ph(g('name'),'Firmenname')}</b>${g('suffix')?' ('+esc(g('suffix'))+')':''}<br>${ph(g('street'),'Straße Hausnummer')}<br>${ph(g('city'),'PLZ Ort')}${g('country')?', '+esc(g('country')):''}<br>${[g('email'),g('web')].filter(Boolean).map(esc).join(' · ')}<br>UID: ${ph(g('uid'),'ATU________')}</div></div>
   <div class="p-addr"><div><div style="font-size:12px;color:#566273">Rechnung an</div><b>${esc(v.optName)}</b>${v.demo?' <span class="ph">Demo</span>':''}<br>${ph(T.street,'Rechnungsadresse')}<br>${ph(T.city,'PLZ Ort')}${T.uid?'<br>UID: '+esc(T.uid):''}</div>
-    <table class="p-meta"><tr><td>Rechnungsnummer</td><td><b>${v.nr}</b></td></tr><tr><td>Rechnungsdatum</td><td>${fmtD(v.date)}</td></tr><tr><td>Leistungszeitraum</td><td>${v.periodTxt}</td></tr><tr><td>Fällig am</td><td>${fmtD(v.due)}</td></tr></table></div>
-  <h1 style="margin-top:34px">Rechnung</h1>${v.storno?`<div class="storno">STORNIERT am ${fmtD(v.storno)}</div>`:''}
+    <table class="p-meta"><tr><td>Rechnungsnummer</td><td><b>${v.nr}</b></td></tr><tr><td>Rechnungsdatum</td><td>${fmtD(v.date)}</td></tr><tr><td>Leistungszeitraum</td><td>${v.periodTxt}</td></tr><tr><td>${(T.pay||'invoice')==='sepa'?'Einzug am':'Fällig am'}</td><td>${fmtD(v.due)}</td></tr><tr><td>Zahlungsart</td><td>${(T.pay||'invoice')==='sepa'?'SEPA-Lastschrift':'Überweisung'}</td></tr></table></div>
+  <h1 style="margin-top:34px">Rechnung</h1>${v.storno?`<div class="storno">STORNIERT am ${fmtD(v.storno)}</div>`:v.paid?`<div class="storno paidst">BEZAHLT am ${fmtD(v.paid)}</div>`:''}
   <table class="p-lines"><thead><tr><th>Leistung</th><th class="num">Menge</th><th class="num">Einzelpreis</th><th class="num">Betrag</th></tr></thead><tbody>
     ${v.lines.map(l=>`<tr><td>${esc(l.txt)}<div style="font-size:12.5px;color:#566273">${esc(l.sub)}</div></td><td class="num">${nf(l.qty)}</td><td class="num">${eur4(l.unit)}</td><td class="num">${eur(l.sum)}</td></tr>`).join('')}</tbody></table>
   <table class="p-sum"><tr><td>Summe netto</td><td class="num">${eur(v.net)}</td></tr><tr><td>zzgl. 20 % USt.</td><td class="num">${eur(v.vat)}</td></tr><tr class="tot"><td>Gesamtbetrag</td><td class="num">${eur(v.gross)}</td></tr></table>
-  <div class="p-foot">Bitte überweisen Sie den Betrag bis ${fmtD(v.due)} unter Angabe der Rechnungsnummer ${v.nr}.<br>${g('bank')?esc(g('bank'))+' · ':''}IBAN: ${ph(g('iban'),'AT__ ____ ____ ____ ____')} · BIC: ${ph(g('bic'),'________')}<br>Firmenbuch: ${ph(g('fn'),'FN ______')}${g('court')?', '+esc(g('court')):''}</div></div>`;
+  <div class="p-foot">${(T.pay||'invoice')==='sepa'?`Der Betrag wird am ${fmtD(v.due)} per SEPA-Lastschrift von Ihrem Konto eingezogen. Bitte sorgen Sie für ausreichende Deckung.`:`Bitte überweisen Sie den Betrag bis ${fmtD(v.due)} unter Angabe der Rechnungsnummer ${v.nr}.`}<br>${g('bank')?esc(g('bank'))+' · ':''}IBAN: ${ph(g('iban'),'AT__ ____ ____ ____ ____')} · BIC: ${ph(g('bic'),'________')}<br>Firmenbuch: ${ph(g('fn'),'FN ______')}${g('court')?', '+esc(g('court')):''}</div></div>`;
 }
 /* ---------- Firmendaten (Absender) und Rechnungsadressen ---------- */
 let savedT=null;
@@ -415,6 +419,8 @@ function renderFirma(){
   <p class="note">Rechnungsadressen und Kontaktdaten der Optiker pflegst du unter <a href="#kunden" onclick="go('kunden');return false">Kundendaten</a>. Bereits erstellte Rechnungen behalten die Angaben vom Zeitpunkt der Erstellung.</p>`;
   missInfo();
 }
+const invPay=v=>(v.to&&v.to.pay)||adr(v.opt).pay||'invoice';
+function togglePaid(nr){const v=B.invoices.find(x=>x.nr===nr);if(!v||v.storno)return;v.paid=v.paid?null:new Date().toISOString();saveB();flash=['ok','Rechnung '+nr+(v.paid?' als bezahlt markiert.':' wieder als offen markiert.')];renderInv(true)}
 function openInv(nr){const v=B.invoices.find(x=>x.nr===nr);if(!v)return;document.getElementById('invDoc').innerHTML=invHTML(v);const m=document.getElementById('modal');m.hidden=false;document.title=v.nr+' – OptiApp';m.querySelector('.mbar .btn').focus()}
 function closeInv(){document.getElementById('modal').hidden=true;document.title='OptiApp Verwaltung'}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('modal').hidden)closeInv()});
@@ -437,16 +443,16 @@ function renderInv(keepFocus){
       <td class="num"><input class="money" id="ts-${o.id}" inputmode="decimal" aria-label="Tarif je Filiale ${esc(o.name)}" placeholder="0,00" value="${fmtIn(t.store)}" onchange="setTariff('${o.id}','store',this)"></td>
       <td class="num"><input class="money" id="tc-${o.id}" inputmode="decimal" aria-label="Tarif je Endkunde ${esc(o.name)}" placeholder="0,00" value="${fmtIn(t.cust)}" onchange="setTariff('${o.id}','cust',this)"></td>
       <td class="num">${inv?eur(inv.net):(t.store||t.cust)&&!why?eur(c.net):'–'}</td>
-      <td class="num">${inv?`<button class="btn sm" id="ac-${o.id}" onclick="openInv('${inv.nr}')">${inv.nr} ansehen</button>`:why?`<span class="hint">${why}</span>`:`<button class="btn sm pri" id="ac-${o.id}" onclick="createInv('${o.id}')">Rechnung erstellen</button>`}</td></tr>`}).join('')}
+      <td class="num">${payBadge(adr(o.id).pay)} ${inv?`<button class="btn sm" id="ac-${o.id}" onclick="openInv('${inv.nr}')">${inv.nr} ansehen</button>`:why?`<span class="hint">${why}</span>`:`<button class="btn sm pri" id="ac-${o.id}" onclick="createInv('${o.id}')">Rechnung erstellen</button>`}</td></tr>`}).join('')}
     </tbody><tfoot><tr><td>Gesamt (${rows.length} Optiker)</td><td class="num">${nf(rows.reduce((a,r)=>a+r.c.stores,0))}</td><td class="num">${nf(rows.reduce((a,r)=>a+r.c.cust,0))}</td><td></td><td></td>
       <td class="num">${eur(r2(rows.reduce((a,r)=>a+(r.inv?r.inv.net:(!r.why?r.c.net:0)),0)))}</td><td class="num hint" style="font-weight:400">${rows.filter(r=>r.inv).length} erstellt · ${open.length} offen</td></tr></tfoot></table></div>
     <p class="note">Endkunden = alle registrierten Endkunden am Ende des Monats. Optiker in Einrichtung werden erst ab Start der App verrechnet. Optik Falkner rechnet mit den Live-Daten des Prototyps.</p></div>
   <div class="card" style="margin-top:14px"><h2>Erstellte Rechnungen</h2><div class="sub">${invs.length?invs.length+' Rechnung'+(invs.length>1?'en':'')+', neueste zuerst':'Noch keine Rechnungen erstellt.'}</div>
-    ${invs.length?`<div class="tblwrap"><table class="inv"><thead><tr><th>Nummer</th><th>Datum</th><th>Optiker</th><th>Zeitraum</th><th class="num">Netto</th><th class="num">Brutto</th><th>Status</th><th class="num"></th></tr></thead><tbody>
+    ${invs.length?`<div class="tblwrap"><table class="inv"><thead><tr><th>Nummer</th><th>Datum</th><th>Optiker</th><th>Zeitraum</th><th class="num">Netto</th><th class="num">Brutto</th><th>Zahlung</th><th>Status</th><th class="num"></th></tr></thead><tbody>
     ${invs.map(v=>`<tr class="${v.storno?'strike':''}"><td><b>${v.nr}</b></td><td>${fmtD(v.date)}</td><td>${esc(v.optName)}</td><td>${v.periodTxt}</td><td class="num amt">${eur(v.net)}</td><td class="num amt">${eur(v.gross)}</td>
-      <td>${v.storno?'<span class="badge b-mute">Storniert</span>':'<span class="badge b-ok">Erstellt</span>'}</td>
-      <td class="num"><div class="acts"><button class="btn sm" onclick="openInv('${v.nr}')">Ansehen / PDF</button>${v.storno?'':`<button class="btn sm" onclick="stornoInv('${v.nr}')">${stornoArm===v.nr?'Wirklich stornieren?':'Stornieren'}</button>`}</div></td></tr>`).join('')}
-    </tbody><tfoot>${(()=>{const ok=invs.filter(v=>!v.storno),st=invs.length-ok.length;return `<tr><td colspan="4">Gesamt (${ok.length} Rechnung${ok.length===1?'':'en'}${st?', ohne '+st+' storniert'+(st>1?'e':'e'):''})</td><td class="num">${eur(r2(ok.reduce((a,v)=>a+v.net,0)))}</td><td class="num">${eur(r2(ok.reduce((a,v)=>a+v.gross,0)))}</td><td colspan="2"></td></tr>`})()}</tfoot></table></div>`:''}
+      <td>${payBadge(invPay(v))}</td><td>${v.storno?'<span class="badge b-mute">Storniert</span>':v.paid?`<span class="badge b-ok">Bezahlt ${fmtD(v.paid)}</span>`:v.due.slice(0,10)<new Date().toISOString().slice(0,10)?'<span class="badge b-warn">Überfällig</span>':'<span class="badge b-warn" style="background:var(--mute-bg);color:var(--ink)">Offen</span>'}</td>
+      <td class="num"><div class="acts">${v.storno?'':`<button class="btn sm" id="pd-${v.nr}" onclick="togglePaid('${v.nr}')">${v.paid?'Als offen markieren':'Als bezahlt markieren'}</button>`}<button class="btn sm" onclick="openInv('${v.nr}')">Ansehen / PDF</button>${v.storno?'':`<button class="btn sm" onclick="stornoInv('${v.nr}')">${stornoArm===v.nr?'Wirklich stornieren?':'Stornieren'}</button>`}</div></td></tr>`).join('')}
+    </tbody><tfoot>${(()=>{const ok=invs.filter(v=>!v.storno),st=invs.length-ok.length;return `<tr><td colspan="4">Gesamt (${ok.length} Rechnung${ok.length===1?'':'en'}${st?', ohne '+st+' storniert'+(st>1?'e':'e'):''})</td><td class="num">${eur(r2(ok.reduce((a,v)=>a+v.net,0)))}</td><td class="num">${eur(r2(ok.reduce((a,v)=>a+v.gross,0)))}</td><td></td><td colspan="2" class="hint" style="font-weight:700">offen: ${eur(r2(ok.filter(v=>!v.paid).reduce((a,v)=>a+v.gross,0)))} brutto</td></tr>`})()}</tfoot></table></div>`:''}
     <p class="note">${missCount()?`Noch ${missCount()} Angaben offen (Absender, Bankdaten, Rechnungsadressen). Bitte unter <a href="#firma" onclick="go('firma');return false">Firmendaten</a> und <a href="#kunden" onclick="go('kunden');return false">Kundendaten</a> ausfüllen, sonst erscheinen sie gelb auf der Rechnung.`:'Firmendaten und Rechnungsadressen sind vollständig.'}</p></div>`;
   if(fid){const el=document.getElementById(fid);if(el)el.focus()}
 }
@@ -468,7 +474,7 @@ function saveNewOpt(){const g=id=>document.getElementById(id).value.trim(), name
   if(OPT.some(o=>o.name.toLowerCase()===name.toLowerCase())){err('Diesen Optiker gibt es schon.');return}
   const id='o'+Date.now().toString(36), stores=g('no-stores').split(',').map(x=>x.trim()).filter(Boolean);
   B.custom.push({id,name,stores:stores.length?stores:[name],iom:g('no-iom'),status:g('no-status'),created:new Date().toISOString()});
-  B.addr[id]=Object.fromEntries(K_FIELDS.map(([k])=>[k,g('no-'+k)]));
+  B.addr[id]=Object.assign(Object.fromEntries(K_FIELDS.map(([k])=>[k,g('no-'+k)])),{pay:g('no-pay')==='sepa'?'sepa':'invoice'});
   saveB();load();newOpt=false;flash=['ok',name+' wurde angelegt. Den Tarif trägst du unter „Rechnungen“ ein.'];renderKunden();
   const card=document.getElementById('kc-'+id);if(card)card.scrollIntoView({block:'center'})}
 function renderKunden(keep){
@@ -486,6 +492,7 @@ function renderKunden(keep){
       <div class="wide2"><label for="no-stores">Filialen (mit Komma getrennt)</label><input class="txt" id="no-stores" placeholder="z. B. Linz, Wels"></div>
       <div><label for="no-iom">Kundenverwaltungsprogramm</label><input class="txt" id="no-iom" placeholder="z. B. Optosys"></div>
       ${K_FIELDS.map(([k,l,ph])=>`<div><label for="no-${k}">${l.replace(' *','')}</label><input class="txt" id="no-${k}" placeholder="${esc(ph)}" ${k==='email'?'type="email"':k==='phone'?'type="tel"':''}></div>`).join('')}
+      <div><label for="no-pay">Zahlungskondition</label><select class="txt" id="no-pay">${Object.entries(PAY).map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></div>
     </div><p class="hint" id="no-err" role="alert" style="color:var(--warn);font-weight:700;margin:10px 0 0"></p>
     <div class="acts" style="justify-content:flex-start;margin-top:14px"><button class="btn pri" onclick="saveNewOpt()">Optiker anlegen</button><button class="btn" onclick="newOpt=false;renderKunden()">Abbrechen</button></div></div>`:''}
   ${OPT.map(o=>{const c=o.custom?B.custom.find(x=>x.id===o.id):null;return `<div class="card" id="kc-${o.id}" style="margin-top:14px">
@@ -496,7 +503,7 @@ function renderKunden(keep){
       <div><label for="kc-${o.id}-status">Status</label><select class="txt" id="kc-${o.id}-status" onchange="setCust('${o.id}','status',this)">${STAT.map(([v,l])=>`<option value="${v}" ${o.status===v?'selected':''}>${l}</option>`).join('')}</select></div>
       <div class="wide2"><label for="kc-${o.id}-stores">Filialen (mit Komma getrennt)</label><input class="txt" id="kc-${o.id}-stores" value="${esc(o.stores.map(x=>x[0]).join(', '))}" onchange="setCust('${o.id}','stores',this)"></div>
       <div><label for="kc-${o.id}-iom">Kundenverwaltungsprogramm</label><input class="txt" id="kc-${o.id}-iom" value="${esc(o.iom&&o.iom!=='–'?o.iom:'')}" onchange="setCust('${o.id}','iom',this)"></div></div>
-    <div class="ff3">${K_FIELDS.map(f=>kField(o,f)).join('')}</div></div>`}).join('')}
+    <div class="ff3">${K_FIELDS.map(f=>kField(o,f)).join('')}<div><label for="k-${o.id}-pay">Zahlungskondition</label><select class="txt" id="k-${o.id}-pay" onchange="setPay('${o.id}',this)">${Object.entries(PAY).map(([v,l])=>`<option value="${v}" ${adr(o.id).pay===v?'selected':''}>${l}</option>`).join('')}</select></div></div></div>`}).join('')}
   <p class="note">Name, Status, Filialen und Kundenverwaltungsprogramm lassen sich bei allen Optikern ändern. Bereits erstellte Rechnungen behalten den alten Namen. Selbst angelegte Optiker und alle Kundendaten liegen im Prototyp nur in diesem Browser. Optik Falkner zeigt Live-Daten, die übrigen Optiker mit „Demo“ sind erfundene Beispiele.</p>`;
   missInfo(); if(fid){const el=document.getElementById(fid);if(el)el.focus()}
 }

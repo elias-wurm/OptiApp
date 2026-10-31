@@ -366,6 +366,7 @@ nav.bottom button.on{color:var(--brand)}
 .avatar{width:58px;height:58px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:'DM Serif Display',serif;font-size:24px}
 .muted-s{font-size:13px;color:var(--muted)}
 .mt{margin-top:12px}
+.input.ro{background:var(--surface-2);color:var(--muted);cursor:default}
 </style>
 </head>
 <body>
@@ -445,8 +446,9 @@ nav.bottom button.on{color:var(--brand)}
       </div>
       <h2>Persönliche Daten</h2>
       <div class="card">
-        <label class="f" style="margin-top:0">Vorname</label><input class="input" id="pFirst">
-        <label class="f">Nachname</label><input class="input" id="pLast">
+        <label class="f" style="margin-top:0">Vorname</label><input class="input ro" id="pFirst" readonly aria-readonly="true" tabindex="-1">
+        <label class="f">Nachname</label><input class="input ro" id="pLast" readonly aria-readonly="true" tabindex="-1">
+        <p class="muted-s" style="margin-top:6px">Ihren Namen pflegt Ihre Filiale. Bei einer Änderung wenden Sie sich bitte an uns.</p>
         <label class="f">E-Mail</label><input class="input" type="email" id="pMail">
         <label class="f">Telefon</label><input class="input" type="tel" id="pPhone">
         <label class="f">Lieferadresse</label><input class="input" id="pAddr">
@@ -470,7 +472,7 @@ nav.bottom button.on{color:var(--brand)}
         <button class="list-item" style="width:100%;text-align:left" onclick="demoPush()"><div class="grow">Demo: Bewertungs-Benachrichtigung zeigen</div></button>
         <button class="list-item" style="width:100%;text-align:left;color:var(--danger)" onclick="resetDemo()"><div class="grow">Demo-Daten zurücksetzen</div></button>
       </div>
-      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.10 · Kundendaten sind Beispieldaten</p>
+      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.11 · Kundendaten sind Beispieldaten</p>
     </section>
   </main>
 
@@ -861,8 +863,12 @@ function renderProfile(){
 /* ===================== Aktionen ===================== */
 function setUI(k,v){S.ui[k]=v;persist();render()}
 function toggleNotif(k){S.notif[k]=!S.notif[k];persist();render()}
+// Vor- und Nachname sind nicht änderbar. Geänderte Kontaktdaten werden fürs Dashboard protokolliert.
+const CONTACT_LABEL={mail:'E-Mail',phone:'Telefon',addr:'Adresse'};
 function saveProfile(){
-  ['First','Last','Mail','Phone','Addr'].forEach(k=>S.profile[k.toLowerCase()]=document.getElementById('p'+k).value.trim());
+  S.profileChanges=S.profileChanges||[];
+  ['Mail','Phone','Addr'].forEach(k=>{const key=k.toLowerCase(),nv=document.getElementById('p'+k).value.trim(),ov=S.profile[key]||'';
+    if(nv!==ov){S.profileChanges.push({id:'pc'+Date.now()+key,field:key,old:ov,new:nv,ts:new Date().toISOString()});S.profile[key]=nv}});
   persist();render();toast('Profil gespeichert');
 }
 function cancelAppt(id){if(confirm('Termin wirklich stornieren?')){S.appts=S.appts.filter(a=>a.id!==id);persist();render();toast('Termin storniert')}}
@@ -1447,7 +1453,6 @@ function onbRender(){
   if(onb.step===0) h=`<div class="hero-logo"><img src="${logo}" alt=""><div class="wordmark" style="align-items:center"><span class="wm-top" style="font-size:18px;padding:6px 6px 6px 12px">FALKNER</span><span class="wm-sub" style="font-size:14px">OPTIK · SEHZENTRUM</span></div></div>
     <h1 style="text-align:center;font-size:28px">Willkommen!</h1><p class="sub" style="text-align:center;margin-top:6px">Brillenpass, Kontaktlinsen, Termine und der direkte Draht zu Ihrem Optiker – alles in einer App.</p>
     <button class="btn accent" style="margin-top:28px" onclick="onb.mode='existing';onb.step=1;onbRender()">Anmelden</button>
-    <button class="btn ghost" style="margin-top:10px" onclick="onb.mode='new';onb.step=1;onbRender()">Neu registrieren</button>
     <button class="btn outline" style="margin-top:22px" onclick="onbDemo()">Demo-Login (Julian Karlinger)</button>
     <p class="muted-s" style="text-align:center;margin-top:10px">Meldet Sie direkt mit dem Demo-Kunden an (Kundennummer <b>104772</b>).</p>`;
   if(onb.step===1&&onb.mode==='existing') h=onbSteps(1)+`<h1 style="font-size:26px">Konto verknüpfen</h1><p class="sub">Ihre Kundennummer finden Sie auf Ihrer Rechnung oder Kundenkarte${inv?' – sie wurde aus Ihrer Einladung übernommen':''}.</p>
