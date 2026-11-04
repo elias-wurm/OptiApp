@@ -2,6 +2,13 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<script>/* Runde 4: Hell/Dunkel aus den App-Einstellungen, Standard Systemeinstellung */
+(function(){var mq=matchMedia('(prefers-color-scheme: dark)');
+window.gtApply=function(t){if(t===undefined){try{t=((JSON.parse(localStorage.getItem('glass-falkner-v10'))||{}).ui||{}).theme}catch(e){}}
+ window.__gtT=t||'system';var r=(__gtT==='light'||__gtT==='dark')?__gtT:(mq.matches?'dark':'light');
+ document.documentElement.setAttribute('data-gt',r);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',r==='dark'?'#12151B':'#ECEFF3')};
+mq.addEventListener('change',function(){gtApply(window.__gtT)});gtApply();})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#26262b">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -368,6 +375,185 @@ nav.bottom button.on{color:var(--brand)}
 .mt{margin-top:12px}
 .input.ro{background:var(--surface-2);color:var(--muted);cursor:default}
 </style>
+<style id="glass">
+/* ===== Glass-Test (Kunden-App) ===== */
+:root:root:root{
+  --bg:#141922; --surface:rgba(255,255,255,.10); --surface-2:rgba(255,255,255,.07); --ink:#F5F6F8; --muted:rgba(236,239,245,.66);
+  --line:rgba(255,255,255,.15); --brand:#FFFFFF; --brand-2:#E3E6EC; --accent:#EF4A50; --accent-soft:rgba(239,74,80,.20);
+  --brand-soft:rgba(255,255,255,.13); --ok:#5FE3AA; --ok-soft:rgba(95,227,170,.17); --warn:#FFC069; --warn-soft:rgba(255,192,105,.17); --danger:#FF7A6E;
+  --radius:22px; --shadow:0 10px 30px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.10);
+  --glass:blur(22px) saturate(150%);
+  color-scheme:dark;
+}
+html{background:#141922 url(bg.jpg) center/cover fixed}
+body,body[style]{background:transparent!important}
+@media (min-width:600px){body{background:transparent!important}
+  .app{border:1px solid rgba(255,255,255,.22)!important;box-shadow:0 40px 100px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.18)!important;border-radius:40px!important}}
+.app{background:rgba(16,20,28,.28)!important}
+@media (min-width:600px){.app{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}}
+h1,.logo-text,.hero .big,.avatar{font-family:'DM Sans',system-ui,sans-serif!important;font-weight:700;letter-spacing:-.02em}
+h2{color:rgba(255,255,255,.55)}
+/* Glasflächen */
+.card,.qa,.tile,.seg,.icon-btn,.head-btn,.store-pill,.who button,.msg.shop,.msg.status,.typing,.day-sep,.push,.chat-head .falcon,
+.head-avatar,.notice,.store-opt,.day,.slot,.chip,.seg2,.voucher,.kasko-box{
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);border:1px solid var(--line)}
+.card,.tile,.qa{transition:transform .2s ease,background .2s ease}
+.tile:hover,.qa:hover{transform:translateY(-4px);background:rgba(255,255,255,.14)}
+.hero{background:rgba(255,255,255,.10)!important;border:1px solid rgba(255,255,255,.22);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);box-shadow:var(--shadow)}
+.hero::before{display:none}
+.hero .btn-light{background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.3)}
+/* Buttons */
+.btn{border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.btn:not(.ghost):not(.accent):not(.outline){background:#fff;color:#141922}
+.btn.ghost{background:rgba(255,255,255,.10);border:1px solid var(--line);-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
+.btn.accent{background:var(--accent)}
+.seg button.on,.day.on,.chip.on{background:#fff;color:#141922;border-color:#fff}
+.seg{border-radius:999px}.seg button{border-radius:999px}
+.input,select.input,textarea.input,.num-in,.chatbar textarea{background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--ink)}
+.input::placeholder,textarea::placeholder{color:rgba(236,239,245,.45)}
+option{background:#1b2029;color:#fff}
+.toggle{background:rgba(255,255,255,.18)}
+/* Kopf, Navigation, Chatleiste */
+header.top{background:transparent}
+nav.bottom{left:12px!important;right:12px!important;bottom:calc(env(safe-area-inset-bottom) + 12px)!important;border-radius:26px;
+  background:rgba(18,22,30,.42);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  box-shadow:0 12px 40px rgba(0,0,0,.35);padding:6px!important}
+nav.bottom button{border-radius:20px}
+nav.bottom button.on{background:rgba(255,255,255,.16);color:#fff}
+main{padding-bottom:120px}
+.chatbar{bottom:calc(88px + env(safe-area-inset-bottom))!important;background:rgba(18,22,30,.40);border-top:1px solid var(--line);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
+.chat-att{background:rgba(18,22,30,.6);-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
+.msg.me{background:var(--accent)}
+/* Sheets, Onboarding, Toast */
+.sheet{background:rgba(24,28,38,.72)!important;border:1px solid rgba(255,255,255,.18);border-bottom:0;-webkit-backdrop-filter:blur(30px) saturate(160%);backdrop-filter:blur(30px) saturate(160%)}
+.scrim{background:rgba(5,8,12,.35)}
+.onb{background:rgba(14,18,26,.45)!important;-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+.toast{background:rgba(255,255,255,.92);color:#141922;-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
+.push{background:rgba(30,34,44,.62)!important}
+.map{background:linear-gradient(90deg,transparent 48%,var(--line) 48% 52%,transparent 52%),linear-gradient(0deg,transparent 38%,var(--line) 38% 42%,transparent 42%),rgba(255,255,255,.05)}
+.mapframe{filter:grayscale(.2) brightness(.85)}
+.paper{box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.wm-top{background:rgba(0,0,0,.55)!important;box-shadow:0 0 0 1px rgba(255,255,255,.2)!important}
+.wm-sub{color:#FF8A7E!important}
+.falcon img{filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:9px}
+.onb{background:rgba(14,18,26,.9)!important;-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px)}
+
+
+/* --- Runde 2: neutrales Glas, Akzente in der Optiker-Farbe --- */
+.tile .ic,.qa .ic{background:rgba(255,255,255,.12)!important;color:var(--accent)!important}
+.head-avatar,.avatar{background:var(--accent)!important;color:#fff!important}
+.chatbar .cb.send{background:var(--accent)}
+/* Tableiste und Chatleiste blickdicht, damit nichts durchscheint */
+nav.bottom{background:#161A22!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.chatbar,.chat-att{background:#161A22!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+/* Popups: Inhalt dahinter verschwimmt */
+.scrim{background:rgba(5,8,12,.30)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.lightbox{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);background:rgba(5,8,12,.6)!important}
+/* Tableiste unten angedockt: kein Inhalt mehr unter oder neben der Leiste */
+nav.bottom{left:0!important;right:0!important;bottom:0!important;border-radius:24px 24px 0 0!important;border-bottom:0!important;
+  padding:8px 6px calc(env(safe-area-inset-bottom) + 8px)!important;box-shadow:0 -10px 30px rgba(0,0,0,.25)!important}
+.chatbar{bottom:calc(66px + env(safe-area-inset-bottom))!important}
+nav.bottom{z-index:12!important}.chatbar{z-index:11!important}header.top{position:relative;z-index:6}
+
+
+/* --- Runde 3: Tableiste als Liquid Glass --- */
+nav.bottom{left:14px!important;right:14px!important;bottom:calc(env(safe-area-inset-bottom) + 12px)!important;
+  border-radius:999px!important;border:0!important;padding:5px!important;isolation:isolate;overflow:visible;
+  background:rgba(28,32,42,.30)!important;
+  -webkit-backdrop-filter:blur(10px) saturate(190%) brightness(1.08)!important;backdrop-filter:blur(10px) saturate(190%) brightness(1.08)!important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.38),inset 0 -1px 1px rgba(255,255,255,.12),inset 0 0 18px rgba(255,255,255,.06),0 10px 30px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.2)!important}
+nav.bottom.lg-refract{-webkit-backdrop-filter:url(#lgRefract) blur(8px) saturate(190%) brightness(1.08)!important;backdrop-filter:url(#lgRefract) blur(8px) saturate(190%) brightness(1.08)!important}
+/* Lichtkante: oben links und unten rechts heller, wie bei echtem Glas */
+nav.bottom::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;z-index:2;
+  background:linear-gradient(135deg,rgba(255,255,255,.55),rgba(255,255,255,.08) 35%,rgba(255,255,255,.04) 65%,rgba(255,255,255,.35));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+nav.bottom button{border-radius:999px!important;background:transparent!important;color:rgba(245,246,248,.78)!important;position:relative;z-index:1;
+  text-shadow:0 1px 2px rgba(0,0,0,.35);transition:color .25s,transform .25s}
+nav.bottom button svg{filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.3))}
+nav.bottom button.on{color:var(--accent)!important}
+nav.bottom button:active{transform:scale(.94)}
+/* Linse unter dem aktiven Tab, gleitet mit Federung zum neuen Tab */
+nav.bottom .lg-lens{position:absolute;top:5px;bottom:5px;left:5px;width:0;border-radius:999px;z-index:0;pointer-events:none;
+  background:rgba(255,255,255,.14);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.45),inset 0 -1px 1px rgba(255,255,255,.12),0 3px 10px rgba(0,0,0,.18);
+  transition:left .5s cubic-bezier(.34,1.45,.5,1),width .5s cubic-bezier(.34,1.45,.5,1),transform .25s ease,opacity .2s}
+nav.bottom:has(button:active) .lg-lens{transform:scale(1.06,1.12);background:rgba(255,255,255,.2)}
+/* Weicher Übergang am unteren Rand, damit Text hinter der Leiste ausgeblendet wird */
+.lg-edge{position:absolute;left:0;right:0;bottom:0;height:calc(110px + env(safe-area-inset-bottom));z-index:10;pointer-events:none;
+  background:linear-gradient(to top,rgba(10,12,18,.88) 0%,rgba(10,12,18,.7) 40%,rgba(10,12,18,0) 100%);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  -webkit-mask-image:linear-gradient(to top,#000 45%,transparent);mask-image:linear-gradient(to top,#000 45%,transparent)}
+@media (max-width:599px){.lg-edge{position:fixed;max-width:440px;margin:0 auto}}
+.app:has(.chatbar.on) .lg-edge{height:calc(170px + env(safe-area-inset-bottom))}
+/* Chatleiste schwebt über der Tableiste */
+.chatbar{bottom:calc(76px + env(safe-area-inset-bottom))!important;background:transparent!important;border-top:0!important;padding:6px 14px!important}
+.chatbar textarea{background:rgba(28,32,42,.55)!important;border:1px solid rgba(255,255,255,.16)!important;-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%)}
+.chat-att{background:rgba(28,32,42,.75)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+@media (prefers-reduced-motion:reduce){nav.bottom .lg-lens{transition:none}}
+
+/* --- Runde 4: Hell/Dunkel, ruhiger Hintergrund, Anmeldung blickdicht --- */
+.app{background:rgba(16,20,28,.18)!important}
+/* Anmeldung (Onboarding) blickdicht */
+.onb,.onb[style]{background:#12151B!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-gt="light"] .onb{background:#ECEFF3!important}
+/* Hell */
+html[data-gt="light"]:root:root:root{--bg:#ECEFF3; --ink:#141922; --muted:rgba(20,25,34,.62); --line:rgba(20,25,34,.11); --surface:rgba(255,255,255,.62); --surface-2:rgba(255,255,255,.5);
+--ok:#1E9566; --ok-soft:rgba(30,149,102,.13); --warn:#B7700F; --warn-soft:rgba(220,150,40,.16); --danger:#D23F3F; color-scheme:light; --brand:#141922; --brand-2:#2A303B; --brand-soft:rgba(20,25,34,.07);
+  --shadow:0 10px 30px rgba(20,25,34,.08),inset 0 1px 0 rgba(255,255,255,.9)}
+html[data-gt="light"] .app{background:rgba(255,255,255,.28)!important}
+@media (min-width:600px){html[data-gt="light"] .app{border-color:rgba(20,25,34,.12)!important;box-shadow:0 40px 100px rgba(20,25,34,.16),inset 0 1px 0 #fff!important}}
+html[data-gt="light"] h2{color:rgba(20,25,34,.5)}
+html[data-gt="light"] .tile:hover,html[data-gt="light"] .qa:hover{background:rgba(255,255,255,.85)}
+html[data-gt="light"] .hero{background:rgba(255,255,255,.62)!important;border-color:rgba(255,255,255,.95)}
+html[data-gt="light"] .hero{color:#141922}
+html[data-gt="light"] .hero::after{border-color:rgba(20,25,34,.05)}
+html[data-gt="light"] .hero .btn-light{background:rgba(20,25,34,.06);border-color:rgba(20,25,34,.12);color:#141922}
+html[data-gt="light"] .btn{box-shadow:0 6px 18px rgba(20,25,34,.10)}
+html[data-gt="light"] .btn:not(.ghost):not(.accent):not(.outline){background:#141922;color:#fff}
+html[data-gt="light"] .btn.ghost{background:rgba(255,255,255,.65)}
+html[data-gt="light"] .seg button.on,html[data-gt="light"] .day.on,html[data-gt="light"] .chip.on{background:#141922;color:#fff;border-color:#141922}
+html[data-gt="light"] .input,html[data-gt="light"] select.input,html[data-gt="light"] textarea.input,html[data-gt="light"] .num-in{background:rgba(255,255,255,.75)}
+html[data-gt="light"] .input::placeholder,html[data-gt="light"] textarea::placeholder{color:rgba(20,25,34,.42)}
+html[data-gt="light"] option{background:#fff;color:#141922}
+html[data-gt="light"] .toggle{background:rgba(20,25,34,.16)}
+.toggle.on,html[data-gt="light"] .toggle.on{background:var(--ok)}
+html[data-gt="light"] .tile .ic,html[data-gt="light"] .qa .ic{background:rgba(20,25,34,.06)!important}
+html[data-gt="light"] .sheet{background:rgba(255,255,255,.86)!important;border-color:rgba(255,255,255,.95)}
+html[data-gt="light"] .scrim{background:rgba(20,25,34,.18)!important}
+html[data-gt="light"] .toast{background:rgba(20,25,34,.92);color:#fff}
+html[data-gt="light"] .push{background:rgba(255,255,255,.85)!important}
+html[data-gt="light"] .mapframe{filter:none}
+html[data-gt="light"] .paper{box-shadow:0 10px 30px rgba(20,25,34,.12)}
+html[data-gt="light"] .wm-sub{color:#C4161C!important}
+html[data-gt="light"] .falcon img{filter:none}
+/* Tableiste hell */
+html[data-gt="light"] nav.bottom{background:rgba(255,255,255,.42)!important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.55),inset 0 0 18px rgba(255,255,255,.35),0 10px 30px rgba(20,25,34,.16),0 2px 6px rgba(20,25,34,.08)!important}
+html[data-gt="light"] nav.bottom::before{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(255,255,255,.3) 35%,rgba(20,25,34,.05) 65%,rgba(255,255,255,.8))}
+html[data-gt="light"] nav.bottom button{color:rgba(20,25,34,.72)!important;text-shadow:none}
+html[data-gt="light"] nav.bottom button svg{filter:none}
+html[data-gt="light"] nav.bottom button.on{color:var(--accent)!important}
+html[data-gt="light"] nav.bottom .lg-lens{background:rgba(20,25,34,.07);box-shadow:inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(20,25,34,.05),0 3px 10px rgba(20,25,34,.10)}
+html[data-gt="light"] .lg-edge{background:linear-gradient(to top,rgba(236,239,243,.92) 0%,rgba(236,239,243,.72) 40%,rgba(236,239,243,0) 100%)}
+html[data-gt="light"] .chatbar textarea{background:rgba(255,255,255,.75)!important;border-color:rgba(20,25,34,.12)!important}
+html[data-gt="light"] .chat-att{background:rgba(255,255,255,.88)!important}
+/* Hintergrund: ruhig, Farben nur noch ganz schwach */
+html{background:radial-gradient(70% 60% at 90% -5%,rgba(240,110,70,.07),transparent 70%),radial-gradient(60% 60% at 0% 35%,rgba(90,120,190,.06),transparent 70%),#12151B!important;background-attachment:fixed!important}
+html[data-gt="light"]{background:radial-gradient(70% 60% at 90% -5%,rgba(240,110,70,.06),transparent 70%),radial-gradient(60% 60% at 0% 35%,rgba(90,120,190,.06),transparent 70%),#ECEFF3!important;background-attachment:fixed!important}
+body::before{display:none!important}
+html[data-gt="light"] ::-webkit-scrollbar-thumb{background:rgba(20,25,34,.2)}
+
+/* --- Runde 5: Profilbild ohne Rand, Popups blickdicht --- */
+:root{--gs-acc:var(--accent)}
+.head-avatar,.avatar{border:0!important;box-shadow:0 4px 12px rgba(0,0,0,.18)!important}
+.sheet{background:rgba(22,26,34,.97)!important}
+html[data-gt="light"] .sheet{background:rgba(250,251,253,.97)!important}
+.scrim{background:rgba(5,8,12,.55)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+html[data-gt="light"] .scrim{background:rgba(20,25,34,.35)!important}
+</style>
 </head>
 <body>
 <div class="app" id="app">
@@ -600,7 +786,7 @@ const kaskoLabel=m=>m%12===0?(m/12)+(m===12?' Jahr':' Jahre'):m+' Monate';
 // Auftragsstatus: nur noch Offen / In Bearbeitung / Abgeschlossen
 const normStatus=s=>({'Eingegangen':'Offen','In Prüfung':'Offen','Wird bereitgelegt':'Offen','Versand vorbereitet':'Offen','In Arbeit':'In Bearbeitung','Abholbereit':'Abgeschlossen','Versendet':'Abgeschlossen'})[s]||s;
 let S;
-try{S=JSON.parse(localStorage.getItem('falkner-v10'))}catch(e){}
+try{S=JSON.parse(localStorage.getItem('glass-falkner-v10'))}catch(e){}
 const FIRST_RUN=!S;
 if(!S) S=JSON.parse(JSON.stringify(DEFAULT));
 S.ui=S.ui||{theme:'system',fs:1,hc:false}; S.storeCfg=S.storeCfg||{}; (S.tickets||[]).forEach(t=>t.status=normStatus(t.status));
@@ -613,6 +799,7 @@ let FALCON_DEFAULT=null;
 function applyUI(){
   const r=document.documentElement, u=S.ui||{};
   if(u.theme==='light'||u.theme==='dark') r.setAttribute('data-theme',u.theme); else r.removeAttribute('data-theme');
+  if(window.gtApply)gtApply(u.theme||'system');
   r.classList.toggle('hc',!!u.hc); r.style.setProperty('--fs',u.fs||1);
   const b=S.brand||{};
   if(b.accent){r.style.setProperty('--accent',b.accent);r.style.setProperty('--accent-soft',hexA(b.accent,.14))} else {r.style.removeProperty('--accent');r.style.removeProperty('--accent-soft')}
@@ -622,7 +809,7 @@ function applyUI(){
 }
 applyStoreCfg();
 let quotaWarned=false;
-function persist(){try{localStorage.setItem('falkner-v10',JSON.stringify(S))}catch(e){if(!quotaWarned&&typeof toast==='function'){quotaWarned=true;toast('Speicher des Prototyps ist voll – ältere Fotos bitte löschen')}}}
+function persist(){try{localStorage.setItem('glass-falkner-v10',JSON.stringify(S))}catch(e){if(!quotaWarned&&typeof toast==='function'){quotaWarned=true;toast('Speicher des Prototyps ist voll – ältere Fotos bitte löschen')}}}
 
 const fmtDate=(iso,opt={day:'2-digit',month:'2-digit',year:'numeric'})=>new Date(iso+'T12:00').toLocaleDateString('de-AT',opt);
 const eur=v=>v.toLocaleString('de-AT',{style:'currency',currency:'EUR'});
@@ -872,7 +1059,7 @@ function saveProfile(){
   persist();render();toast('Profil gespeichert');
 }
 function cancelAppt(id){if(confirm('Termin wirklich stornieren?')){S.appts=S.appts.filter(a=>a.id!==id);persist();render();toast('Termin storniert')}}
-function resetDemo(){if(confirm('Alle Demo-Daten zurücksetzen? Die App startet danach wie beim ersten Öffnen.')){try{localStorage.removeItem('falkner-v10')}catch(e){};location.href=location.pathname}}
+function resetDemo(){if(confirm('Alle Demo-Daten zurücksetzen? Die App startet danach wie beim ersten Öffnen.')){try{localStorage.removeItem('glass-falkner-v10')}catch(e){};location.href=location.pathname}}
 // Brillenpass als echte PDF-Datei (ohne externe Bibliothek)
 const PDF_MAP={'€':128,'‚':130,'„':132,'…':133,'–':150,'—':151,'“':147,'”':148,'‘':145,'’':146};
 const pdfTxt=t=>[...String(t)].map(ch=>{const c=PDF_MAP[ch]||ch.charCodeAt(0);return c<256?String.fromCharCode(c):'?'}).join('').replace(/[\\()]/g,m=>'\\'+m);
@@ -947,10 +1134,10 @@ function demoPush(){
 }
 
 /* --- Chat --- */
-const dashAlive=()=>{try{return Date.now()-(+localStorage.getItem('falkner-dash-alive')||0)<15000}catch(e){return false}};
+const dashAlive=()=>{try{return Date.now()-(+localStorage.getItem('glass-falkner-dash-alive')||0)<15000}catch(e){return false}};
 // Live-Verbindung zum Dashboard (gleicher Browser): Änderungen sofort übernehmen
 window.addEventListener('storage',e=>{
-  if(e.key!=='falkner-v10'||!e.newValue)return;
+  if(e.key!=='glass-falkner-v10'||!e.newValue)return;
   let n;try{n=JSON.parse(e.newValue)}catch(x){return}
   const before=new Set(S.chat.map(m=>m.id)); S=n; S.ui=S.ui||{theme:'system',fs:1,hc:false};
   const fresh=S.chat.filter(m=>!before.has(m.id)&&m.from!=='me');
@@ -1477,7 +1664,7 @@ function onbDemo(){S=JSON.parse(JSON.stringify(DEFAULT));onb.mode='existing';onb
 function onbLink(){
   const kd=document.getElementById('oKd').value.replace(/\s/g,''), err=document.getElementById('oErr');
   if(kd===DEFAULT.profile.kdnr){S=JSON.parse(JSON.stringify(DEFAULT));onb.step=2;onbRender();return}
-  let inv=null; try{const D=JSON.parse(localStorage.getItem('falkner-dash-v1'));inv=D&&D.customers.find(c=>c.kdnr===kd)}catch(e){}
+  let inv=null; try{const D=JSON.parse(localStorage.getItem('glass-falkner-dash-v1'));inv=D&&D.customers.find(c=>c.kdnr===kd)}catch(e){}
   if(inv){S=blankAccount(inv.name.split(' ')[0],inv.name.split(' ').slice(1).join(' '),inv.mail,inv.phone,kd);S.store=inv.store;onb.step=2;onbRender();return}
   err.textContent='Diese Kundennummer kennen wir nicht. Demo: 104772 – oder ein im Dashboard eingeladener Kunde.';
 }
@@ -1505,6 +1692,154 @@ if(FIRST_RUN||!S.store){onbShow()}
 else {const u=S.chat.filter(m=>!m.read&&m.from!=='me').slice(-1)[0], pr=pendingReview();
   if(u&&S.notif.chat) setTimeout(()=>showPush((u.title?u.title+' – ':'')+u.text,()=>go('chat')),1200);
   else if(pr) setTimeout(()=>reviewPush(pr),1200)}
+</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="lgRefract" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+  <feImage id="lgMap" x="0" y="0" result="map" preserveAspectRatio="none"/>
+  <feDisplacementMap in="SourceGraphic" in2="map" scale="28" xChannelSelector="R" yChannelSelector="G"/>
+</filter></svg>
+<script>
+/* ===== Runde 3: Liquid-Glass-Tableiste ===== */
+(function(){
+  const nav=document.querySelector('nav.bottom');if(!nav)return;
+  const lens=document.createElement('span');lens.className='lg-lens';nav.prepend(lens);
+  const edge=document.createElement('div');edge.className='lg-edge';nav.before(edge);
+  function moveLens(){const b=nav.querySelector('button.on');lens.style.opacity=b?1:0;if(!b||!nav.offsetWidth)return;lens.style.left=b.offsetLeft+'px';lens.style.width=b.offsetWidth+'px'}
+  new MutationObserver(moveLens).observe(nav,{subtree:true,attributes:true,attributeFilter:['class']});
+  addEventListener('resize',moveLens);requestAnimationFrame(moveLens);
+  /* Lichtbrechung an den Rändern (nur Chromium, z. B. Chrome, Edge, Android-App) */
+  const isChromium=!!window.chrome||!!(navigator.userAgentData&&navigator.userAgentData.brands.some(x=>/Chromium/.test(x.brand)));
+  if(!(isChromium&&CSS.supports('backdrop-filter','url(#x)')))return;
+  let lastW=0,lastH=0;
+  function buildMap(){
+    const w=Math.round(nav.offsetWidth),h=Math.round(nav.offsetHeight);if(!w||!h||(w===lastW&&h===lastH))return;lastW=w;lastH=h;
+    const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d'),img=x.createImageData(w,h),d=img.data;
+    const r=h/2,band=Math.min(18,r);
+    for(let j=0;j<h;j++)for(let i=0;i<w;i++){
+      /* Abstand zum Rand der Pille und Richtung nach außen */
+      const cx=Math.min(Math.max(i,r),w-r),dx=i-cx,dy=j-r,len=Math.hypot(dx,dy)||1,dist=r-len;
+      let k=dist<band?Math.pow(1-dist/band,2):0;
+      const p=(j*w+i)*4;d[p]=128-dx/len*k*127;d[p+1]=128-dy/len*k*127;d[p+2]=128;d[p+3]=255;
+    }
+    x.putImageData(img,0,0);
+    const m=document.getElementById('lgMap');m.setAttribute('width',w);m.setAttribute('height',h);m.setAttribute('href',c.toDataURL());
+    nav.classList.add('lg-refract');
+  }
+  new ResizeObserver(buildMap).observe(nav);
+})();
+</script>
+<!-- ===== Runde 5: Glas-Datumsauswahl ===== -->
+<style>
+@media (pointer:fine){
+input[type="date"]{padding-right:38px!important;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ECEFF5' stroke-opacity='.75' stroke-width='2' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E")!important;
+  background-repeat:no-repeat!important;background-position:right 12px center!important;background-size:16px!important}
+html[data-gt="light"] input[type="date"]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23141922' stroke-opacity='.7' stroke-width='2' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E")!important}
+input[type="date"]::-webkit-calendar-picker-indicator{display:none}
+input[type="date"].gd-open{border-color:rgba(255,255,255,.38)!important;box-shadow:0 0 0 3px rgba(255,255,255,.10)!important}
+html[data-gt="light"] input[type="date"].gd-open{border-color:rgba(20,25,34,.3)!important;box-shadow:0 0 0 3px rgba(20,25,34,.08)!important}
+}
+.gd-pop{position:fixed;z-index:10000;width:292px;padding:12px;border-radius:20px;box-sizing:border-box;color:#F5F6F8;font-size:14px;line-height:1.2;
+  background:rgba(30,34,44,.78);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 22px 55px rgba(0,0,0,.45);transform-origin:top left;animation:gdIn .18s cubic-bezier(.2,.9,.3,1.2)}
+.gd-pop.up{transform-origin:bottom left}
+@keyframes gdIn{from{opacity:0;transform:scale(.95)}}
+.gd-pop button{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;border-radius:999px;transition:background .12s}
+.gd-pop button:focus-visible{outline:2px solid currentColor;outline-offset:1px}
+.gd-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px}
+.gd-title{padding:6px 10px!important;font-weight:700;font-size:15px;display:inline-flex!important;align-items:center;gap:6px}
+.gd-title svg{width:12px;height:12px;opacity:.7}
+.gd-nav{display:flex;gap:4px}
+.gd-nav button{width:32px;height:32px;display:grid!important;place-items:center}
+.gd-nav svg{width:16px;height:16px}
+.gd-pop button:hover:not([disabled]){background:rgba(255,255,255,.12)}
+.gd-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.gd-pop .gd-wd{text-align:center;font-size:11px;font-weight:700;opacity:.55;padding:4px 0 6px}
+.gd-pop .gd-day{height:34px;font-variant-numeric:tabular-nums}
+.gd-pop .gd-day.out{opacity:.38}
+.gd-pop .gd-day.today{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55)}
+.gd-pop .gd-day.on,.gd-pop .gd-cell.on{background:var(--gs-acc,#EF4A50)!important;color:#fff;font-weight:700}
+.gd-pop .gd-day[disabled]{opacity:.2;cursor:default}
+.gd-pop .gd-cells{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.gd-pop .gd-cell{height:44px;border-radius:14px!important;font-weight:600}
+.gd-pop .gd-cell.cur{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55)}
+.gd-foot{display:flex;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.12)}
+.gd-pop .gd-foot button{padding:6px 12px;font-weight:600;color:var(--gs-acc,#EF4A50)}
+html[data-gt="light"] .gd-pop{background:rgba(255,255,255,.88);border-color:rgba(255,255,255,.95);color:#141922;box-shadow:inset 0 1px 0 #fff,0 22px 55px rgba(20,25,34,.2)}
+html[data-gt="light"] .gd-pop button:hover:not([disabled]){background:rgba(20,25,34,.07)}
+html[data-gt="light"] .gd-day.today,html[data-gt="light"] .gd-cell.cur{box-shadow:inset 0 0 0 1.5px rgba(20,25,34,.45)}
+html[data-gt="light"] .gd-foot{border-top-color:rgba(20,25,34,.1)}
+@media (prefers-reduced-motion:reduce){.gd-pop{animation:none}}
+</style>
+<script>
+(function(){
+  if(matchMedia('(pointer:coarse)').matches)return; /* Touch-Geräte: Auswahl des Systems */
+  const MN=['Jänner','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const MS=['Jän','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  const WD=['Mo','Di','Mi','Do','Fr','Sa','So'];
+  const CH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+  const L='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
+  const R='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+  let open=null;
+  const pad=n=>String(n).padStart(2,'0'),iso=(y,m,d)=>y+'-'+pad(m+1)+'-'+pad(d);
+  const parse=v=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(v||'');return m?{y:+m[1],m:+m[2]-1,d:+m[3]}:null};
+  const todayIso=()=>{const t=new Date();return iso(t.getFullYear(),t.getMonth(),t.getDate())};
+  function close(){if(!open)return;open.pop.remove();open.inp.classList.remove('gd-open');open=null}
+  function place(){const r=open.inp.getBoundingClientRect(),p=open.pop,h=p.offsetHeight,w=p.offsetWidth;
+    const below=innerHeight-r.bottom-10,up=below<h&&r.top-10>below;
+    p.style.top=Math.max(8,up?r.top-h-6:r.bottom+6)+'px';p.style.left=Math.max(8,Math.min(r.left,innerWidth-w-8))+'px';p.classList.toggle('up',up)}
+  const ok=v=>{const i=open.inp;return(!i.min||v>=i.min)&&(!i.max||v<=i.max)};
+  function head(title,act){return `<div class="gd-head"><button type="button" class="gd-title" data-a="${act}">${title} ${CH}</button><span class="gd-nav"><button type="button" data-a="prev" aria-label="Zurück">${L}</button><button type="button" data-a="next" aria-label="Weiter">${R}</button></span></div>`}
+  function render(){
+    const o=open,sel=o.inp.value,ti=todayIso(),sp=parse(sel),t=new Date();let h='';
+    if(o.mode==='days'){
+      h+=head(MN[o.m]+' '+o.y,'months')+'<div class="gd-grid">'+WD.map(w=>`<span class="gd-wd">${w}</span>`).join('');
+      const off=(new Date(o.y,o.m,1).getDay()+6)%7;
+      for(let k=0;k<42;k++){const d=new Date(o.y,o.m,1-off+k),v=iso(d.getFullYear(),d.getMonth(),d.getDate());
+        h+=`<button type="button" class="gd-day${d.getMonth()!==o.m?' out':''}${v===ti?' today':''}${v===sel?' on':''}" data-v="${v}" aria-label="${d.getDate()}. ${MN[d.getMonth()]} ${d.getFullYear()}" ${ok(v)?'':'disabled'}>${d.getDate()}</button>`}
+      h+='</div>';
+    }else if(o.mode==='months'){
+      h+=head(String(o.y),'years')+'<div class="gd-cells">'+MS.map((m,i)=>`<button type="button" class="gd-cell${sp&&sp.y===o.y&&sp.m===i?' on':''}${t.getFullYear()===o.y&&t.getMonth()===i?' cur':''}" data-mo="${i}">${m}</button>`).join('')+'</div>';
+    }else{
+      const s=Math.floor(o.y/12)*12;
+      h+=head(s+' – '+(s+11),'days')+'<div class="gd-cells">'+Array.from({length:12},(_,i)=>s+i).map(y=>`<button type="button" class="gd-cell${sp&&sp.y===y?' on':''}${t.getFullYear()===y?' cur':''}" data-yr="${y}">${y}</button>`).join('')+'</div>';
+    }
+    h+=`<div class="gd-foot"><button type="button" data-a="clear">Löschen</button><button type="button" data-a="today">Heute</button></div>`;
+    o.pop.innerHTML=h;
+  }
+  function set(v){const i=open.inp;close();
+    if(i.value!==v){i.value=v;i.dispatchEvent(new Event('input',{bubbles:true}));i.dispatchEvent(new Event('change',{bubbles:true}))}
+    if(i.isConnected)i.focus({preventScroll:true})}
+  function build(inp){
+    close();const pop=document.createElement('div');pop.className='gd-pop';pop.setAttribute('role','dialog');pop.setAttribute('aria-label','Datum wählen');
+    const p=parse(inp.value)||parse(inp.min&&inp.min>todayIso()?inp.min:'')||parse(todayIso());
+    open={inp,pop,y:p.y,m:p.m,mode:'days'};document.body.appendChild(pop);render();place();inp.classList.add('gd-open');
+    pop.addEventListener('mousedown',e=>e.preventDefault());
+    pop.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled||!open)return;const o=open,a=b.dataset.a;
+      if(b.dataset.v)return set(b.dataset.v);
+      if(a==='clear')return set('');
+      if(a==='today')return set(todayIso());
+      if(b.dataset.mo!=null){o.m=+b.dataset.mo;o.mode='days'}
+      else if(b.dataset.yr!=null){o.y=+b.dataset.yr;o.mode='months'}
+      else if(a==='months'||a==='years'||a==='days'){o.mode=a}
+      else if(a==='prev'||a==='next'){const s=a==='prev'?-1:1;
+        if(o.mode==='days'){o.m+=s;if(o.m<0){o.m=11;o.y--}if(o.m>11){o.m=0;o.y++}}else o.y+=s*(o.mode==='years'?12:1)}
+      render();place()});
+  }
+  document.addEventListener('mousedown',e=>{
+    const inp=e.target.closest&&e.target.closest('input[type="date"]');
+    if(inp&&!inp.disabled&&!inp.readOnly){if(!(open&&open.inp===inp))build(inp);return}
+    if(open&&!e.target.closest('.gd-pop'))close();
+  },true);
+  document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('input[type="date"]'))e.preventDefault()},true);
+  document.addEventListener('input',e=>{if(open&&e.target===open.inp){const p=parse(open.inp.value);if(p){open.y=p.y;open.m=p.m;open.mode='days'}render()}},true);
+  document.addEventListener('keydown',e=>{
+    if(open&&e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();const i=open.inp;close();i.focus()}
+    else if(open&&e.key==='Tab')close();
+    else if(!open&&e.target.matches&&e.target.matches('input[type="date"]')&&(e.key==='Enter'||(e.altKey&&e.key==='ArrowDown'))){e.preventDefault();build(e.target)}
+  },true);
+  addEventListener('scroll',e=>{if(open&&!(e.target.closest&&e.target.closest('.gd-pop')))close()},true);
+  addEventListener('resize',close);addEventListener('blur',close);
+})();
 </script>
 </body>
 </html>
