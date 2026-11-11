@@ -167,6 +167,14 @@ tbody tr:hover td,tbody tr[aria-selected="true"] td{background:var(--surface-2)}
 .empty{color:var(--muted);padding:20px 0}
 @media (max-width:1000px){.grid2,.dcols{grid-template-columns:1fr}.tiles,.dgrid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.top-in,.main{padding:0 16px}.main{padding-top:20px}.tag{display:none}.head h1{font-size:28px}.tile .n{font-size:28px}}
+.kebab{font-size:16px;line-height:1;padding:5px 11px}
+.imenu{position:fixed;z-index:60;min-width:210px;padding:6px;border-radius:14px;background:var(--surface);border:1px solid var(--line);box-shadow:0 14px 34px rgba(10,16,28,.18);display:flex;flex-direction:column;gap:2px;transform-origin:top right;animation:imIn .16s cubic-bezier(.2,.9,.3,1.2)}
+.imenu.up{transform-origin:bottom right}
+@keyframes imIn{from{opacity:0;transform:scale(.94)}}
+@media (prefers-reduced-motion:reduce){.imenu{animation:none}}
+.imi{display:block;width:100%;text-align:left;background:none;border:0;border-radius:9px;padding:9px 12px;font:inherit;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer;white-space:nowrap}
+.imi:hover,.imi:focus-visible{background:var(--surface-2);outline:none}
+.imi.arm{background:var(--warn-bg);color:var(--warn)}
 </style>
 <style id="glass">
 /* ===== Glass-Test (OptiApp-Verwaltung) ===== */
@@ -244,6 +252,10 @@ html[data-gt="light"] .gt-seg button[aria-checked="true"]{background:#141922;col
 html[data-gt="light"] select:not([multiple]){background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23141922' stroke-opacity='.7' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
 html[data-gt="light"] select:not([multiple]):hover{background-color:rgba(255,255,255,.92)!important}
 html[data-gt="light"] select:not([multiple]):focus-visible,html[data-gt="light"] select.gs-open{border-color:rgba(20,25,34,.3)!important;box-shadow:0 0 0 3px rgba(20,25,34,.08)!important}
+.imenu{background:rgba(30,34,44,.62);border-color:rgba(255,255,255,.16);color:#F5F6F8;border-radius:16px;-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 20px 50px rgba(0,0,0,.45)}
+.imi{color:inherit}.imi:hover,.imi:focus-visible{background:rgba(255,255,255,.13)}
+html[data-gt="light"] .imenu{background:rgba(255,255,255,.8);border-color:rgba(255,255,255,.95);color:#141922;box-shadow:inset 0 1px 0 #fff,0 20px 50px rgba(20,25,34,.18)}
+html[data-gt="light"] .imi:hover,html[data-gt="light"] .imi:focus-visible{background:rgba(20,25,34,.06)}
 html[data-gt="light"] .gs-pop{background:rgba(255,255,255,.8);border-color:rgba(255,255,255,.95);color:#141922;box-shadow:inset 0 1px 0 #fff,0 20px 50px rgba(20,25,34,.18)}
 html[data-gt="light"] .gs-opt:hover,html[data-gt="light"] .gs-opt.hl{background:rgba(20,25,34,.06)}
 html[data-gt="light"] .gs-opt.on::before{border-color:var(--gs-acc,#141922)}
@@ -524,6 +536,26 @@ function renderFirma(){
   missInfo();
 }
 const invPay=v=>(v.to&&v.to.pay)||adr(v.opt).pay||'invoice';
+/* ☰-Menü je Rechnung */
+let imenuEl=null;
+function closeIMenu(){if(!imenuEl)return;const b=document.getElementById('km-'+imenuEl.dataset.nr);if(b)b.setAttribute('aria-expanded','false');imenuEl.remove();imenuEl=null}
+function invMenu(ev,nr){ev.stopPropagation();const btn=ev.currentTarget,was=imenuEl&&imenuEl.dataset.nr===nr;closeIMenu();if(was)return;const v=B.invoices.find(x=>x.nr===nr);if(!v)return;
+  const items=[];if(!v.storno)items.push(['paid',v.paid?'Als offen markieren':'Als bezahlt markieren']);items.push(['view','Ansehen / PDF']);if(!v.storno)items.push(['storno','Stornieren']);
+  const m=document.createElement('div');m.className='imenu';m.setAttribute('role','menu');m.dataset.nr=nr;
+  m.innerHTML=items.map(([k,t])=>`<button type="button" role="menuitem" class="imi" data-k="${k}">${t}</button>`).join('');
+  m.addEventListener('click',e=>{const b=e.target.closest('.imi');if(!b)return;e.stopPropagation();const k=b.dataset.k;
+    if(k==='storno'&&!b.dataset.arm){b.dataset.arm='1';b.textContent='Wirklich stornieren?';b.classList.add('arm');return}
+    closeIMenu();if(k==='paid')togglePaid(nr);else if(k==='view')openInv(nr);else{stornoArm=nr;stornoInv(nr)}});
+  document.body.appendChild(m);imenuEl=m;btn.setAttribute('aria-expanded','true');
+  const r=btn.getBoundingClientRect(),w=m.offsetWidth,h=m.offsetHeight;let top=r.bottom+6;
+  if(top+h>innerHeight-8&&r.top-h-6>8){top=r.top-h-6;m.classList.add('up')}
+  m.style.top=top+'px';m.style.left=Math.max(8,Math.min(r.right-w,innerWidth-w-8))+'px';m.querySelector('.imi').focus()}
+document.addEventListener('click',e=>{if(imenuEl&&!e.target.closest('.imenu'))closeIMenu()});
+document.addEventListener('keydown',e=>{if(!imenuEl)return;
+  if(e.key==='Escape'){const b=document.getElementById('km-'+imenuEl.dataset.nr);closeIMenu();if(b)b.focus()}
+  else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const its=[...imenuEl.querySelectorAll('.imi')];let i=its.indexOf(document.activeElement);i=(i+(e.key==='ArrowDown'?1:-1)+its.length)%its.length;its[i].focus()}
+  else if(e.key==='Tab')closeIMenu()});
+addEventListener('scroll',e=>{if(imenuEl&&!(e.target.closest&&e.target.closest('.imenu')))closeIMenu()},true);addEventListener('resize',closeIMenu);
 function togglePaid(nr){const v=B.invoices.find(x=>x.nr===nr);if(!v||v.storno)return;v.paid=v.paid?null:new Date().toISOString();saveB();flash=['ok','Rechnung '+nr+(v.paid?' als bezahlt markiert.':' wieder als offen markiert.')];renderInv(true)}
 function openInv(nr){const v=B.invoices.find(x=>x.nr===nr);if(!v)return;document.getElementById('invDoc').innerHTML=invHTML(v);const m=document.getElementById('modal');m.hidden=false;document.title=v.nr+' – OptiApp';m.querySelector('.mbar .btn').focus()}
 function closeInv(){document.getElementById('modal').hidden=true;document.title='OptiApp Verwaltung'}
@@ -555,7 +587,7 @@ function renderInv(keepFocus){
     ${invs.length?`<div class="tblwrap"><table class="inv"><thead><tr><th>Nummer</th><th>Datum</th><th>Optiker</th><th>Zeitraum</th><th class="num">Netto</th><th class="num">Brutto</th><th>Zahlung</th><th>Status</th><th class="num"></th></tr></thead><tbody>
     ${invs.map(v=>`<tr class="${v.storno?'strike':''}"><td><b>${v.nr}</b></td><td>${fmtD(v.date)}</td><td>${esc(v.optName)}</td><td>${v.periodTxt}</td><td class="num amt">${eur(v.net)}</td><td class="num amt">${eur(v.gross)}</td>
       <td>${payBadge(invPay(v))}</td><td>${v.storno?'<span class="badge b-mute">Storniert</span>':v.paid?`<span class="badge b-ok">Bezahlt ${fmtD(v.paid)}</span>`:v.due.slice(0,10)<new Date().toISOString().slice(0,10)?'<span class="badge b-warn">Überfällig</span>':'<span class="badge b-warn" style="background:var(--mute-bg);color:var(--ink)">Offen</span>'}</td>
-      <td class="num"><div class="acts">${v.storno?'':`<button class="btn sm" id="pd-${v.nr}" onclick="togglePaid('${v.nr}')">${v.paid?'Als offen markieren':'Als bezahlt markieren'}</button>`}<button class="btn sm" onclick="openInv('${v.nr}')">Ansehen / PDF</button>${v.storno?'':`<button class="btn sm" onclick="stornoInv('${v.nr}')">${stornoArm===v.nr?'Wirklich stornieren?':'Stornieren'}</button>`}</div></td></tr>`).join('')}
+      <td class="num"><div class="acts"><button class="btn sm kebab" id="km-${v.nr}" aria-haspopup="menu" aria-expanded="false" aria-label="Aktionen für Rechnung ${v.nr}" title="Aktionen" onclick="invMenu(event,'${v.nr}')">☰</button></div></td></tr>`).join('')}
     </tbody><tfoot>${(()=>{const ok=invs.filter(v=>!v.storno),st=invs.length-ok.length;return `<tr><td colspan="4">Gesamt (${ok.length} Rechnung${ok.length===1?'':'en'}${st?', ohne '+st+' storniert'+(st>1?'e':'e'):''})</td><td class="num">${eur(r2(ok.reduce((a,v)=>a+v.net,0)))}</td><td class="num">${eur(r2(ok.reduce((a,v)=>a+v.gross,0)))}</td><td></td><td colspan="2" class="hint" style="font-weight:700">offen: ${eur(r2(ok.filter(v=>!v.paid).reduce((a,v)=>a+v.gross,0)))} brutto</td></tr>`})()}</tfoot></table></div>`:''}
     <p class="note">${missCount()?`Noch ${missCount()} Angaben offen (Absender, Bankdaten, Rechnungsadressen). Bitte unter <a href="#firma" onclick="go('firma');return false">Firmendaten</a> und <a href="#kunden" onclick="go('kunden');return false">Kundendaten</a> ausfüllen, sonst erscheinen sie gelb auf der Rechnung.`:'Firmendaten und Rechnungsadressen sind vollständig.'}</p></div>`;
   if(fid){const el=document.getElementById(fid);if(el)el.focus()}
