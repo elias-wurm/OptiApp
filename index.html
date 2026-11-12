@@ -553,6 +553,22 @@ html[data-gt="light"] .sheet{background:rgba(250,251,253,.97)!important}
 .scrim{background:rgba(5,8,12,.55)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 html[data-gt="light"] .scrim{background:rgba(20,25,34,.35)!important}
 </style>
+<style id="motion-css">
+/* ===== Animationen Kunden-App (v1.12, 13.11.2026) – nur translate/scale/opacity, kurz, abschaltbar über "Bewegung reduzieren" ===== */
+@media (prefers-reduced-motion:no-preference){
+@keyframes moIn{from{opacity:0;translate:0 10px}}
+@keyframes moPop{0%{scale:0;opacity:0}70%{scale:1.15;opacity:1}100%{scale:1}}
+@keyframes moGrow{from{scale:0 1}}
+@keyframes moMsg{from{opacity:0;translate:0 12px;scale:.96}}
+.mo-item{animation:moIn .28s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--mo-i,0)*40ms)}
+.view.mo-in .progress i{transform-origin:0 50%;animation:moGrow .6s cubic-bezier(.2,.8,.2,1) .15s backwards}
+.mo-msg{animation:moMsg .25s cubic-bezier(.2,.8,.2,1)}
+.success .big-ic{animation:moPop .4s cubic-bezier(.3,1.4,.5,1) .05s backwards}
+.head-badge,.nav-dot{animation:moPop .35s cubic-bezier(.3,1.4,.5,1)}
+:is(.btn,.tile,.qa,button.list-item,button.hero,.chip){transition:scale .12s ease,transform .2s ease,background .2s ease}
+:is(.btn,.tile,.qa,button.list-item,button.hero,.chip):active{scale:.97}
+}
+</style>
 </head>
 <body>
 <div class="app" id="app">
@@ -657,7 +673,7 @@ html[data-gt="light"] .scrim{background:rgba(20,25,34,.35)!important}
         <button class="list-item" style="width:100%;text-align:left" onclick="demoPush()"><div class="grow">Demo: Bewertungs-Benachrichtigung zeigen</div></button>
         <button class="list-item" style="width:100%;text-align:left;color:var(--danger)" onclick="resetDemo()"><div class="grow">Demo-Daten zurücksetzen</div></button>
       </div>
-      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.11 · Kundendaten sind Beispieldaten</p>
+      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.12 · Kundendaten sind Beispieldaten</p>
     </section>
   </main>
 
@@ -829,6 +845,7 @@ function setStock(R,L){S.lenses.stock={R,L,updated:today()}}
 
 /* ===================== Navigation ===================== */
 function go(v){
+  const prevView=(document.querySelector('.view.active')||{}).id;
   document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id==='v-'+v));
   document.querySelectorAll('nav.bottom button').forEach(b=>b.classList.toggle('on',b.dataset.view===v));
   document.getElementById('main').scrollTop=0;window.scrollTo(0,0);
@@ -836,7 +853,15 @@ function go(v){
   if(v==='chat'){S.chat.forEach(m=>m.read=true);persist()}
   if(v==='news'){visibleNews().forEach(n=>{if(!S.newsRead.includes(n.id))S.newsRead.push(n.id)});persist()}
   render();
+  if(prevView!=='v-'+v)moEnter(v);
   if(v==='chat')scrollChat()
+}
+/* Animation beim Tab-Wechsel: höchstens 6 oberste Blöcke kurz nacheinander einblenden */
+function moEnter(v){
+  const view=document.getElementById('v-'+v);if(!view||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const items=[];[...view.children].forEach(c=>{if(c.tagName==='DIV'&&c.id&&!c.className.replace('mt','').trim()&&c.children.length)items.push(...c.children);else items.push(c)});
+  items.filter(e=>e.offsetHeight>0).slice(0,6).forEach((e,i)=>{e.style.setProperty('--mo-i',i);e.classList.add('mo-item');e.addEventListener('animationend',()=>e.classList.remove('mo-item'),{once:true})});
+  view.classList.add('mo-in');clearTimeout(view._moT);view._moT=setTimeout(()=>view.classList.remove('mo-in'),900);
 }
 
 /* ===================== Render ===================== */
@@ -1158,7 +1183,7 @@ function addMsg(m,notify){
   if(chatOpen())scrollChat()
   else if(notify!==false&&S.notif.chat) showPush((m.title?m.title+' – ':'')+m.text,()=>go('chat'));
 }
-let typing=false;
+let typing=false, moChatN=null;
 function renderChat(){
   const u=unreadChat(), bd=document.getElementById('chatBadge'); bd.style.display=u?'grid':'none'; bd.textContent=u;
   const last=[...S.chat].reverse().find(m=>m.from!=='me');
@@ -1174,6 +1199,9 @@ function renderChat(){
   });
   if(typing) html+='<div class="typing"><i></i><i></i><i></i></div>';
   document.getElementById('msgs').innerHTML=html;
+  /* nur die jeweils neueste Nachricht animieren */
+  if(moChatN!==null&&S.chat.length>moChatN){const ms=document.querySelectorAll('#msgs .msg');if(ms.length)ms[ms.length-1].classList.add('mo-msg')}
+  moChatN=S.chat.length;
   document.getElementById('quickReplies').innerHTML=['Ist meine Brille fertig?','Termin verschieben','Frage zu Kontaktlinsen','Rückruf bitte'].map(q=>`<button class="chip" onclick="sendChat('${q}')">${q}</button>`).join('');
 }
 /* --- Fotos groß ansehen & langes Drücken zum Löschen --- */
