@@ -313,7 +313,7 @@ html[data-gt="light"] .modal{background:rgba(20,25,34,.3)!important}
     <div id="navList"></div>
     <div class="side-foot"><div class="sideuser"><span class="av" id="sideAv" style="width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700">T</span><div class="grow"><b id="sideName">–</b><div id="sideRole" class="small"></div></div></div>
       <button class="btn ghost sm" style="margin-top:10px;width:100%" onclick="logout()">Abmelden</button>
-      <div style="margin-top:10px">Dashboard-Prototyp v1.4<br>Alle Kundendaten sind Beispieldaten.<br><a class="weblink" href="../website/" target="_blank" rel="noopener">OptiApp-Website ↗</a></div></div>
+      <div style="margin-top:10px">Dashboard-Prototyp v1.5<br>Alle Kundendaten sind Beispieldaten.<br><a class="weblink" href="../website/" target="_blank" rel="noopener">OptiApp-Website ↗</a></div></div>
   </aside>
   <main>
     <div class="top">
@@ -1311,15 +1311,15 @@ html[data-gt="light"] .gd-foot{border-top-color:rgba(20,25,34,.1)}
 </script>
 <!-- ===== Animationen (aus Motion-Test übernommen 13.11.2026; gleicher Block in Dashboard und Verwaltung) ===== -->
 <style id="motion-css">
-@keyframes moItem{from{opacity:0;transform:translateY(16px) scale(.985);filter:blur(8px)}}
+@keyframes moItem{from{opacity:0;transform:translateY(10px)}}
 @keyframes moFade{from{opacity:0}}
-@keyframes moPop{from{opacity:0;transform:translateY(10px) scale(.96);filter:blur(6px)}}
+@keyframes moPop{from{opacity:0;transform:translateY(10px) scale(.96)}}
 @keyframes moGrowY{from{transform:scaleY(0)}}
 @keyframes moGrowX{from{transform:scaleX(0)}}
 @keyframes moDot{from{opacity:0;transform:scale(0)}}
 @keyframes moShine{from{transform:translateX(-120%) skewX(-18deg)}to{transform:translateX(220%) skewX(-18deg)}}
-.mo-item{animation:moItem .55s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--mo-i,0)*55ms)}
-.mo-row{animation:moFade .4s ease backwards;animation-delay:calc(var(--mo-i,0)*28ms + 200ms)}
+.mo-item{animation:moItem .35s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--mo-i,0)*30ms)}
+.mo-row{animation:moFade .3s ease backwards;animation-delay:calc(var(--mo-i,0)*20ms + 120ms)}
 .mo-bar{transform-box:fill-box;transform-origin:50% 100%;animation:moGrowY .75s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--mo-b,0)*45ms + 220ms)}
 .mo-hbar{transform-box:fill-box;transform-origin:0 50%;animation:moGrowX .75s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--mo-b,0)*60ms + 220ms)}
 .mo-dot{transform-box:fill-box;transform-origin:50% 50%;animation:moDot .35s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(var(--mo-b,0)*45ms + 700ms)}
@@ -1334,21 +1334,22 @@ html[data-gt="light"] .gd-foot{border-top-color:rgba(20,25,34,.1)}
 .kpi:hover,.tile:hover{box-shadow:0 18px 40px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.2)}
 html[data-gt="light"] .kpi:hover,html[data-gt="light"] .tile:hover{box-shadow:0 18px 40px rgba(20,25,34,.14),inset 0 1px 0 #fff}
 /* wandernde Markierung im Menü */
-.mo-ghost{position:absolute;z-index:0;pointer-events:none;transition:left .38s cubic-bezier(.3,.9,.3,1),top .38s cubic-bezier(.3,.9,.3,1),width .38s cubic-bezier(.3,.9,.3,1),height .38s cubic-bezier(.3,.9,.3,1)}
+.mo-ghost{position:absolute;z-index:0;pointer-events:none;left:0;top:0;transition:transform .38s cubic-bezier(.3,.9,.3,1),width .38s cubic-bezier(.3,.9,.3,1),height .38s cubic-bezier(.3,.9,.3,1)}
 .mo-navwrap :is(.nav,button){position:relative;z-index:1}
 .mo-navwrap>.mo-ghost{position:absolute}
 .mo-sliding :is(.nav.on,[aria-current="page"]){background:transparent!important;box-shadow:none!important;border-color:transparent!important;transition:none!important}
 button,.btn{transition:transform .15s ease,background .2s ease,color .2s ease,box-shadow .2s ease}
 .btn:active,button:active{transform:scale(.97)}
 .mo-navwrap :is(.nav,button){transition:color .2s ease,transform .15s ease!important}
-@media (prefers-reduced-motion:reduce){.mo-item,.mo-row,.mo-bar,.mo-hbar,.mo-dot,.modal,.modal>*{animation:none!important}.mo-line,.mo-ghost{transition:none!important}.kpi:hover::after,.tile:hover::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.mo-item,.mo-row,.mo-bar,.mo-hbar,.mo-dot,.modal,.modal>*{animation:none!important}.mo-line,.mo-ghost{transition:none!important}.kpi:hover::after,.tile:hover::after{animation:none}button,.btn,.mo-navwrap :is(.nav,button){transition:none!important}.btn:active,button:active{transform:none!important}}
 </style>
 <script>
 window.MO_CFG={root:'#view',nums:'.kpi b',navOn:'#navList .nav.on',navWrap:'aside',wrap:['render'],key:()=>page+'|'+(ME?ME.id:'')};
 (function(){
 const CFG=window.MO_CFG; if(!CFG)return;
 const RM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
-const CARD='.card,.kpi,.tile';
+/* Glasflächen: werden selbst eingeblendet, Bereiche mit Glas darin nie als Ganzes (sonst springt der Weichzeichner) */
+const CARD='.card,.kpi,.tile,.seg,.kv,.sel,.tpl,.appt,.inbox,.msg,.day-sep,.flash';
 const ease=t=>1-Math.pow(1-t,3);
 /* --- Zahlen hochzählen --- */
 const NUM=/(\d{1,3}(?:\.\d{3})+|\d+)(,\d+)?/;
@@ -1356,29 +1357,29 @@ function numNode(el){const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
 function parse(s){const m=s.match(NUM);if(!m)return null;return{v:parseFloat(m[1].replace(/\./g,'')+(m[2]?'.'+m[2].slice(1):'')),dec:m[2]?m[2].length-1:0,grp:m[1].includes('.')||m[1].length>3,m}}
 function fmt(v,p){return v.toLocaleString('de-AT',{minimumFractionDigits:p.dec,maximumFractionDigits:p.dec,useGrouping:p.grp})}
 function tween(el,from,dur){const n=numNode(el);if(!n)return;const fin=n.nodeValue,p=parse(fin);if(!p||p.v===from)return;
-  const pre=fin.slice(0,p.m.index),post=fin.slice(p.m.index+p.m[0].length),t0=performance.now();
-  (function step(t){if(!n.isConnected)return;const k=Math.min(1,(t-t0)/dur);n.nodeValue=k<1?pre+fmt(from+(p.v-from)*ease(k),p)+post:fin;if(k<1)requestAnimationFrame(step)})(t0)}
+  const pre=fin.slice(0,p.m.index),post=fin.slice(p.m.index+p.m[0].length),t0=performance.now();let f=0;
+  (function step(t){if(!n.isConnected)return;const k=Math.min(1,(t-t0)/dur);if(k<1&&(f++&1)){requestAnimationFrame(step);return}n.nodeValue=k<1?pre+fmt(from+(p.v-from)*ease(k),p)+post:fin;if(k<1)requestAnimationFrame(step)})(t0)}
 function snapNums(){const r=document.querySelector(CFG.root);if(!r)return[];return[...r.querySelectorAll(CFG.nums)].map(el=>{const n=numNode(el),p=n&&parse(n.nodeValue);return p?p.v:null})}
 /* --- Einblenden nacheinander --- */
 function collect(root){const out=[];[...root.children].forEach(ch=>{if(ch.matches(CARD)||!ch.querySelector(CARD))out.push(ch);else[...ch.children].forEach(g=>{if(g.matches(CARD)||!g.querySelector(CARD))out.push(g);else out.push(...g.querySelectorAll(':scope>*'))})});return out.filter(e=>e.offsetParent!==null||e.getClientRects().length)}
 function enter(){const root=document.querySelector(CFG.root);if(!root)return;
-  collect(root).slice(0,30).forEach((el,i)=>{el.classList.remove('mo-item');void el.offsetWidth;el.style.setProperty('--mo-i',Math.min(i,12));el.classList.add('mo-item');el.addEventListener('animationend',()=>el.classList.remove('mo-item'),{once:true})});
-  root.querySelectorAll('tbody').forEach(tb=>[...tb.rows].slice(0,14).forEach((tr,i)=>{tr.style.setProperty('--mo-i',i);tr.classList.add('mo-row');tr.addEventListener('animationend',()=>tr.classList.remove('mo-row'),{once:true})}));
+  collect(root).slice(0,8).forEach((el,i)=>{el.classList.remove('mo-item');void el.offsetWidth;el.style.setProperty('--mo-i',i);el.classList.add('mo-item');el.addEventListener('animationend',()=>el.classList.remove('mo-item'),{once:true})});
+  root.querySelectorAll('tbody').forEach(tb=>[...tb.rows].slice(0,8).forEach((tr,i)=>{tr.style.setProperty('--mo-i',i);tr.classList.add('mo-row');tr.addEventListener('animationend',()=>tr.classList.remove('mo-row'),{once:true})}));
   root.querySelectorAll('.chart svg').forEach(svg=>{let b=0;
     svg.querySelectorAll('path,rect,polyline,circle').forEach(el=>{const f=el.getAttribute('fill')||'',s=el.getAttribute('stroke')||'';const acc=/var\(--(accent|series)\)/;
       if(el.id||el.getAttribute('opacity')==='0'||f==='transparent')return;
       if(el.tagName==='circle'&&acc.test(f)){el.style.setProperty('--mo-b',b++);el.classList.add('mo-dot');return}
       if((el.tagName==='polyline'||el.tagName==='path')&&(f==='none')&&acc.test(s)){const L=el.getTotalLength?el.getTotalLength():0;if(!L)return;el.style.strokeDasharray=L;el.style.strokeDashoffset=L;el.classList.add('mo-line');requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.strokeDashoffset=0}));el.addEventListener('transitionend',()=>{el.style.strokeDasharray='';el.style.strokeDashoffset='';el.classList.remove('mo-line')},{once:true});return}
       if(acc.test(f)){el.style.setProperty('--mo-b',b++);el.classList.add(el.tagName==='rect'?'mo-hbar':'mo-bar')}})});
-  root.querySelectorAll(CFG.nums).forEach(el=>tween(el,0,1000))}
+  root.querySelectorAll(CFG.nums).forEach(el=>tween(el,0,600))}
 /* --- wandernde Menü-Markierung --- */
 function navRect(){const a=document.querySelector(CFG.navOn);if(!a)return null;const w=a.closest(CFG.navWrap);if(!w)return null;const r=a.getBoundingClientRect(),wr=w.getBoundingClientRect();return{l:r.left-wr.left+w.scrollLeft,t:r.top-wr.top+w.scrollTop,w:r.width,h:r.height}}
 function slide(from){if(!from)return;const a=document.querySelector(CFG.navOn);if(!a)return;const w=a.closest(CFG.navWrap),to=navRect();if(!w||!to||(Math.abs(to.t-from.t)<1&&Math.abs(to.l-from.l)<1))return;
   if(getComputedStyle(w).position==='static')w.style.position='relative';w.classList.add('mo-navwrap');
   const cs=getComputedStyle(a),g=document.createElement('div');g.className='mo-ghost';
-  Object.assign(g.style,{background:cs.background,boxShadow:cs.boxShadow,borderRadius:cs.borderRadius,border:cs.border,left:from.l+'px',top:from.t+'px',width:from.w+'px',height:from.h+'px'});
+  Object.assign(g.style,{background:cs.background,boxShadow:cs.boxShadow,borderRadius:cs.borderRadius,border:cs.border,transform:`translate(${from.l}px,${from.t}px)`,width:from.w+'px',height:from.h+'px'});
   w.querySelectorAll('.mo-ghost').forEach(x=>x.remove());clearTimeout(w._moT);w.prepend(g);w.classList.add('mo-sliding');
-  requestAnimationFrame(()=>requestAnimationFrame(()=>Object.assign(g.style,{left:to.l+'px',top:to.t+'px',width:to.w+'px',height:to.h+'px'})));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>Object.assign(g.style,{transform:`translate(${to.l}px,${to.t}px)`,width:to.w+'px',height:to.h+'px'})));
   w._moT=setTimeout(()=>{g.remove();w.classList.remove('mo-sliding')},420)}
 /* --- Render-Funktionen umhüllen --- */
 let lastKey=null,depth=0;
@@ -1386,7 +1387,7 @@ CFG.wrap.forEach(name=>{const orig=window[name];if(typeof orig!=='function')retu
   window[name]=function(){if(depth)return orig.apply(this,arguments);depth++;
     const key=CFG.key(),isNew=key!==lastKey,old=RM()?null:snapNums(),nr=isNew&&!RM()?navRect():null;
     try{return orig.apply(this,arguments)}finally{depth--;lastKey=CFG.key();
-      if(!RM()){if(isNew){enter();slide(nr)}else{const r=document.querySelector(CFG.root);if(r){const els=[...r.querySelectorAll(CFG.nums)];if(old&&old.length===els.length)els.forEach((el,i)=>{if(old[i]!=null)tween(el,old[i],600)})}}}}}});
+      if(!RM()){if(isNew){enter();slide(nr)}else{const r=document.querySelector(CFG.root);if(r){const els=[...r.querySelectorAll(CFG.nums)];if(old&&old.length===els.length)els.forEach((el,i)=>{if(old[i]!=null)tween(el,old[i],400)})}}}}}});
 lastKey=CFG.key();if(!RM())requestAnimationFrame(enter);
 })();
 </script>
