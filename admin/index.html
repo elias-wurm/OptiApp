@@ -1024,5 +1024,44 @@ CFG.wrap.forEach(name=>{const orig=window[name];if(typeof orig!=='function')retu
 lastKey=CFG.key();if(!RM())requestAnimationFrame(enter);
 })();
 </script>
+<style id="responsive">
+/* Anpassung an die Geräteauflösung (23.11.2026): Reiter-Leiste unter 1100px eigene wischbare Zeile, unter 900px Tabellen als Glas-Karten */
+@media (max-width:1100px){
+  .top-in{flex-wrap:wrap;height:auto!important;padding-top:10px!important;padding-bottom:8px!important;row-gap:6px}
+  .top .nav{order:3;width:100%;margin-left:0!important;overflow-x:auto;scrollbar-width:none}
+  .top .nav::-webkit-scrollbar{display:none}
+  .top .nav button{flex:none}
+}
+.seg{max-width:100%;overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg>*{flex-shrink:0}
+@media (max-width:400px){
+  .top-in{gap:8px}
+  .top .gt-mount{display:none}
+  .top .btn{padding:7px 11px}
+}
+@media (max-width:900px){
+  .tblwrap{overflow:visible}
+  .tblwrap table{min-width:0!important;width:100%}
+  .tblwrap thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .tblwrap table,.tblwrap tbody,.tblwrap tfoot,.tblwrap tr,.tblwrap td{display:block;width:100%}
+  .tblwrap tr{margin:0 0 10px;padding:8px 0;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.05)}
+  html[data-gt="light"] .tblwrap tr{background:rgba(255,255,255,.55)}
+  .tblwrap td{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:5px 16px!important;border:0!important;text-align:right!important;min-width:0}
+  .tblwrap td::before{content:attr(data-label);font-size:12px;font-weight:700;color:var(--muted);text-align:left;flex-shrink:0;max-width:50%}
+  .tblwrap td[data-label=""]::before{content:none}
+  .tblwrap td[data-label=""]{justify-content:flex-end}
+  .tblwrap td.name{display:block;text-align:left!important;padding-top:6px!important}
+  .tblwrap td.name::before{content:none}
+  .tblwrap td[colspan]{display:block;text-align:left!important}
+  .tblwrap td[colspan]::before{content:none}
+  .tblwrap tfoot tr{font-weight:700}
+}
+</style>
+<script>
+/* Spaltennamen als Beschriftung für die Karten-Ansicht am Handy */
+function labelTables(root){(root||document).querySelectorAll('.tblwrap table').forEach(function(t){var hr=t.querySelector('thead tr');if(!hr)return;var h=[].map.call(hr.children,function(c){var d=document.createElement('div');d.innerHTML=c.innerHTML.replace(/<br\s*\/?>/gi,' ');return d.textContent.replace(/\s+/g,' ').trim()});[].forEach.call(t.querySelectorAll('tbody tr,tfoot tr'),function(r){var i=0;[].forEach.call(r.children,function(c){var span=+(c.getAttribute('colspan')||1);if(!c.hasAttribute('data-label'))c.setAttribute('data-label',span>1?'':(h[i]||''));i+=span})})})}
+(function(){var m=document.getElementById('app');if(!m)return;labelTables(m);new MutationObserver(function(){labelTables(m)}).observe(m,{childList:true,subtree:true})})();
+</script>
 </body>
 </html>
