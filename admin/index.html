@@ -283,6 +283,7 @@ html[data-gt="light"] .txt.miss{background:rgba(245,175,40,.14)!important;border
   <span class="grow"></span><span class="gt-mount" title="Darstellung"></span><a class="weblink" href="../website/" target="_blank" rel="noopener">Website ↗</a><button class="btn" onclick="logout()">Abmelden</button>
 </div></header>
 <main class="main" id="app"></main>
+<p class="ver" style="text-align:center;font-size:12px;color:var(--muted);margin:8px 0 24px">Verwaltung-Prototyp v0.10 · Alle Daten sind Beispieldaten.</p>
 <div class="modal" id="modal" hidden onclick="if(event.target===this)closeInv()"><div class="mwrap"><div class="mbar"><button class="btn" onclick="window.print()">Drucken / als PDF speichern</button><button class="btn" onclick="closeInv()">Schließen</button></div><div id="invDoc"></div></div></div>
 <script>
 /* OptiApp-Verwaltung (Prototyp). Optik Falkner = Live-Daten aus dem Prototyp im selben Browser; alle anderen Optiker sind erfundene Demo-Daten. */
@@ -1025,6 +1026,7 @@ lastKey=CFG.key();if(!RM())requestAnimationFrame(enter);
 })();
 </script>
 <style id="responsive">
+html[data-gt] body select:not([multiple]){background-repeat:no-repeat!important;background-position:right 12px center!important;background-size:12px 8px!important}
 /* Anpassung an die Geräteauflösung (23.11.2026): Reiter-Leiste unter 1100px eigene wischbare Zeile, unter 900px Tabellen als Glas-Karten */
 @media (max-width:1100px){
   .top-in{flex-wrap:wrap;height:auto!important;padding-top:10px!important;padding-bottom:8px!important;row-gap:6px}

@@ -315,7 +315,7 @@ html[data-gt="light"] .modal{background:rgba(20,25,34,.3)!important}
     <div id="navList"></div>
     <div class="side-foot"><div class="sideuser"><span class="av" id="sideAv" style="width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700">T</span><div class="grow"><b id="sideName">–</b><div id="sideRole" class="small"></div></div></div>
       <button class="btn ghost sm" style="margin-top:10px;width:100%" onclick="logout()">Abmelden</button>
-      <div style="margin-top:10px">Dashboard-Prototyp v1.6<br>Alle Kundendaten sind Beispieldaten.<br><a class="weblink" href="../website/" target="_blank" rel="noopener">OptiApp-Website ↗</a></div></div>
+      <div style="margin-top:10px">Dashboard-Prototyp v1.7<br>Alle Kundendaten sind Beispieldaten.<br><a class="weblink" href="../website/" target="_blank" rel="noopener">OptiApp-Website ↗</a></div></div>
   </aside>
   <main>
     <div class="top">
@@ -1395,6 +1395,7 @@ lastKey=CFG.key();if(!RM())requestAnimationFrame(enter);
 })();
 </script>
 <style id="responsive">
+html[data-gt] body select:not([multiple]){background-repeat:no-repeat!important;background-position:right 12px center!important;background-size:12px 8px!important}
 /* v1.6 Anpassung an die Geräteauflösung (23.11.2026): unter 900px Menü per ☰ (ohne Animation, Glas nie als Ganzes einblenden), unter 760px Tabellen als Karten */
 .mbar,.mscrim{display:none}
 .days{grid-template-columns:repeat(6,minmax(0,1fr))}
