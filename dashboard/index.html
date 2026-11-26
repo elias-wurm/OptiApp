@@ -316,7 +316,7 @@ html[data-gt="light"] .modal{background:rgba(20,25,34,.3)!important}
     <div id="navList"></div>
     <div class="side-foot"><div class="sideuser"><span class="av" id="sideAv" style="width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700">T</span><div class="grow"><b id="sideName">–</b><div id="sideRole" class="small"></div></div></div>
       <button class="btn ghost sm" style="margin-top:10px;width:100%" onclick="logout()">Abmelden</button>
-      <div style="margin-top:10px">Dashboard-Prototyp v1.10<br>Alle Kundendaten sind Beispieldaten.<br><a class="weblink" href="../website/" target="_blank" rel="noopener">OptiApp-Website ↗</a></div></div>
+      <div style="margin-top:10px">Dashboard-Prototyp v1.11<br>Alle Kundendaten sind Beispieldaten.<br><a class="weblink" href="../website/" target="_blank" rel="noopener">OptiApp-Website ↗</a></div></div>
   </aside>
   <main>
     <div class="top">
@@ -343,10 +343,12 @@ const DAYN=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Son
 const curStore=()=>STORES[S.store]||STORES.perg;
 
 /* ===================== Beispieldaten ===================== */
-function addDays(n){const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
-function workday(n){const d=new Date();d.setDate(d.getDate()+n);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)}
+/* 27.11.2026: Kalenderdatum JJJJ-MM-TT in Ortszeit (toISOString rechnet in UTC – zwischen 0 und 1 Uhr war das Datum sonst einen Tag zu früh) */
+Date.prototype.isoDay=function(){return this.getFullYear()+'-'+String(this.getMonth()+1).padStart(2,'0')+'-'+String(this.getDate()).padStart(2,'0')};
+function addDays(n){const d=new Date();d.setDate(d.getDate()+n);return d.isoDay()}
+function workday(n){const d=new Date();d.setDate(d.getDate()+n);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);return d.isoDay()}
 function hoursAgo(h){return new Date(Date.now()-h*36e5).toISOString()}
-const today=()=>new Date().toISOString().slice(0,10);
+const today=()=>new Date().isoDay();
 // Gesetzliche Feiertage Österreich (nächste Monate) – im Dashboard änderbar
 const HOLIDAYS=[{date:'2026-10-26',label:'Nationalfeiertag'},{date:'2026-11-01',label:'Allerheiligen'},{date:'2026-12-25',label:'Christtag'},{date:'2026-12-26',label:'Stefanitag'},{date:'2027-01-01',label:'Neujahr'},{date:'2027-01-06',label:'Heilige Drei Könige'}];
 const DEFAULT = {
@@ -406,7 +408,7 @@ const eurK=v=>v.toLocaleString('de-AT',{style:'currency',currency:'EUR'});
 const glassPrice=g=>{const it=((g.purchase||{}).items||[]).find(x=>/gläser|glas/i.test(x[0])&&!/kasko/i.test(x[0]));return it?it[1]:null};
 function kaskoInfo(g){
   if(!g||!g.kasko) return null; const c=kaskoCfg(), d=new Date(g.date+'T12:00'); d.setMonth(d.getMonth()+(+c.months));
-  const until=d.toISOString().slice(0,10), gp=glassPrice(g), t=new Date().toISOString().slice(0,10);
+  const until=d.isoDay(), gp=glassPrice(g), t=new Date().isoDay();
   return {until,active:until>=t,months:+c.months,pct:+c.pct,glassOnly:c.cover!=='all',cover:c.cover==='all'?'Brillengläser und Fassung':'Nur Brillengläser',
     ded:c.pct+' % vom Glaspreis'+(gp!=null?' ('+eurK(gp*c.pct/100)+')':'')};
 }
@@ -469,7 +471,7 @@ if(!D)D=JSON.parse(JSON.stringify(DDEFAULT));
 function saveD(){try{localStorage.setItem(DKEY,JSON.stringify(D))}catch(e){try{D=JSON.parse(localStorage.getItem(DKEY))||D}catch(x){}}}
 const DEMO_BIRTH={'c2':['1964-07-19','2009-05-20'],'c3':['1994-11-23','2021-02-11'],'c4':['2003-07-30','2024-08-02'],'c5':['1976-01-17','2015-10-06']};
 const DEMO_KVP={c2:{addr:'Beispielgasse 12, '+STORES.perg.zip,kvp:{mail:'sophie.lindner@example.at',phone:'+43 664 123 9876',addr:'Beispielgasse 12, '+STORES.perg.zip}},c3:{addr:'Dorfplatz 4, '+STORES.dimbach.zip,kvp:{mail:'t.huber@example.at',phone:'+43 680 555 1020',addr:'Dorfplatz 4, '+STORES.dimbach.zip}},c4:{addr:'Mühlgasse 7, '+STORES.perg.zip,kvp:{mail:'anna.leitner@example.at',phone:'+43 676 555 0101',addr:'Mühlgasse 7, '+STORES.perg.zip},changes:[{id:'pcdemo4',field:'phone',old:'+43 676 555 0101',new:'+43 676 908 7711',ts:new Date(Date.now()-2*864e5).toISOString()}]},c5:{addr:'Kirchenweg 2, '+STORES.dimbach.zip,kvp:{mail:'s.gruber@example.at',phone:'+43 650 300 4422',addr:'Kirchenweg 2, '+STORES.dimbach.zip}}};
-D.customers.forEach((c,i)=>{const dk=DEMO_KVP[c.id];if(dk){if(!c.addr)c.addr=dk.addr;if(!c.kvp)c.kvp=dk.kvp;if(!c.changes&&dk.changes)c.changes=dk.changes}if(!c.kdnr)c.kdnr=String(310400+i*37);if(DEMO_BIRTH[c.id]){if(!c.birth)c.birth=DEMO_BIRTH[c.id][0];if(!c.since)c.since=DEMO_BIRTH[c.id][1]}if(!c.since)c.since=(c.invited||new Date().toISOString().slice(0,10));c.tickets.forEach(x=>x.status=normStatus(x.status))});
+D.customers.forEach((c,i)=>{const dk=DEMO_KVP[c.id];if(dk){if(!c.addr)c.addr=dk.addr;if(!c.kvp)c.kvp=dk.kvp;if(!c.changes&&dk.changes)c.changes=dk.changes}if(!c.kdnr)c.kdnr=String(310400+i*37);if(DEMO_BIRTH[c.id]){if(!c.birth)c.birth=DEMO_BIRTH[c.id][0];if(!c.since)c.since=DEMO_BIRTH[c.id][1]}if(!c.since)c.since=(c.invited||new Date().isoDay());c.tickets.forEach(x=>x.status=normStatus(x.status))});
 const TPL_DEFAULT=[
   ['✅','Brille abholbereit','Ihre Brille ist bereit zur Abholung','Sie können Ihre Brille ab sofort in der Filiale {f} abholen.','hours'],
   ['✅','Linsen abholbereit','Ihre Kontaktlinsen sind abholbereit','Sie können die Linsen ab sofort in der Filiale {f} abholen.','hours'],
@@ -597,7 +599,7 @@ const statusBadge=s=>`<span class="badge ${({'Offen':'b-warn','In Bearbeitung':'
 function vHome(){
   const cs=customers().filter(inFilter), unread=cs.reduce((n,c)=>n+unreadOf(c),0);
   const open=allTickets().filter(t=>t.status!=='Abgeschlossen'), ready=open.filter(t=>t.status==='In Bearbeitung').length;
-  const now=new Date(), td=new Date().toISOString().slice(0,10);
+  const now=new Date(), td=new Date().isoDay();
   const ap=allAppts().filter(a=>apptTime(a)>=new Date(td+'T00:00')).sort((a,b)=>apptTime(a)-apptTime(b));
   const tdA=ap.filter(a=>a.date===td).length;
   const rv=allReviews(), avg=rv.length?(rv.reduce((s,r)=>s+r.stars,0)/rv.length):0;
@@ -783,8 +785,8 @@ function vOrders(){
 
 /* --- Termine --- */
 function vAppts(){
-  const days=[];const d=new Date();while(days.length<6){if(d.getDay()!==0)days.push(d.toISOString().slice(0,10));d.setDate(d.getDate()+1)}
-  const ap=allAppts(), td=days[0]===new Date().toISOString().slice(0,10)?days[0]:'';
+  const days=[];const d=new Date();while(days.length<6){if(d.getDay()!==0)days.push(d.isoDay());d.setDate(d.getDate()+1)}
+  const ap=allAppts(), td=days[0]===new Date().isoDay()?days[0]:'';
   V(`<div class="row" style="margin-bottom:12px"><span class="grow muted small">${(STORES[filter]?[STORES[filter]]:Object.values(STORES)).map(s=>{const c=(s.closed||[]).filter(x=>days.includes(x.date));return c.length?`🚫 ${esc(s.name)} geschlossen: `+c.map(x=>fmtDate(x.date,{weekday:'short',day:'2-digit',month:'2-digit'})+' ('+esc(x.label)+')').join(', '):''}).filter(Boolean).join(' · ')}</span><button class="btn accent" onclick="newAppt()">+ Termin eintragen</button></div>
   <div class="days">${days.map(day=>`<div class="card day ${day===td?'today':''}"><b>${day===td?'Heute':fmtDate(day,{weekday:'long'})}</b><div class="muted small">${fmtDate(day)}</div>
     ${ap.filter(a=>a.date===day).sort((a,b)=>a.time.localeCompare(b.time)).map(a=>`<div class="appt ${apptTime(a)<new Date()?'past':''}"><b>${a.time}</b> · ${esc(a.type)}<div class="muted small">${custName(a.cust)}${a.for?' (für '+esc(a.for)+')':''} · ${storeName(a.store)}</div>
@@ -796,7 +798,7 @@ function newAppt(){
   const cs=customers().filter(inFilter);
   modal('Termin eintragen',`<label class="f">Kunde</label><select class="input" id="naC">${cs.map(c=>`<option value="${c.id}">${esc(c.name)}${c.parent?' ('+esc(c.relation)+' von '+esc(c.parent)+')':''}</option>`).join('')}</select>
     <label class="f">Leistung</label><select class="input" id="naT">${APPT_TYPES.map(x=>`<option>${x}</option>`).join('')}</select>
-    <div class="grid two" style="gap:10px"><div><label class="f">Datum</label><input class="input" id="naD" type="date" value="${new Date(Date.now()+864e5).toISOString().slice(0,10)}"></div><div><label class="f">Uhrzeit</label><input class="input" id="naH" type="time" value="10:00" step="900"></div></div>
+    <div class="grid two" style="gap:10px"><div><label class="f">Datum</label><input class="input" id="naD" type="date" value="${new Date(Date.now()+864e5).isoDay()}"></div><div><label class="f">Uhrzeit</label><input class="input" id="naH" type="time" value="10:00" step="900"></div></div>
     <label class="f">Filiale</label><select class="input" id="naS">${storeOptions(filter==='all'?'perg':filter)}</select>
     <label class="row small" style="gap:6px;margin-top:12px"><input type="checkbox" id="naN" checked> Kunde per Nachricht informieren</label>
     <p class="small" id="naErr" style="color:var(--danger);margin-top:6px"></p>
@@ -829,7 +831,7 @@ function docUpload(cid,gid,kind,inp){const f=inp.files[0];inp.value='';if(!f)ret
   const done=d=>{let ok=true;mutate(cid,x=>{const g=x.glasses.find(y=>y.id===gid);if(g)g.docs=Object.assign({},g.docs,{[kind]:d})});
     const chk=cust(cid),g2=chk&&chk.glasses.find(y=>y.id===gid);ok=!!(g2&&g2.docs&&g2.docs[kind]&&g2.docs[kind].date===d.date&&g2.docs[kind].name===d.name);
     render();toast(ok?'Dokument hochgeladen'+(String(cid).startsWith('live')?' · in der App sichtbar':''):'Speicher des Prototyps ist voll – Datei bitte verkleinern')};
-  const today=new Date().toISOString().slice(0,10);
+  const today=new Date().isoDay();
   if(f.type==='application/pdf'){if(f.size>DOC_MAX_PDF){toast('PDF ist zu groß (max. 1,5 MB im Prototyp)');return}
     const r=new FileReader();r.onload=e=>done({name:f.name,type:'pdf',mime:'application/pdf',data:e.target.result,date:today});r.readAsDataURL(f);return}
   if(/^image\//.test(f.type)){const url=URL.createObjectURL(f),im=new Image();im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
@@ -899,7 +901,7 @@ function saveCustomer(){
   const v=id=>document.getElementById(id).value.trim();
   if(!v('ncF')||!v('ncL')){document.getElementById('ncErr').textContent='Bitte Vor- und Nachname angeben.';return}
   let kd;do{kd=String(Math.floor(200000+Math.random()*700000))}while(customers().some(c=>c.kdnr===kd));
-  const c={id:uid('c'),kdnr:kd,birth:v('ncB'),since:new Date().toISOString().slice(0,10),name:v('ncF')+' '+v('ncL'),store:v('ncS'),phone:v('ncP'),mail:v('ncM'),chat:[],tickets:[],appts:[],glasses:[],lenses:null,loyalty:{points:0,goal:5,vouchers:[]},reviews:[]};
+  const c={id:uid('c'),kdnr:kd,birth:v('ncB'),since:new Date().isoDay(),name:v('ncF')+' '+v('ncL'),store:v('ncS'),phone:v('ncP'),mail:v('ncM'),chat:[],tickets:[],appts:[],glasses:[],lenses:null,loyalty:{points:0,goal:5,vouchers:[]},reviews:[]};
   D.customers.push(c);saveD();selCust=c.id;page='customers';render();invite(c.id);
 }
 function invite(cid){
@@ -916,7 +918,7 @@ function invite(cid){
       <span class="grow"></span><button class="btn" onclick="markInvited('${c.id}');closeModal()">Fertig</button></div>
     <p class="muted small" style="margin-top:10px">Demo-Tipp: Link im selben Browser öffnen (App vorher über Profil → „Demo-Daten zurücksetzen“ neu starten).</p>`);
 }
-function markInvited(cid){const c=D.customers.find(x=>x.id===cid);if(c&&!c.invited){c.invited=new Date().toISOString().slice(0,10);saveD();render()}}
+function markInvited(cid){const c=D.customers.find(x=>x.id===cid);if(c&&!c.invited){c.invited=new Date().isoDay();saveD();render()}}
 function saveGlasses(cid,gid){
   const vals=[...document.querySelectorAll('.gIn')].map(i=>[i.dataset.e,i.dataset.f,i.value.trim()]), pd=document.getElementById('gPd').value, k=document.getElementById('gKasko').value;
   mutate(cid,x=>{const g=x.glasses.find(g=>g.id===gid);vals.forEach(([e,f,v])=>g[e][f]=v||'–');g.pd=pd;
@@ -924,11 +926,11 @@ function saveGlasses(cid,gid){
   toast('Brillenpass gespeichert'+(cid==='live'?' · in der App sichtbar':''))}
 function newGlasses(cid){
   mutate(cid,x=>{const last=[...x.glasses].sort((a,b)=>b.date.localeCompare(a.date))[0];
-    x.glasses.push({id:uid('g'),date:new Date().toISOString().slice(0,10),R:Object.assign({sph:'',cyl:'',ax:'',add:''},last?last.R:{}),L:Object.assign({sph:'',cyl:'',ax:'',add:''},last?last.L:{}),pd:last?last.pd:''})});
+    x.glasses.push({id:uid('g'),date:new Date().isoDay(),R:Object.assign({sph:'',cyl:'',ax:'',add:''},last?last.R:{}),L:Object.assign({sph:'',cyl:'',ax:'',add:''},last?last.L:{}),pd:last?last.pd:''})});
   toast('Neue Messung angelegt – Werte eintragen und speichern')}
 function setLensKind(cid,k){mutate(cid,x=>{x.lenses.kind=k;['R','L'].forEach(e=>{x.lenses[e].cyl=x.lenses[e].cyl||'–';x.lenses[e].ax=x.lenses[e].ax||'–';x.lenses[e].add=x.lenses[e].add||'–'})});toast('Linsentyp geändert')}
 function pts(cid,d){mutate(cid,x=>{const Y=x.loyalty;Y.vouchers=Y.vouchers||[];Y.points=Math.max(0,Y.points+d);
-  if(Y.points>=Y.goal){Y.points=0;Y.vouchers.push({code:'FALK-'+String(Date.now()).slice(-4),date:new Date().toISOString().slice(0,10)});toast('Treuepass voll – Gutschein erstellt')}})}
+  if(Y.points>=Y.goal){Y.points=0;Y.vouchers.push({code:'FALK-'+String(Date.now()).slice(-4),date:new Date().isoDay()});toast('Treuepass voll – Gutschein erstellt')}})}
 function redeemV(cid,code){mutate(cid,x=>{x.loyalty.vouchers=x.loyalty.vouchers.filter(v=>v.code!==code)});toast('Gutschein '+code+' eingelöst')}
 
 /* --- News --- */
@@ -967,7 +969,7 @@ function audCount(){const el=document.getElementById('audN');if(!el)return;const
 function resetAud(){['aMin','aMax'].forEach(id=>document.getElementById(id).value='');document.getElementById('aYrs').value='0';document.getElementById('aProd').value='all';audCount()}
 function addNews(){
   const t=document.getElementById('nTitle').value.trim(), tx=document.getElementById('nText').value.trim(); if(!t||!tx){toast('Bitte Titel und Text ausfüllen');return}
-  const n={id:uid('n'),date:new Date().toISOString().slice(0,10),store:document.getElementById('nStore').value,tag:document.getElementById('nTag').value.trim()||'Info',title:t,text:tx};
+  const n={id:uid('n'),date:new Date().isoDay(),store:document.getElementById('nStore').value,tag:document.getElementById('nTag').value.trim()||'Info',title:t,text:tx};
   if(document.getElementById('nCta').checked)n.cta=['Termin buchen',"openSheet('book')"];
   const aud=readAud(); if(aud){if(!audHits(aud,n.store)){toast('Kein Kunde passt zu dieser Zielgruppe');return}n.aud=aud}
   S=loadS();S.extraNews.unshift(n);saveS();render();toast('News veröffentlicht – in der App sichtbar');
@@ -987,7 +989,7 @@ function vReviews(){
 /* --- Auswertungen --- */
 const MONTHS=(()=>{const r=[],d=new Date();d.setDate(1);for(let i=5;i>=0;i--){const x=new Date(d);x.setMonth(d.getMonth()-i);r.push(x)}return r})();
 const mLabel=d=>d.toLocaleDateString('de-AT',{month:'short'}).replace('.','');
-const mKey=d=>d.toISOString().slice(0,7);
+const mKey=d=>d.isoDay().slice(0,7);
 function seriesFor(){
   const k=filter==='all'?1:(filter==='perg'?.62:.38), cur=mKey(new Date()), cs=customers().filter(inFilter);
   const users=[38,61,90,124,151,168].map(v=>Math.round(v*k)); users[5]+=cs.filter(c=>c.live&&!c.parent).length;
@@ -1048,7 +1050,7 @@ function vSettings(){
           <label class="f">Hinweis</label><input class="input" id="sNote" value="${esc(st.note||'')}" placeholder="z. B. Abendtermine nur nach Vereinbarung">
           <button class="btn accent" style="margin-top:14px" onclick="saveStore('${st.id}')">Speichern</button></div>
         <div class="card"><h2>Urlaub & Feiertage</h2><p class="muted small">An diesen Tagen ist die Filiale geschlossen – in der App ist keine Buchung möglich.</p>
-          ${(st.closed||[]).slice().sort((a,b)=>a.date.localeCompare(b.date)).map(c=>`<div class="li"><b style="min-width:110px">${fmtDate(c.date,{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})}</b><span class="grow">${esc(c.label)}</span>${c.date<new Date().toISOString().slice(0,10)?'<span class="badge b-mute">vorbei</span>':''}<button class="btn ghost sm" style="color:var(--danger)" onclick="delClosed('${st.id}','${c.date}')">Entfernen</button></div>`).join('')||'<p class="empty">Keine Schließtage</p>'}
+          ${(st.closed||[]).slice().sort((a,b)=>a.date.localeCompare(b.date)).map(c=>`<div class="li"><b style="min-width:110px">${fmtDate(c.date,{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})}</b><span class="grow">${esc(c.label)}</span>${c.date<new Date().isoDay()?'<span class="badge b-mute">vorbei</span>':''}<button class="btn ghost sm" style="color:var(--danger)" onclick="delClosed('${st.id}','${c.date}')">Entfernen</button></div>`).join('')||'<p class="empty">Keine Schließtage</p>'}
           <div class="grid two" style="gap:10px;margin-top:10px"><div><label class="f">Von</label><input class="input" type="date" id="cFrom"></div><div><label class="f">Bis (optional)</label><input class="input" type="date" id="cTo"></div></div>
           <label class="f">Grund</label><input class="input" id="cLbl" placeholder="z. B. Betriebsurlaub">
           <button class="btn ghost" style="margin-top:12px" onclick="addClosed('${st.id}')">+ Schließtage hinzufügen</button></div>
@@ -1092,7 +1094,7 @@ function storeCfgMut(id,fn){S=loadS();S.storeCfg=S.storeCfg||{};S.storeCfg[id]=S
 function saveStore(id){const hours=[...document.querySelectorAll('.hIn')].map(i=>parseHours(i.value)), g=x=>document.getElementById(x).value.trim();
   storeCfgMut(id,c=>{c.hours=hours;c.slot=+document.getElementById('slot').value;c.full=g('sFull');c.street=g('sStreet');c.zip=g('sZip');c.tel=g('sTel');c.telLink=g('sTel').replace(/[^\d+]/g,'').replace(/^0/,'+43');c.mail=g('sMail');c.note=g('sNote')});toast('Filiale gespeichert – in der App sichtbar')}
 function addClosed(id){const f=document.getElementById('cFrom').value,to=document.getElementById('cTo').value||f,l=document.getElementById('cLbl').value.trim()||'Geschlossen';if(!f){toast('Bitte ein Datum wählen');return}
-  storeCfgMut(id,c=>{c.closed=c.closed||JSON.parse(JSON.stringify(STORES[id].closed||[]));const d=new Date(f+'T12:00'),e=new Date(to+'T12:00');let n=0;while(d<=e&&n<60){const iso=d.toISOString().slice(0,10);if(!c.closed.some(x=>x.date===iso))c.closed.push({date:iso,label:l});d.setDate(d.getDate()+1);n++}});toast('Schließtage gespeichert')}
+  storeCfgMut(id,c=>{c.closed=c.closed||JSON.parse(JSON.stringify(STORES[id].closed||[]));const d=new Date(f+'T12:00'),e=new Date(to+'T12:00');let n=0;while(d<=e&&n<60){const iso=d.isoDay();if(!c.closed.some(x=>x.date===iso))c.closed.push({date:iso,label:l});d.setDate(d.getDate()+1);n++}});toast('Schließtage gespeichert')}
 function delClosed(id,date){storeCfgMut(id,c=>{c.closed=(c.closed||JSON.parse(JSON.stringify(STORES[id].closed||[]))).filter(x=>x.date!==date)})}
 function saveTpl(){document.querySelectorAll('.tI').forEach(i=>{D.templates[+i.dataset.i][+i.dataset.k]=i.value});saveD();render();toast('Vorlagen gespeichert')}
 function addTpl(){saveTplSilent();D.templates.push(['🔔','Neue Vorlage','Titel','Text für den Kunden','']);saveD();render()}

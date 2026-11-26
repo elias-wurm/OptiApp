@@ -283,10 +283,12 @@ html[data-gt="light"] .txt.miss{background:rgba(245,175,40,.14)!important;border
   <span class="grow"></span><span class="gt-mount" title="Darstellung"></span><a class="weblink" href="../website/" target="_blank" rel="noopener">Website ↗</a><button class="btn" onclick="logout()">Abmelden</button>
 </div></header>
 <main class="main" id="app"></main>
-<p class="ver" style="text-align:center;font-size:12px;color:var(--muted);margin:8px 0 24px">Verwaltung-Prototyp v0.12 · Alle Daten sind Beispieldaten.</p>
+<p class="ver" style="text-align:center;font-size:12px;color:var(--muted);margin:8px 0 24px">Verwaltung-Prototyp v0.13 · Alle Daten sind Beispieldaten.</p>
 <div class="modal" id="modal" hidden onclick="if(event.target===this)closeInv()"><div class="mwrap"><div class="mbar"><button class="btn" onclick="window.print()">Drucken / als PDF speichern</button><button class="btn" onclick="closeInv()">Schließen</button></div><div id="invDoc"></div></div></div>
 <script>
 /* OptiApp-Verwaltung (Prototyp). Optik Falkner = Live-Daten aus dem Prototyp im selben Browser; alle anderen Optiker sind erfundene Demo-Daten. */
+/* 27.11.2026: Kalenderdatum JJJJ-MM-TT in Ortszeit (toISOString rechnet in UTC – zwischen 0 und 1 Uhr war das Datum sonst einen Tag zu früh) */
+Date.prototype.isoDay=function(){return this.getFullYear()+'-'+String(this.getMonth()+1).padStart(2,'0')+'-'+String(this.getDate()).padStart(2,'0')};
 try{if(sessionStorage.getItem('optiapp-admin')!=='1'){location.replace('../website/login.html');}}catch(e){}
 function logout(){try{sessionStorage.removeItem('optiapp-admin')}catch(e){}location.href='../website/login.html'}
 
@@ -587,7 +589,7 @@ function renderInv(keepFocus){
   <div class="card" style="margin-top:14px"><h2>Erstellte Rechnungen</h2><div class="sub">${invs.length?invs.length+' Rechnung'+(invs.length>1?'en':'')+', neueste zuerst':'Noch keine Rechnungen erstellt.'}</div>
     ${invs.length?`<div class="tblwrap"><table class="inv"><thead><tr><th>Nummer</th><th>Datum</th><th>Optiker</th><th>Zeitraum</th><th class="num">Netto</th><th class="num">Brutto</th><th>Zahlung</th><th>Status</th><th class="num"></th></tr></thead><tbody>
     ${invs.map(v=>`<tr class="${v.storno?'strike':''}"><td><b>${v.nr}</b></td><td>${fmtD(v.date)}</td><td>${esc(v.optName)}</td><td>${v.periodTxt}</td><td class="num amt">${eur(v.net)}</td><td class="num amt">${eur(v.gross)}</td>
-      <td>${payBadge(invPay(v))}</td><td>${v.storno?'<span class="badge b-mute">Storniert</span>':v.paid?`<span class="badge b-ok">Bezahlt ${fmtD(v.paid)}</span>`:v.due.slice(0,10)<new Date().toISOString().slice(0,10)?'<span class="badge b-warn">Überfällig</span>':'<span class="badge b-warn" style="background:var(--mute-bg);color:var(--ink)">Offen</span>'}</td>
+      <td>${payBadge(invPay(v))}</td><td>${v.storno?'<span class="badge b-mute">Storniert</span>':v.paid?`<span class="badge b-ok">Bezahlt ${fmtD(v.paid)}</span>`:v.due.slice(0,10)<new Date().isoDay()?'<span class="badge b-warn">Überfällig</span>':'<span class="badge b-warn" style="background:var(--mute-bg);color:var(--ink)">Offen</span>'}</td>
       <td class="num"><div class="acts"><button class="btn sm kebab" id="km-${v.nr}" aria-haspopup="menu" aria-expanded="false" aria-label="Aktionen für Rechnung ${v.nr}" title="Aktionen" onclick="invMenu(event,'${v.nr}')">☰</button></div></td></tr>`).join('')}
     </tbody><tfoot>${(()=>{const ok=invs.filter(v=>!v.storno),st=invs.length-ok.length;return `<tr><td colspan="4">Gesamt (${ok.length} Rechnung${ok.length===1?'':'en'}${st?', ohne '+st+' storniert'+(st>1?'e':'e'):''})</td><td class="num">${eur(r2(ok.reduce((a,v)=>a+v.net,0)))}</td><td class="num">${eur(r2(ok.reduce((a,v)=>a+v.gross,0)))}</td><td></td><td colspan="2" class="hint" style="font-weight:700">offen: ${eur(r2(ok.filter(v=>!v.paid).reduce((a,v)=>a+v.gross,0)))} brutto</td></tr>`})()}</tfoot></table></div>`:''}
     <p class="note">${missCount()?`Noch ${missCount()} Angaben offen (Absender, Bankdaten, Rechnungsadressen). Bitte unter <a href="#firma" onclick="go('firma');return false">Firmendaten</a> und <a href="#kunden" onclick="go('kunden');return false">Kundendaten</a> ausfüllen, sonst erscheinen sie gelb auf der Rechnung.`:'Firmendaten und Rechnungsadressen sind vollständig.'}</p></div>`;
@@ -650,7 +652,7 @@ const leadSt=k=>LEAD_ST.find(x=>x[0]===k)||LEAD_ST[0];
 const L_FIELDS=[['name','Name des Optikers *','z. B. Optik Muster','wide2'],['status','Status','',''],['city','Ort','z. B. Amstetten',''],['stores','Anzahl Filialen','1',''],['iom','Kundenverwaltungsprogramm','',''],
   ['contact','Ansprechpartner','',''],['phone','Telefon','+43 …',''],['email','E-Mail','name@optiker.at',''],['next','Nächster Schritt am','',''],['todo','Nächster Schritt','z. B. anrufen, Demo zeigen','wide2'],['note','Notizen','','wide3']];
 let leadEdit=null, leadFilter='offen', leadDel=null;
-const todayISO=()=>new Date().toISOString().slice(0,10);
+const todayISO=()=>new Date().isoDay();
 function leadForm(l){const v=k=>esc(l?(l[k]??''):k==='status'?'geplant':k==='stores'?'1':'');
   return `<div class="ff3">${L_FIELDS.map(([k,lab,ph,cls])=>`<div class="${cls}"><label for="ld-${k}">${lab}</label>${
     k==='status'?`<select class="txt" id="ld-status">${LEAD_ST.map(([s,t])=>`<option value="${s}" ${(l?l.status:'geplant')===s?'selected':''}>${t}</option>`).join('')}</select>`

@@ -717,7 +717,7 @@ html[data-gt="light"] .scrim{background:rgba(20,25,34,.35)!important}
         <button class="list-item" style="width:100%;text-align:left" onclick="demoPush()"><div class="grow">Demo: Bewertungs-Benachrichtigung zeigen</div></button>
         <button class="list-item" style="width:100%;text-align:left;color:var(--danger)" onclick="resetDemo()"><div class="grow">Demo-Daten zurücksetzen</div></button>
       </div>
-      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.21 · Kundendaten sind Beispieldaten</p>
+      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.22 · Kundendaten sind Beispieldaten</p>
     </section>
   </main>
 
@@ -761,10 +761,12 @@ const DAYN=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Son
 const curStore=()=>STORES[S.store]||STORES.perg;
 
 /* ===================== Beispieldaten ===================== */
-function addDays(n){const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
-function workday(n){const d=new Date();d.setDate(d.getDate()+n);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)}
+/* 27.11.2026: Kalenderdatum JJJJ-MM-TT in Ortszeit (toISOString rechnet in UTC – zwischen 0 und 1 Uhr war das Datum sonst einen Tag zu früh) */
+Date.prototype.isoDay=function(){return this.getFullYear()+'-'+String(this.getMonth()+1).padStart(2,'0')+'-'+String(this.getDate()).padStart(2,'0')};
+function addDays(n){const d=new Date();d.setDate(d.getDate()+n);return d.isoDay()}
+function workday(n){const d=new Date();d.setDate(d.getDate()+n);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);return d.isoDay()}
 function hoursAgo(h){return new Date(Date.now()-h*36e5).toISOString()}
-const today=()=>new Date().toISOString().slice(0,10);
+const today=()=>new Date().isoDay();
 // Gesetzliche Feiertage Österreich (nächste Monate) – im Dashboard änderbar
 const HOLIDAYS=[{date:'2026-10-26',label:'Nationalfeiertag'},{date:'2026-11-01',label:'Allerheiligen'},{date:'2026-12-25',label:'Christtag'},{date:'2026-12-26',label:'Stefanitag'},{date:'2027-01-01',label:'Neujahr'},{date:'2027-01-06',label:'Heilige Drei Könige'}];
 const DEFAULT = {
@@ -824,7 +826,7 @@ const eurK=v=>v.toLocaleString('de-AT',{style:'currency',currency:'EUR'});
 const glassPrice=g=>{const it=((g.purchase||{}).items||[]).find(x=>/gläser|glas/i.test(x[0])&&!/kasko/i.test(x[0]));return it?it[1]:null};
 function kaskoInfo(g){
   if(!g||!g.kasko) return null; const c=kaskoCfg(), d=new Date(g.date+'T12:00'); d.setMonth(d.getMonth()+(+c.months));
-  const until=d.toISOString().slice(0,10), gp=glassPrice(g), t=new Date().toISOString().slice(0,10);
+  const until=d.isoDay(), gp=glassPrice(g), t=new Date().isoDay();
   return {until,active:until>=t,months:+c.months,pct:+c.pct,glassOnly:c.cover!=='all',cover:c.cover==='all'?'Brillengläser und Fassung':'Nur Brillengläser',
     ded:c.pct+' % vom Glaspreis'+(gp!=null?' ('+eurK(gp*c.pct/100)+')':'')};
 }
@@ -923,7 +925,7 @@ const isKid=p=>p.relation==='Tochter'||p.relation==='Sohn';
 function checkupDue(p){
   const last=[...p.glasses].sort((a,b)=>b.date.localeCompare(a.date))[0]; if(!last) return null;
   const d=new Date(last.date+'T12:00'); d.setMonth(d.getMonth()+(isKid(p)?6:12));
-  return {date:d.toISOString().slice(0,10),months:isKid(p)?6:12,days:Math.round((d-new Date())/864e5)};
+  return {date:d.isoDay(),months:isKid(p)?6:12,days:Math.round((d-new Date())/864e5)};
 }
 function dueReminders(){
   if(!S.notif.checkup) return [];
@@ -1227,7 +1229,7 @@ function scrollChat(){const mn=document.getElementById('main');mn.scrollTop=mn.s
 const chatOpen=()=>document.getElementById('v-chat').classList.contains('active');
 const unreadChat=()=>S.chat.filter(m=>!m.read&&m.from!=='me').length;
 const fmtTime=ts=>new Date(ts).toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
-const dayLabel=ts=>{const d=new Date(ts).toISOString().slice(0,10);return d===today()?'Heute':d===addDays(-1)?'Gestern':fmtDate(d,{weekday:'short',day:'numeric',month:'long'})};
+const dayLabel=ts=>{const d=new Date(ts).isoDay();return d===today()?'Heute':d===addDays(-1)?'Gestern':fmtDate(d,{weekday:'short',day:'numeric',month:'long'})};
 function addMsg(m,notify){
   m=Object.assign({id:'m'+Date.now()+Math.random().toString(36).slice(2,5),ts:new Date().toISOString(),store:curStore().id,read:chatOpen()},m);
   S.chat.push(m);persist();render();
@@ -1502,7 +1504,7 @@ function showDoc(gid,kind){
     <div style="color:#6e6e74;font-size:12px;margin-top:8px">enthaltene USt.: ${eur(sum-sum/1.2)} · bezahlt</div>`;
   if(kind==='warranty'){const u=new Date(g.date+'T12:00');u.setFullYear(u.getFullYear()+2);
     body=`<h3 style="margin-top:16px">Garantie-Zertifikat</h3><p style="margin-top:8px">Für die Brille von <b>${esc(o.first)} ${esc(o.last)}</b>, gekauft am ${fmtDate(g.date)} (Rechnung ${esc(P.nr)}).</p>
-    <table><tr><td>Gewährleistung</td><td>bis ${fmtDate(u.toISOString().slice(0,10))}</td></tr><tr><td>Umfang</td><td>Material- und Verarbeitungsfehler</td></tr><tr><td>Anpassung & Service</td><td>kostenlos</td></tr></table>`}
+    <table><tr><td>Gewährleistung</td><td>bis ${fmtDate(u.isoDay())}</td></tr><tr><td>Umfang</td><td>Material- und Verarbeitungsfehler</td></tr><tr><td>Anpassung & Service</td><td>kostenlos</td></tr></table>`}
   if(kind==='kasko') body=`<h3 style="margin-top:16px">Vollkasko-Police</h3><p style="margin-top:8px">Versicherte Person: <b>${esc(o.first)} ${esc(o.last)}</b></p>
     <table><tr><td>Laufzeit (${kaskoLabel(kaskoInfo(g).months)})</td><td>${fmtDate(g.date)} – ${fmtDate(kaskoInfo(g).until)}</td></tr><tr><td>Gedeckt</td><td>${esc(kaskoInfo(g).cover)}</td></tr><tr><td>Selbstbehalt</td><td>${esc(kaskoInfo(g).ded)}</td></tr><tr><td>Status</td><td>${kaskoActive(g)?'aktiv':'abgelaufen'}</td></tr></table>`;
   setSheet('Dokument',`<div class="paper">${head}${body}<span class="stamp-demo">BEISPIELDOKUMENT</span></div>
@@ -1681,8 +1683,8 @@ function sheetBook(o){
 function selStore(id){bk.store=id;bk.day=null;bk.time=null;document.getElementById('bStore').innerHTML=storeOpts(id,'selStore');renderDays();chkBook()}
 function renderDays(){
   const st=STORES[bk.store],out=[];
-  for(let i=1;i<=14;i++){const d=new Date();d.setDate(d.getDate()+i);const iso=d.toISOString().slice(0,10),wd=(d.getDay()+6)%7,closed=!st.hours[wd].length||(st.closed||[]).some(c=>c.date===iso);
-    out.push(`<button class="day" ${closed?'disabled':''} data-d="${d.toISOString().slice(0,10)}" onclick="selDay(this)"><small>${d.toLocaleDateString('de-AT',{weekday:'short'})}</small><b>${d.getDate()}</b></button>`)}
+  for(let i=1;i<=14;i++){const d=new Date();d.setDate(d.getDate()+i);const iso=d.isoDay(),wd=(d.getDay()+6)%7,closed=!st.hours[wd].length||(st.closed||[]).some(c=>c.date===iso);
+    out.push(`<button class="day" ${closed?'disabled':''} data-d="${d.isoDay()}" onclick="selDay(this)"><small>${d.toLocaleDateString('de-AT',{weekday:'short'})}</small><b>${d.getDate()}</b></button>`)}
   document.getElementById('days').innerHTML=out.join('');
   document.getElementById('slots').innerHTML='<p class="muted-s" style="grid-column:1/-1">Bitte zuerst einen Tag wählen.</p>';
 }
