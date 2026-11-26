@@ -520,6 +520,8 @@ nav.bottom:has(button:active) .lg-lens{transform:scale(1.06,1.12);background:rgb
 .chat-att{background:rgba(28,32,42,.75)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 @media (prefers-reduced-motion:reduce){nav.bottom .lg-lens{transition:none}}
 /* 26.11.2026: Untertitel unter dem Logo in der Markenfarbe (z. B. Blau bei Muster Optik); Push nach oben wegwischbar */
+/* Optiker-Auswahl über dem Startbildschirm */
+.sheet.top{z-index:61}.scrim.top{z-index:60}
 html.brand-sub[data-gt] .wm-sub,html.brand-sub .wm-sub{color:var(--accent)!important}
 .push{touch-action:none;user-select:none;-webkit-user-select:none}
 @media (prefers-reduced-motion:reduce){.push{transition:none!important}}
@@ -701,10 +703,11 @@ html[data-gt="light"] .scrim{background:rgba(20,25,34,.35)!important}
         <button class="list-item" style="width:100%;text-align:left" onclick="openSheet('legal','privacy')"><div class="grow">Datenschutzerklärung</div><span class="chev">›</span></button>
         <button class="list-item" style="width:100%;text-align:left" onclick="openSheet('legal','imprint')"><div class="grow">Impressum</div><span class="chev">›</span></button>
         <div class="list-item"><div class="grow">Meine Daten exportieren</div><span class="chev">›</span></div>
+        <button class="list-item" style="width:100%;text-align:left" onclick="openSheet('optiker')"><div class="grow">Demo: Optiker wechseln</div></button>
         <button class="list-item" style="width:100%;text-align:left" onclick="demoPush()"><div class="grow">Demo: Bewertungs-Benachrichtigung zeigen</div></button>
         <button class="list-item" style="width:100%;text-align:left;color:var(--danger)" onclick="resetDemo()"><div class="grow">Demo-Daten zurücksetzen</div></button>
       </div>
-      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.19 · Kundendaten sind Beispieldaten</p>
+      <p class="muted-s" style="text-align:center;margin-top:20px">Prototyp v1.20 · Kundendaten sind Beispieldaten</p>
     </section>
   </main>
 
@@ -1300,10 +1303,10 @@ function autoReply(text){
 /* ===================== Bottom Sheets ===================== */
 const sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim');
 function openSheet(kind,arg){
-  ({news:sheetNews,docs:sheetDocs,onbStore:sheetStore,family:sheetFamily,damage:sheetDamage,kasko:sheetKasko,order:sheetOrder,book:sheetBook,store:sheetStore,stock:sheetStock,rate:sheetRate,legal:sheetLegal,famDel:sheetFamDel,msgDel:sheetMsgDel})[kind](arg);
+  ({news:sheetNews,docs:sheetDocs,onbStore:sheetStore,family:sheetFamily,damage:sheetDamage,kasko:sheetKasko,order:sheetOrder,book:sheetBook,store:sheetStore,stock:sheetStock,rate:sheetRate,legal:sheetLegal,famDel:sheetFamDel,msgDel:sheetMsgDel,optiker:sheetOptiker})[kind](arg);
   sheet.classList.add('on');scrim.classList.add('on');
 }
-function closeSheet(){sheet.classList.remove('on');scrim.classList.remove('on')}
+function closeSheet(){sheet.classList.remove('on','top');scrim.classList.remove('on','top')}
 function setSheet(title,html){document.getElementById('sheetTitle').textContent=title;document.getElementById('sheetBody').innerHTML=html;document.getElementById('sheetBody').scrollTop=0}
 function successView(title,text,extra){
   setSheet('',`<div class="success"><div class="big-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
@@ -1316,6 +1319,14 @@ function pickChip(el){el.parentElement.querySelectorAll('.chip').forEach(c=>c.cl
 function storeOpts(sel,fn){
   return Object.values(STORES).map(x=>`<button class="store-opt ${x.id===sel?'on':''}" onclick="${fn}('${x.id}')"><span class="radio"></span><div class="grow"><b>${x.full}</b><div class="muted-s">${x.street}, ${x.zip} · ${x.tel}</div></div></button>`).join('');
 }
+/* Demo: zwischen Optikern wechseln (27.11.2026) – zum Herzeigen; Demo-Daten bleiben je Optiker erhalten */
+function sheetOptiker(){
+  if(onbEl().classList.contains('on')){sheet.classList.add('top');scrim.classList.add('top')} // auch über dem Startbildschirm
+  setSheet('Optiker wechseln',`
+    <p class="sub">Zum Herzeigen: dieselbe App im Design eines anderen Optikers. Die Demo-Daten bleiben je Optiker erhalten.</p>
+    ${OPTIKER_LIST.map(p=>`<button class="store-opt ${p.id===OPTIKER.id?'on':''}" onclick="switchOptiker('${p.id}')"><span class="radio"></span><img src="${p.logo||FALCON_DEFAULT||''}" alt="" style="width:36px;height:36px;object-fit:contain;flex-shrink:0"><div class="grow"><b>${esc(p.name)}</b><div class="muted-s">Filialen ${esc(p.sub)}</div></div></button>`).join('')}`);
+}
+function switchOptiker(id){if(id===OPTIKER.id){closeSheet();return}OPTIKER.switchTo(id)}
 function sheetStore(first){
   setSheet(first?'Willkommen bei '+OPTIKER.name:'Filiale wählen',`
     <p class="sub">${first?'In welcher Filiale sind Sie Kunde? Sie können das jederzeit ändern.':'Ihre Stammfiliale für Termine, Abholungen und Reparaturen.'}</p>
@@ -1706,7 +1717,8 @@ function onbRender(){
     <h1 style="text-align:center;font-size:28px">Willkommen!</h1><p class="sub" style="text-align:center;margin-top:6px">Brillenpass, Kontaktlinsen, Termine und der direkte Draht zu Ihrem Optiker – alles in einer App.</p>
     <button class="btn accent" style="margin-top:28px" onclick="onb.mode='existing';onb.step=1;onbRender()">Anmelden</button>
     <button class="btn outline" style="margin-top:22px" onclick="onbDemo()">Demo-Login (Lukas Mayr)</button>
-    <p class="muted-s" style="text-align:center;margin-top:10px">Meldet Sie direkt mit dem Demo-Kunden an (Kundennummer <b>104772</b>).</p>`;
+    <p class="muted-s" style="text-align:center;margin-top:10px">Meldet Sie direkt mit dem Demo-Kunden an (Kundennummer <b>104772</b>).</p>
+    <p class="muted-s" style="text-align:center;margin-top:18px">Demo: ${esc(OPTIKER.name)} · <a href="#" style="color:inherit;text-decoration:underline" onclick="openSheet('optiker');return false">Anderen Optiker zeigen</a></p>`;
   if(onb.step===1&&onb.mode==='existing') h=onbSteps(1)+`<h1 style="font-size:26px">Konto verknüpfen</h1><p class="sub">Ihre Kundennummer finden Sie auf Ihrer Rechnung oder Kundenkarte${inv?' – sie wurde aus Ihrer Einladung übernommen':''}.</p>
     <label class="f">Kundennummer</label><input class="input" id="oKd" inputmode="numeric" value="${esc(inv||'')}" placeholder="z. B. 104772">
     <label class="f">Geburtsdatum</label><input class="input" id="oBirth" type="date">

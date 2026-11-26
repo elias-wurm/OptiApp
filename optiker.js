@@ -44,8 +44,20 @@ var P={
     behoerde:'Bezirkshauptmannschaft Perg',stores:FALKNER_STORES}
 };
 
-var id=P[window.OPTIKER_ID]?window.OPTIKER_ID:'muster';
+/* Welcher Optiker? 1. Unterseite (falkner/) setzt OPTIKER_ID, 2. in der Prototyp-APK die gespeicherte
+   Demo-Auswahl (optiapp-optiker), 3. sonst Muster Optik (auch beim ersten Start der APK). */
+var saved=null;
+if(window.OPTIAPP_APK){try{saved=localStorage.getItem('optiapp-optiker')}catch(e){}}
+var id=P[window.OPTIKER_ID]?window.OPTIKER_ID:(P[saved]?saved:'muster');
 var O=P[id];
+/* Liste für „Demo: Optiker wechseln“ */
+window.OPTIKER_LIST=Object.keys(P).map(function(k){return {id:k,name:P[k].name,logo:P[k].logo,sub:P[k].stores.perg.name+' und '+P[k].stores.dimbach.name}});
+/* Wechsel: in der APK Auswahl speichern und neu laden; im Browser zur Adresse des Optikers (…/ bzw. …/falkner/) */
+O.switchTo=function(nid){
+  if(!P[nid])return;
+  if(window.OPTIAPP_APK){try{localStorage.setItem('optiapp-optiker',nid)}catch(e){}location.reload();return}
+  location.href=new URL(P[nid].appDir||'./',document.baseURI).href;
+};
 /* Speicherschlüssel je Optiker, z. B. optiapp-falkner-app, optiapp-muster-dash */
 O.key=function(k){return 'optiapp-'+id+'-'+k};
 window.OPTIKER=O;
