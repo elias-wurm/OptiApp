@@ -2,9 +2,9 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="version" content="Website v0.6">
+<meta name="version" content="Website v0.7">
 <script>/* Runde 4: Hell/Dunkel – Standard Systemeinstellung, nur auf diesem Gerät gespeichert */
-(function(){var K='glass-theme-web',mq=matchMedia('(prefers-color-scheme: dark)');
+(function(){var K='optiapp-theme-web',mq=matchMedia('(prefers-color-scheme: dark)');
 function pref(){try{return localStorage.getItem(K)||'system'}catch(e){return 'system'}}
 function apply(){var p=pref(),r=p==='system'?(mq.matches?'dark':'light'):p;document.documentElement.setAttribute('data-gt',r);
  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',r==='dark'?'#12151B':'#ECEFF3');

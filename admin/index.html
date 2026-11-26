@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <script>/* Runde 4: Hell/Dunkel – Standard Systemeinstellung, nur auf diesem Gerät gespeichert */
-(function(){var K='glass-theme-admin',mq=matchMedia('(prefers-color-scheme: dark)');
+(function(){var K='optiapp-theme-admin',mq=matchMedia('(prefers-color-scheme: dark)');
 function pref(){try{return localStorage.getItem(K)||'system'}catch(e){return 'system'}}
 function apply(){var p=pref(),r=p==='system'?(mq.matches?'dark':'light'):p;document.documentElement.setAttribute('data-gt',r);
  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',r==='dark'?'#12151B':'#ECEFF3');
@@ -283,12 +283,12 @@ html[data-gt="light"] .txt.miss{background:rgba(245,175,40,.14)!important;border
   <span class="grow"></span><span class="gt-mount" title="Darstellung"></span><a class="weblink" href="../website/" target="_blank" rel="noopener">Website ↗</a><button class="btn" onclick="logout()">Abmelden</button>
 </div></header>
 <main class="main" id="app"></main>
-<p class="ver" style="text-align:center;font-size:12px;color:var(--muted);margin:8px 0 24px">Verwaltung-Prototyp v0.11 · Alle Daten sind Beispieldaten.</p>
+<p class="ver" style="text-align:center;font-size:12px;color:var(--muted);margin:8px 0 24px">Verwaltung-Prototyp v0.12 · Alle Daten sind Beispieldaten.</p>
 <div class="modal" id="modal" hidden onclick="if(event.target===this)closeInv()"><div class="mwrap"><div class="mbar"><button class="btn" onclick="window.print()">Drucken / als PDF speichern</button><button class="btn" onclick="closeInv()">Schließen</button></div><div id="invDoc"></div></div></div>
 <script>
 /* OptiApp-Verwaltung (Prototyp). Optik Falkner = Live-Daten aus dem Prototyp im selben Browser; alle anderen Optiker sind erfundene Demo-Daten. */
-try{if(sessionStorage.getItem('glass-optiapp-admin')!=='1'){location.replace('../website/login.html');}}catch(e){}
-function logout(){try{sessionStorage.removeItem('glass-optiapp-admin')}catch(e){}location.href='../website/login.html'}
+try{if(sessionStorage.getItem('optiapp-admin')!=='1'){location.replace('../website/login.html');}}catch(e){}
+function logout(){try{sessionStorage.removeItem('optiapp-admin')}catch(e){}location.href='../website/login.html'}
 
 const NOW=new Date(), MONTHS=[]; // letzte 12 Monate inkl. aktuellem
 for(let i=11;i>=0;i--){const d=new Date(NOW.getFullYear(),NOW.getMonth()-i,1);MONTHS.push(d)}
@@ -312,7 +312,7 @@ const DEMO=[
 ];
 // Optik Falkner: Live aus dem Prototyp (App + Dashboard im selben Browser)
 function falkner(){
-  let S=null,D=null;try{S=JSON.parse(localStorage.getItem('glass-falkner-v11'))}catch(e){}try{D=JSON.parse(localStorage.getItem('glass-falkner-dash-v2'))}catch(e){}
+  let S=null,D=null;try{S=JSON.parse(localStorage.getItem('optiapp-falkner-app'))}catch(e){}try{D=JSON.parse(localStorage.getItem('optiapp-falkner-dash'))}catch(e){}
   const iomCust=D&&D.customers?D.customers.length:5, invited=D&&D.customers?D.customers.filter(c=>c.invited).length:0;
   const appUsers=S&&S.profile?1+((S.family||[]).length):2; // ohne App-Daten im Browser: Demo-Konto Lukas + Lena
   const since30=Date.now()-30*864e5, inRange=t=>t&&new Date(t).getTime()>=since30;
@@ -452,7 +452,7 @@ function colChart(id,labels,vals,long){
 /* ===================== Rechnungen ===================== */
 /* Abrechnung monatlich: Grundgebühr je Filiale + Gebühr je registriertem Endkunden (Bestand am Monatsende). Beträge netto, zzgl. 20 % USt.
    Prototyp: Tarife und Rechnungen liegen im Browser (localStorage). */
-const BKEY='glass-optiapp-billing-v1', VAT=.2;
+const BKEY='optiapp-billing', VAT=.2;
 let B={tariffs:{},invoices:[],seq:{},company:{},addr:{},custom:[],over:{},leads:[]}, view='optiker', per=10, flash=null;
 try{const x=JSON.parse(localStorage.getItem(BKEY));if(x&&x.tariffs)B=Object.assign(B,x)}catch(e){}
 const CO_FIELDS=[['name','Firmenname','OptiApp GmbH'],['suffix','Zusatz (z. B. in Gründung)','in Gründung'],['street','Straße und Hausnummer',''],['city','PLZ und Ort',''],['country','Land','Österreich'],['email','E-Mail','office@optiapp.at'],['web','Website','optiapp.at'],['uid','UID-Nummer',''],['fn','Firmenbuchnummer',''],['court','Firmenbuchgericht',''],['bank','Bank',''],['iban','IBAN',''],['bic','BIC',''],['due','Zahlungsziel in Tagen','14']];
@@ -701,7 +701,7 @@ function renderLeads(keep){
   if(fid){const el=document.getElementById(fid);if(el)el.focus()}
 }
 /* ===== Support-Chat Optiker ↔ OptiApp (Prototyp: gemeinsamer Speicher im selben Browser) ===== */
-const SKEY='glass-optiapp-support-v1';
+const SKEY='optiapp-support';
 function supSeed(){const t=(d,h,m)=>{const x=new Date();x.setDate(x.getDate()+d);x.setHours(h,m,0,0);return x.toISOString()};
   return {threads:{
     falkner:[{id:'s1',from:'oa',author:'OptiApp Team',text:'Willkommen bei OptiApp! Bei Fragen zur App oder zum Dashboard schreiben Sie uns einfach hier. Wir antworten werktags innerhalb von 24 Stunden.',ts:t(-6,9,0),readOpt:true,readOa:true}],
@@ -751,7 +751,7 @@ function renderAll(){navBadge();document.querySelectorAll('.nav button').forEach
 if(location.hash==='#rechnungen')view='rechnungen';if(location.hash==='#firma')view='firma';if(location.hash==='#kunden')view='kunden';if(location.hash==='#leads')view='leads';if(location.hash==='#nachrichten')view='support';
 const LOGO_SVG=(()=>{const l=document.querySelector('header .logo').cloneNode(true);l.setAttribute('height','34');l.style.color='#172235';return l.outerHTML})();
 load();renderAll();
-window.addEventListener('storage',e=>{if(e.key==='glass-falkner-v11'||e.key==='glass-falkner-dash-v2'){load();renderAll()}});
+window.addEventListener('storage',e=>{if(e.key==='optiapp-falkner-app'||e.key==='optiapp-falkner-dash'){load();renderAll()}});
 </script>
 <!-- ===== Runde 3: Glas-Dropdowns ===== -->
 <style>

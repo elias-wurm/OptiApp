@@ -2,9 +2,9 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="version" content="Website v0.6">
+<meta name="version" content="Website v0.7">
 <script>/* Runde 4: Hell/Dunkel – Standard Systemeinstellung, nur auf diesem Gerät gespeichert */
-(function(){var K='glass-theme-web',mq=matchMedia('(prefers-color-scheme: dark)');
+(function(){var K='optiapp-theme-web',mq=matchMedia('(prefers-color-scheme: dark)');
 function pref(){try{return localStorage.getItem(K)||'system'}catch(e){return 'system'}}
 function apply(){var p=pref(),r=p==='system'?(mq.matches?'dark':'light'):p;document.documentElement.setAttribute('data-gt',r);
  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',r==='dark'?'#12151B':'#ECEFF3');
@@ -74,9 +74,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     </form>
     <div class="demo">
       <b>Demo-Zugänge (Prototyp) – Passwort jeweils „demo“</b>
-      <button type="button" data-u="inhaber@optik-falkner.at"><span>inhaber@optik-falkner.at</span><span>alle Filialen</span></button>
-      <button type="button" data-u="perg@optik-falkner.at"><span>perg@optik-falkner.at</span><span>Filiale Perg</span></button>
-      <button type="button" data-u="dimbach@optik-falkner.at"><span>dimbach@optik-falkner.at</span><span>Filiale Dimbach</span></button>
+      <button type="button" data-u="inhaber@muster-optik.example"><span>inhaber@muster-optik.example</span><span>Muster Optik</span></button>
+      <button type="button" data-u="inhaber@optik-falkner.at"><span>inhaber@optik-falkner.at</span><span>Falkner, alle Filialen</span></button>
+      <button type="button" data-u="perg@optik-falkner.at"><span>perg@optik-falkner.at</span><span>Falkner, Filiale Perg</span></button>
+      <button type="button" data-u="dimbach@optik-falkner.at"><span>dimbach@optik-falkner.at</span><span>Falkner, Filiale Dimbach</span></button>
       <button type="button" data-u="admin@optiapp.at"><span>admin@optiapp.at</span><span>OptiApp-Verwaltung</span></button>
     </div>
   </div>
@@ -91,7 +92,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </svg></span><span class="grow"></span><a href="rechtliches.html#impressum">Impressum</a><a href="rechtliches.html#datenschutz">Datenschutz</a></div></footer>
 <script>
 // Prototyp: Demo-Zugänge statt echter Anmeldung. Später prüft ein Server Passwort und Zwei-Faktor-Code.
-const ACCOUNTS={'admin@optiapp.at':'admin','inhaber@optik-falkner.at':'owner','perg@optik-falkner.at':'perg','dimbach@optik-falkner.at':'dimbach'};
+// Wert: [Optiker, Benutzer im Dashboard]; Muster Optik = Hauptadresse dashboard/, Falkner = dashboard/falkner/
+const ACCOUNTS={'admin@optiapp.at':['admin'],'inhaber@muster-optik.example':['muster','owner'],'inhaber@optik-falkner.at':['falkner','owner'],'perg@optik-falkner.at':['falkner','perg'],'dimbach@optik-falkner.at':['falkner','dimbach']};
 const $=id=>document.getElementById(id), err=$('lErr');
 document.querySelectorAll('.demo button').forEach(b=>b.onclick=()=>{$('lMail').value=b.dataset.u;$('lPw').value='demo';$('lPw').focus()});
 $('eye').onclick=()=>{const p=$('lPw'),show=p.type==='password';p.type=show?'text':'password';$('eye').textContent=show?'Verbergen':'Anzeigen'};
@@ -100,9 +102,10 @@ $('lf').onsubmit=e=>{e.preventDefault();err.style.color='';
   const m=$('lMail').value.trim().toLowerCase(), pw=$('lPw').value;
   if(!m||!pw){err.textContent='Bitte E-Mail und Passwort eingeben.';(!m?$('lMail'):$('lPw')).focus();return}
   if(!ACCOUNTS[m]||pw!=='demo'){err.textContent='E-Mail oder Passwort stimmt nicht. Im Prototyp: einen Demo-Zugang unten wählen.';$('lPw').select();return}
-  if(ACCOUNTS[m]==='admin'){try{sessionStorage.setItem('glass-optiapp-admin','1')}catch(x){}location.href='../admin/';return}
-  try{sessionStorage.setItem('glass-falkner-dash-user',ACCOUNTS[m]);sessionStorage.setItem('glass-optiapp-web','1')}catch(x){}
-  location.href='../dashboard/';
+  const [opt,user]=ACCOUNTS[m];
+  if(opt==='admin'){try{sessionStorage.setItem('optiapp-admin','1')}catch(x){}location.href='../admin/';return}
+  try{sessionStorage.setItem('optiapp-'+opt+'-dash-user',user);sessionStorage.setItem('optiapp-web','1')}catch(x){}
+  location.href=opt==='muster'?'../dashboard/':'../dashboard/falkner/';
 };
 </script>
 </body>

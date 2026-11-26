@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Optik Falkner – Dashboard</title>
+<!-- Unterseite für Optik Falkner (26.11.2026): lädt den Optiker-Dashboard aus ../index.html mit dem
+     Optiker-Profil „falkner“ (siehe optiker.js im Hauptordner). Eine Codebasis für alle Optiker –
+     hier nichts anpassen, Änderungen nur in ../index.html bzw. optiker.js. -->
+</head>
+<body>
+<script>
+window.OPTIKER_ID='falkner';
+fetch('../index.html',{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.text()}).then(function(h){
+  h=h.replace(/<head>/i,'<head><base href="../"><script>window.OPTIKER_ID="falkner"<\/script>');
+  document.open();document.write(h);document.close();
+}).catch(function(){document.body.textContent='Die Seite konnte nicht geladen werden.'});
+</script>
+<noscript>Bitte JavaScript aktivieren.</noscript>
+</body>
+</html>
