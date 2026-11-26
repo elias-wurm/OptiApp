@@ -283,7 +283,7 @@ html[data-gt="light"] .txt.miss{background:rgba(245,175,40,.14)!important;border
   <span class="grow"></span><span class="gt-mount" title="Darstellung"></span><a class="weblink" href="../website/" target="_blank" rel="noopener">Website ↗</a><button class="btn" onclick="logout()">Abmelden</button>
 </div></header>
 <main class="main" id="app"></main>
-<p class="ver" style="text-align:center;font-size:12px;color:var(--muted);margin:8px 0 24px">Verwaltung-Prototyp v0.10 · Alle Daten sind Beispieldaten.</p>
+<p class="ver" style="text-align:center;font-size:12px;color:var(--muted);margin:8px 0 24px">Verwaltung-Prototyp v0.11 · Alle Daten sind Beispieldaten.</p>
 <div class="modal" id="modal" hidden onclick="if(event.target===this)closeInv()"><div class="mwrap"><div class="mbar"><button class="btn" onclick="window.print()">Drucken / als PDF speichern</button><button class="btn" onclick="closeInv()">Schließen</button></div><div id="invDoc"></div></div></div>
 <script>
 /* OptiApp-Verwaltung (Prototyp). Optik Falkner = Live-Daten aus dem Prototyp im selben Browser; alle anderen Optiker sind erfundene Demo-Daten. */
@@ -312,9 +312,9 @@ const DEMO=[
 ];
 // Optik Falkner: Live aus dem Prototyp (App + Dashboard im selben Browser)
 function falkner(){
-  let S=null,D=null;try{S=JSON.parse(localStorage.getItem('glass-falkner-v10'))}catch(e){}try{D=JSON.parse(localStorage.getItem('glass-falkner-dash-v1'))}catch(e){}
+  let S=null,D=null;try{S=JSON.parse(localStorage.getItem('glass-falkner-v11'))}catch(e){}try{D=JSON.parse(localStorage.getItem('glass-falkner-dash-v2'))}catch(e){}
   const iomCust=D&&D.customers?D.customers.length:5, invited=D&&D.customers?D.customers.filter(c=>c.invited).length:0;
-  const appUsers=S&&S.profile?1+((S.family||[]).length):2; // ohne App-Daten im Browser: Demo-Konto Julian + Lena
+  const appUsers=S&&S.profile?1+((S.family||[]).length):2; // ohne App-Daten im Browser: Demo-Konto Lukas + Lena
   const since30=Date.now()-30*864e5, inRange=t=>t&&new Date(t).getTime()>=since30;
   const chats=[...((S&&S.chat)||[]).filter(m=>m.from==='me'),...((D&&D.customers)||[]).flatMap(c=>(c.chat||[]).filter(m=>m.from==='me'))].filter(m=>inRange(m.ts)).length;
   const tix=[...((S&&S.tickets)||[]),...((D&&D.customers)||[]).flatMap(c=>c.tickets||[])].filter(t=>inRange(t.date));
@@ -751,7 +751,7 @@ function renderAll(){navBadge();document.querySelectorAll('.nav button').forEach
 if(location.hash==='#rechnungen')view='rechnungen';if(location.hash==='#firma')view='firma';if(location.hash==='#kunden')view='kunden';if(location.hash==='#leads')view='leads';if(location.hash==='#nachrichten')view='support';
 const LOGO_SVG=(()=>{const l=document.querySelector('header .logo').cloneNode(true);l.setAttribute('height','34');l.style.color='#172235';return l.outerHTML})();
 load();renderAll();
-window.addEventListener('storage',e=>{if(e.key==='glass-falkner-v10'||e.key==='glass-falkner-dash-v1'){load();renderAll()}});
+window.addEventListener('storage',e=>{if(e.key==='glass-falkner-v11'||e.key==='glass-falkner-dash-v2'){load();renderAll()}});
 </script>
 <!-- ===== Runde 3: Glas-Dropdowns ===== -->
 <style>

@@ -315,7 +315,7 @@ html[data-gt="light"] .modal{background:rgba(20,25,34,.3)!important}
     <div id="navList"></div>
     <div class="side-foot"><div class="sideuser"><span class="av" id="sideAv" style="width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700">T</span><div class="grow"><b id="sideName">–</b><div id="sideRole" class="small"></div></div></div>
       <button class="btn ghost sm" style="margin-top:10px;width:100%" onclick="logout()">Abmelden</button>
-      <div style="margin-top:10px">Dashboard-Prototyp v1.7<br>Alle Kundendaten sind Beispieldaten.<br><a class="weblink" href="../website/" target="_blank" rel="noopener">OptiApp-Website ↗</a></div></div>
+      <div style="margin-top:10px">Dashboard-Prototyp v1.9<br>Alle Kundendaten sind Beispieldaten.<br><a class="weblink" href="../website/" target="_blank" rel="noopener">OptiApp-Website ↗</a></div></div>
   </aside>
   <main>
     <div class="top">
@@ -324,7 +324,7 @@ html[data-gt="light"] .modal{background:rgba(20,25,34,.3)!important}
       <span class="gt-mount" title="Darstellung"></span>
       <div class="user" id="userBox"></div>
     </div>
-    <div class="demo">🔗 <b>Demo-Verbindung:</b> Der Kunde <b>Julian Karlinger</b> <span class="live">Live</span> ist mit der Kunden-App verbunden. Öffnen Sie die <a href="../" target="_blank">Kunden-App</a> im selben Browser in einem zweiten Tab – Nachrichten und Statusmeldungen kommen dort sofort an.</div>
+    <div class="demo">🔗 <b>Demo-Verbindung:</b> Der Kunde <b>Lukas Mayr</b> <span class="live">Live</span> ist mit der Kunden-App verbunden. Öffnen Sie die <a href="../" target="_blank">Kunden-App</a> im selben Browser in einem zweiten Tab – Nachrichten und Statusmeldungen kommen dort sofort an.</div>
     <div id="view"></div>
   </main>
 </div>
@@ -362,7 +362,7 @@ const today=()=>new Date().toISOString().slice(0,10);
 // Gesetzliche Feiertage Österreich (nächste Monate) – im Dashboard änderbar
 const HOLIDAYS=[{date:'2026-10-26',label:'Nationalfeiertag'},{date:'2026-11-01',label:'Allerheiligen'},{date:'2026-12-25',label:'Christtag'},{date:'2026-12-26',label:'Stefanitag'},{date:'2027-01-01',label:'Neujahr'},{date:'2027-01-06',label:'Heilige Drei Könige'}];
 const DEFAULT = {
-  profile:{kdnr:'104772',birth:'1988-05-12',first:'Julian',last:'Karlinger',mail:'julian.karlinger@example.at',phone:'+43 660 123 4567',addr:'Musterweg 3, 4320 Perg'},
+  profile:{kdnr:'104772',birth:'1985-09-23',first:'Lukas',last:'Mayr',mail:'lukas.mayr@example.at',phone:'+43 660 123 4567',addr:'Musterweg 3, 4320 Perg'},
   store:null,
   notif:{chat:true,checkup:true,reminder:true,appt:true,review:true,offers:false},
   ui:{theme:'system',fs:1,hc:false},
@@ -383,7 +383,7 @@ const DEFAULT = {
     R:{bc:'8,5',dia:'14,3',sph:'-2,00',cyl:'–',ax:'–',add:'–'},L:{bc:'8,5',dia:'14,3',sph:'-2,25',cyl:'–',ax:'–',add:'–'},
     price:64.90,stock:{R:23,L:23,updated:addDays(0)}},
   who:'me',
-  family:[{id:'k1',first:'Lena',last:'Karlinger',relation:'Tochter',birth:'2017',lenses:null,
+  family:[{id:'k1',first:'Lena',last:'Mayr',relation:'Tochter',birth:'2017',lenses:null,
     glasses:[{id:'k1g1',date:'2026-07-08',note:'Myopie-Management-Gläser',
       R:{sph:'-1,25',cyl:'–',ax:'–',add:'–'},L:{sph:'-1,50',cyl:'-0,25',ax:'170',add:'–'},pd:'28,0 / 28,5',
       kasko:true,
@@ -428,7 +428,9 @@ const normStatus=s=>({'Eingegangen':'Offen','In Prüfung':'Offen','Wird bereitge
 
 
 /* ======== Speicher ======== */
-const KEY='glass-falkner-v10', DKEY='glass-falkner-dash-v1';
+const KEY='glass-falkner-v11', DKEY='glass-falkner-dash-v2';
+try{localStorage.removeItem('glass-falkner-v10');localStorage.removeItem('glass-falkner-dash-v1')}catch(e){} /* 26.11.2026: Demo-Daten mit neuen Beispielnamen – alte Speicherstände verwerfen */
+
 let S;
 function loadS(){let x=null;try{x=JSON.parse(localStorage.getItem(KEY))}catch(e){}
   if(!x){x=JSON.parse(JSON.stringify(DEFAULT));x.store='perg';try{localStorage.setItem(KEY,JSON.stringify(x))}catch(e){}}
@@ -447,7 +449,7 @@ function applyBrand(){const b=S.brand||{},r=document.documentElement,im=document
 
 const ts=(dayOff,h,m)=>{const d=new Date();d.setDate(d.getDate()+dayOff);d.setHours(h,m||0,0,0);return d.toISOString()};
 const DDEFAULT={customers:[
-  {id:'c2',birth:'1961-03-08',since:'2009-05-20',name:'Maria Berger',store:'perg',phone:'+43 664 210 3344',mail:'maria.berger@example.at',
+  {id:'c2',birth:'1964-07-19',since:'2009-05-20',name:'Sophie Lindner',store:'perg',phone:'+43 664 123 9876',mail:'sophie.lindner@example.at',
    chat:[{id:'d1',from:'me',text:'Hallo, kann ich meine Brille morgen Vormittag abholen?',ts:ts(0,8,42)}],
    tickets:[{id:'dt1',kind:'Brillenauftrag',title:'Gleitsichtbrille neu',status:'In Arbeit',date:addDays(-3)}],
    appts:[{id:'da1',type:'Brillenglasberatung',date:workday(0),time:'14:30',store:'perg'}],
@@ -474,8 +476,8 @@ let D;
 try{D=JSON.parse(localStorage.getItem(DKEY))}catch(e){}
 if(!D)D=JSON.parse(JSON.stringify(DDEFAULT));
 function saveD(){try{localStorage.setItem(DKEY,JSON.stringify(D))}catch(e){try{D=JSON.parse(localStorage.getItem(DKEY))||D}catch(x){}}}
-const DEMO_BIRTH={'c2':['1961-03-08','2009-05-20'],'c3':['1994-11-23','2021-02-11'],'c4':['2003-07-30','2024-08-02'],'c5':['1976-01-17','2015-10-06']};
-const DEMO_KVP={c2:{addr:'Linzer Straße 12, 4320 Perg',kvp:{mail:'maria.berger@example.at',phone:'+43 664 210 3344',addr:'Linzer Straße 12, 4320 Perg'}},c3:{addr:'Dorfplatz 4, 4371 Dimbach',kvp:{mail:'t.huber@example.at',phone:'+43 680 555 1020',addr:'Dorfplatz 4, 4371 Dimbach'}},c4:{addr:'Mühlgasse 7, 4320 Perg',kvp:{mail:'anna.leitner@example.at',phone:'+43 676 555 0101',addr:'Mühlgasse 7, 4320 Perg'},changes:[{id:'pcdemo4',field:'phone',old:'+43 676 555 0101',new:'+43 676 908 7711',ts:new Date(Date.now()-2*864e5).toISOString()}]},c5:{addr:'Kirchenweg 2, 4371 Dimbach',kvp:{mail:'s.gruber@example.at',phone:'+43 650 300 4422',addr:'Kirchenweg 2, 4371 Dimbach'}}};
+const DEMO_BIRTH={'c2':['1964-07-19','2009-05-20'],'c3':['1994-11-23','2021-02-11'],'c4':['2003-07-30','2024-08-02'],'c5':['1976-01-17','2015-10-06']};
+const DEMO_KVP={c2:{addr:'Beispielgasse 12, 4320 Perg',kvp:{mail:'sophie.lindner@example.at',phone:'+43 664 123 9876',addr:'Beispielgasse 12, 4320 Perg'}},c3:{addr:'Dorfplatz 4, 4371 Dimbach',kvp:{mail:'t.huber@example.at',phone:'+43 680 555 1020',addr:'Dorfplatz 4, 4371 Dimbach'}},c4:{addr:'Mühlgasse 7, 4320 Perg',kvp:{mail:'anna.leitner@example.at',phone:'+43 676 555 0101',addr:'Mühlgasse 7, 4320 Perg'},changes:[{id:'pcdemo4',field:'phone',old:'+43 676 555 0101',new:'+43 676 908 7711',ts:new Date(Date.now()-2*864e5).toISOString()}]},c5:{addr:'Kirchenweg 2, 4371 Dimbach',kvp:{mail:'s.gruber@example.at',phone:'+43 650 300 4422',addr:'Kirchenweg 2, 4371 Dimbach'}}};
 D.customers.forEach((c,i)=>{const dk=DEMO_KVP[c.id];if(dk){if(!c.addr)c.addr=dk.addr;if(!c.kvp)c.kvp=dk.kvp;if(!c.changes&&dk.changes)c.changes=dk.changes}if(!c.kdnr)c.kdnr=String(310400+i*37);if(DEMO_BIRTH[c.id]){if(!c.birth)c.birth=DEMO_BIRTH[c.id][0];if(!c.since)c.since=DEMO_BIRTH[c.id][1]}if(!c.since)c.since=(c.invited||new Date().toISOString().slice(0,10));c.tickets.forEach(x=>x.status=normStatus(x.status))});
 const TPL_DEFAULT=[
   ['✅','Brille abholbereit','Ihre Brille ist bereit zur Abholung','Sie können Ihre Brille ab sofort in der Filiale {f} abholen.','hours'],
@@ -684,7 +686,7 @@ window.addEventListener('storage',e=>{if(e.key!==SKEY||!ME)return;
   const t2=document.getElementById('supReply');if(t2&&keep!==null){t2.value=keep;if(foc)t2.focus()}});
 
 /* ===== Kontaktdaten: Änderungen aus der App und Abgleich mit dem Kundenverwaltungsprogramm ===== */
-const KVP_LIVE_DEFAULT={mail:'julian.karlinger@example.at',phone:'+43 660 123 4567',addr:'Musterweg 3, 4320 Perg'};
+const KVP_LIVE_DEFAULT={mail:'lukas.mayr@example.at',phone:'+43 660 123 4567',addr:'Musterweg 3, 4320 Perg'};
 const C_LABEL={mail:'E-Mail',phone:'Telefon',addr:'Adresse'};
 function kvpOf(c){if(!c||c.parent)return null;if(c.id==='live')return Object.assign({},KVP_LIVE_DEFAULT,D.kvpLive||{});return c.kvp||null}
 const appContact=c=>({mail:c.mail||'',phone:c.phone||'',addr:c.addr||''});
@@ -1438,6 +1440,14 @@ html[data-gt] body select:not([multiple]){background-repeat:no-repeat!important;
   table.t td[data-label=""]::before{content:none}
   table.t td[data-label=""]{justify-content:flex-end}
 }
+</style>
+<!-- ===== Performance A1 (v1.8, 26.11.2026): Inhaltsflächen ohne Weichzeichner =====
+     Im Inhaltsbereich (#view) liegt hinter den Karten nur der fast einfarbige Hintergrund –
+     der Weichzeichner war dort kaum sichtbar, kostete beim Tab-Wechsel aber die meiste Rechenzeit.
+     Farben, Rand und Schatten bleiben gleich. Seitenleiste, Handy-Menüleiste, Dialoge und
+     Dropdown-Listen behalten ihr Glas (Schritte A2/A3 im Performance-Plan). -->
+<style id="perf-a1">
+#view :is(.card,.seg,.demo,.msg.me,.msg.status,.day-sep,.tpl,.appt,.inbox,select){-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 </style>
 <script>
 function navToggle(o){if(o===undefined)o=!document.body.classList.contains('nav-open');document.body.classList.toggle('nav-open',!!o);var b=document.getElementById('mbarBtn');if(b){b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen')}}
